@@ -1,0 +1,23 @@
+{
+  "name": "to-game",
+  "authors": [
+    "Jan Biasi <jan.biasi@namics.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "phaser": "~2.4.4"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "to-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "serve": "node node_modules/http-server/bin/http-server -o --cors"
+  },
+  "author": "Jan Biasi <jan.biasi@namics.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-header": "^1.7.1",
+    "gulp-if": "^2.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1"
+  }
+}

@@ -1,0 +1,23 @@
+{
+    "clean": {
+        "dist": "./dist/**/*.*"
+    },
+    "dependencies": {
+        "target": "./dist",
+        "name": "dependencies",
+        "files": [
+            "./bower_components/jquery/dist/jquery.min.js",
+            "./bower_components/phaser/build/phaser.min.js"
+        ]
+    },
+    "app": {
+        "minify": false,
+        "target": "./dist",
+        "name": "application",
+        "files": [
+            "./app/src/module.js",
+            "./app/src/*.js",
+            "./app/*.js"
+        ]
+    }
+}
