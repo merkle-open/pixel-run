@@ -6,6 +6,21 @@
         var windowApplication = window.App;
     }
 
+    // LogNameSpaces
+    var LNS = {
+        'publish': 'Module.publish',
+        'access': 'Module.access',
+        'register': 'App.register',
+        'start': 'App.start',
+        'config': 'App.configure',
+        'load': 'App.load',
+        'resolve': 'App.resolve'
+    };
+
+    for(var action in LNS) {
+        LNS[action] = '[' + LNS[action] + ']';
+    }
+
     var App = window.App = {};
 
     App._config = {
@@ -52,15 +67,42 @@
     });
 
     App.register = function(name, settings, factory) {
-        App.debug.log('Registering Module "%s" ...', name);
+        App.debug.log('%s Registering Module "%s" ...', LNS.register, name);
         if(factory === undefined) {
             factory = settings;
             settings = {};
         }
 
         App.modules[name] = {
-            settings: settings
+            _settings: settings,
+            _store: {
+                public: {},
+                private: {}
+            }
         };
+
+        App.modules[name].publish = function(key, value) {
+            App.debug.log(
+                '%s Publishing %s on %s (%s)',
+                LNS.publish, key, name, typeof value
+            );
+
+            var target = App.modules[name]._store.public;
+            target[key] = value;
+            return target;
+        };
+
+        App.modules[name].access = function(key) {
+            var root = App.modules[name]._store;
+            if(!root.public[key] && root.private[key]) {
+                App.debug.error('%s No value found for %s in %s', LNS.access, key, name);
+            }
+            return root.public[key] ? root.public[key] : root.private[key];
+        };
+
+        if(settings.dependencies) {
+            App.modules[name]._dependencies = settings.dependencies;
+        }
 
         App.queue[name] = {
             name: name,
@@ -79,17 +121,20 @@
             if(mod.dependencies.length <= 0) {
                 try {
                     queue[name].factory(modules[name]);
-                    App.debug.log('Loaded module "%s"!', name);
+                    App.debug.log('%s Loaded module "%s"!', LNS.load, name);
                     delete queue[name];
                 } catch(notLoaded) {
-                    App.debug.error('Couldn\'t load module %s: %s', name, notLoaded.message);
+                    App.debug.error(
+                        '%s Couldn\'t load module %s: %s',
+                        LNS.load, name, notLoaded.message
+                    );
                 }
             }
         }
     };
 
     App.resolveDependency = function(component) {
-        App.debug.info('Resolving %s -> [%s]', component.name, component.dependencies.toString());
+        App.debug.info('%s Resolving %s -> [%s]', LNS.resolve, component.name, component.dependencies.toString());
         if(!component.dependencies || component.dependencies.length <= 0) {
             if(App.modules[component]) {
                 App.debug.log('Module %s already loaded, done!', component);
@@ -98,7 +143,7 @@
                 try {
                     App.queue[component].factory(App.modules[component]);
                     delete App.queue[component];
-                    App.debug.log('Module %s was loaded successfully!', component);
+                    App.debug.log('%s Module %s was loaded successfully!', LNS.load, component);
                 } catch(failed) {
                     App.debug.error('Loading factory of %s failed: %s', component, failed.message);
                 }
@@ -106,7 +151,7 @@
         } else {
             component.dependencies.forEach(function(dependency) {
                 if(App.modules[dependency]) {
-                    App.debug.log('Dependency %s already loaded, skipping ...', dependency);
+                    App.debug.log('%s Dependency %s already loaded, skipping ...', LNS.load, dependency);
                 } else {
                     App.resolveDependency(dependency);
                 }
@@ -115,7 +160,7 @@
             try {
                 App.queue[component.name].factory(App.modules[component.name]);
                 delete App.queue[component.name];
-                App.debug.log('Module %s was loaded successfully!', component.name);
+                App.debug.log('%s Module %s was loaded successfully!', LNS.load, component.name);
             } catch(failed) {
                 App.debug.error('Loading factory of %s failed: %s', component.name, failed.message);
             }
@@ -133,12 +178,13 @@
         }
     };
 
-    App.start = function() {
+    App.start = function(callback) {
         App.debug.info('Application is starting ...');
         App.loadModules();
         for(var name in App.queue) {
             App.resolveDependency(App.queue[name]);
         }
+        callback();
     };
 
     App.stop = function(reason) {

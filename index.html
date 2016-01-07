@@ -5,10 +5,21 @@
     <title>TunOstschweiz - Namics Game</title>
 </head>
 <body>
+    <button type="button" id="startgame">Start Game</button>
     <script src="dist/dependencies.js" charset="utf-8"></script>
     <script src="dist/application.js" charset="utf-8"></script>
     <script type="text/javascript">
-        App.start();
+        App.start(function() {
+            var started = false;
+            var start = document.getElementById('startgame');
+            start.onclick = function() {
+                if(!started) {
+                    App.modules.Game.access('start')();
+                    started = true;
+                    start.remove();
+                }
+            }
+        });
     </script>
 </body>
 </html>

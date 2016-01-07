@@ -6,6 +6,21 @@
         var windowApplication = window.App;
     }
 
+    // LogNameSpaces
+    var LNS = {
+        'publish': 'Module.publish',
+        'access': 'Module.access',
+        'register': 'App.register',
+        'start': 'App.start',
+        'config': 'App.configure',
+        'load': 'App.load',
+        'resolve': 'App.resolve'
+    };
+
+    for(var action in LNS) {
+        LNS[action] = '[' + LNS[action] + ']';
+    }
+
     var App = window.App = {};
 
     App._config = {
@@ -52,15 +67,42 @@
     });
 
     App.register = function(name, settings, factory) {
-        App.debug.log('Registering Module "%s" ...', name);
+        App.debug.log('%s Registering Module "%s" ...', LNS.register, name);
         if(factory === undefined) {
             factory = settings;
             settings = {};
         }
 
         App.modules[name] = {
-            settings: settings
+            _settings: settings,
+            _store: {
+                public: {},
+                private: {}
+            }
         };
+
+        App.modules[name].publish = function(key, value) {
+            App.debug.log(
+                '%s Publishing %s on %s (%s)',
+                LNS.publish, key, name, typeof value
+            );
+
+            var target = App.modules[name]._store.public;
+            target[key] = value;
+            return target;
+        };
+
+        App.modules[name].access = function(key) {
+            var root = App.modules[name]._store;
+            if(!root.public[key] && root.private[key]) {
+                App.debug.error('%s No value found for %s in %s', LNS.access, key, name);
+            }
+            return root.public[key] ? root.public[key] : root.private[key];
+        };
+
+        if(settings.dependencies) {
+            App.modules[name]._dependencies = settings.dependencies;
+        }
 
         App.queue[name] = {
             name: name,
@@ -79,17 +121,20 @@
             if(mod.dependencies.length <= 0) {
                 try {
                     queue[name].factory(modules[name]);
-                    App.debug.log('Loaded module "%s"!', name);
+                    App.debug.log('%s Loaded module "%s"!', LNS.load, name);
                     delete queue[name];
                 } catch(notLoaded) {
-                    App.debug.error('Couldn\'t load module %s: %s', name, notLoaded.message);
+                    App.debug.error(
+                        '%s Couldn\'t load module %s: %s',
+                        LNS.load, name, notLoaded.message
+                    );
                 }
             }
         }
     };
 
     App.resolveDependency = function(component) {
-        App.debug.info('Resolving %s -> [%s]', component.name, component.dependencies.toString());
+        App.debug.info('%s Resolving %s -> [%s]', LNS.resolve, component.name, component.dependencies.toString());
         if(!component.dependencies || component.dependencies.length <= 0) {
             if(App.modules[component]) {
                 App.debug.log('Module %s already loaded, done!', component);
@@ -98,7 +143,7 @@
                 try {
                     App.queue[component].factory(App.modules[component]);
                     delete App.queue[component];
-                    App.debug.log('Module %s was loaded successfully!', component);
+                    App.debug.log('%s Module %s was loaded successfully!', LNS.load, component);
                 } catch(failed) {
                     App.debug.error('Loading factory of %s failed: %s', component, failed.message);
                 }
@@ -106,7 +151,7 @@
         } else {
             component.dependencies.forEach(function(dependency) {
                 if(App.modules[dependency]) {
-                    App.debug.log('Dependency %s already loaded, skipping ...', dependency);
+                    App.debug.log('%s Dependency %s already loaded, skipping ...', LNS.load, dependency);
                 } else {
                     App.resolveDependency(dependency);
                 }
@@ -115,7 +160,7 @@
             try {
                 App.queue[component.name].factory(App.modules[component.name]);
                 delete App.queue[component.name];
-                App.debug.log('Module %s was loaded successfully!', component.name);
+                App.debug.log('%s Module %s was loaded successfully!', LNS.load, component.name);
             } catch(failed) {
                 App.debug.error('Loading factory of %s failed: %s', component.name, failed.message);
             }
@@ -133,12 +178,13 @@
         }
     };
 
-    App.start = function() {
+    App.start = function(callback) {
         App.debug.info('Application is starting ...');
         App.loadModules();
         for(var name in App.queue) {
             App.resolveDependency(App.queue[name]);
         }
+        callback();
     };
 
     App.stop = function(reason) {
@@ -156,12 +202,16 @@
 
     App.register('Game', {
         dependencies: ['Media', 'World', 'Render']
-    }, function(container, settings) {
-        container.game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
-            preload: App.modules.Media.init,
-            create: App.modules.World.init,
-            update: App.modules.Render.init
-        });
+    }, function(module, settings) {
+        module.publish('start', function() {
+            var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+               preload: App.modules.Media.access('init'),
+               create: App.modules.World.access('init'),
+               update: App.modules.Render.access('init')
+           });
+
+           module.publish('game', game);
+       });
     });
 
 })(window);
@@ -171,14 +221,14 @@
 
     App.register('Media', {
         dependencies: []
-    }, function(container, settings) {
-        container.init = function() {
-            var game = App.modules.Game.game;
+    }, function(module) {
+        module.publish('init', function() {
+            var game = App.modules.Game.access('game');
             game.load.image('sky', 'assets/img/sky.png');
             game.load.image('ground', 'assets/img/platform.png');
             game.load.image('star', 'assets/img/star.png');
             game.load.spritesheet('dude', 'assets/img/dude.png', 32, 48);
-        }
+        });
     });
 
 })(window);
@@ -188,12 +238,12 @@
 
     App.register('Render', {
         dependencies: ['World']
-    }, function(container, settings) {
-        container.init = function() {
-            var game = App.modules.Game.game;
-            var player = App.modules.World.player;
-            var platforms = App.modules.World.platforms;
-            var cursors = container.cursors;
+    }, function(module) {
+        module.publish('init', function() {
+            var game = App.modules.Game.access('game');
+            var player = App.modules.World.access('player');
+            var platforms = App.modules.World.access('platforms');
+            var cursors = module.access('cursors');
 
             //  Collide the player and the stars with the platforms
             game.physics.arcade.collide(player, platforms);
@@ -220,7 +270,33 @@
             if (cursors.up.isDown && player.body.touching.down) {
                 player.body.velocity.y = -350;
             }
-        }
+
+            module.access('collectible')();
+        });
+
+        module.publish('collectible', function() {
+            var game = App.modules.Game.access('game');
+            var player = App.modules.World.access('player');
+            var platforms = App.modules.World.access('platforms');
+            var collectible = App.modules.World.access('collectible');
+            var collector = module.access('collectItem');
+
+            game.physics.arcade.collide(collectible, platforms);
+            game.physics.arcade.overlap(player, collectible, collector, null, this);
+        });
+
+        module.publish('collectItem', function(player, item, points) {
+            var score = App.modules.World._store.private.score;
+            var scoreText = App.modules.World.access('scoreText');
+            points = points || 5;
+
+            // Removes the star from the screen
+            item.kill(App.modules.World.access('collectible'));
+            App.modules.World._store.private.score = (score + points);
+
+            // Increase the score
+            scoreText.text = 'Score: ' + App.modules.World._store.private.score;
+        });
     });
 
 })(window);
@@ -230,11 +306,11 @@
 
     App.register('World', {
         dependencies: []
-    }, function(container, settings) {
-        container.init = function() {
-            var platforms = container.platforms;
-            var player = container.player;
-            var game = App.modules.Game.game;
+    }, function(module, settings) {
+        module.publish('init', function() {
+            var platforms = module.access('platforms');
+            var player = module.access('player');
+            var game = App.modules.Game.access('game');
 
             //  We're going to be using physics, so enable the Arcade Physics system
             game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -265,16 +341,25 @@
             ledge.body.immovable = true;
 
             // Export elements to global module scope
-            container.ground = ground;
-            container.ledge = ledge;
-            container.platforms = platforms;
+            module.publish('ground', ground);
+            module.publish('ledge', ledge);
+            module.publish('platforms', platforms);
 
-            // Adding the player
-            container.addPlayer();
-        }
+            // Adding the player and score
+            module.access('addPlayer')();
+            module.access('addScore')();
 
-        container.addPlayer = function() {
-            var game = App.modules.Game.game;
+            // Add collectible items
+            module.access('addCollectible')({
+                gravity: 200,
+                counter: 20,
+                bounce: 0.1
+            });
+
+        });
+
+        module.publish('addPlayer', function() {
+            var game = App.modules.Game.access('game');
             var player;
 
             // The player and its settings
@@ -292,9 +377,45 @@
             player.animations.add('left', [0, 1, 2, 3], 10, true);
             player.animations.add('right', [5, 6, 7, 8], 10, true);
 
+            // The camera should follow the player
+            game.camera.follow(player);
+
             // Publish player to module scope
-            container.player = player;
-        }
+            module.publish('player', player);
+        });
+
+        module.publish('addCollectible', function(settings) {
+            settings = settings || {};
+            var game = App.modules.Game.access('game');
+            var collectible;
+
+            collectible = game.add.group();
+            collectible.enableBody = true;
+
+            var counter = settings.counter || 12;
+            var bounce = settings.bounce || 0.7;
+            var gravity = settings.gravity || 100;
+
+            for (var i = 0; i < counter; i++) {
+                //  Create a star inside of the 'collectible' group
+                var star = collectible.create(i * 70, 0, 'star');
+                star.body.gravity.y = gravity;
+                star.body.bounce.y = bounce + Math.random() * 0.2;
+            }
+
+            module.publish('collectible', collectible);
+        });
+
+        module._store.private.score = 0;
+        module.publish('addScore', function() {
+            var game = App.modules.Game.access('game');
+
+            var scoreText = game.add.text(16, 16, 'Score: 0', {
+                fontSize: '32px', fill: '#FFF'
+            });
+
+            module.publish('scoreText', scoreText);
+        });
     });
 
 })(window);
