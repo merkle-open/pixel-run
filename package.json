@@ -4,7 +4,7 @@
   "description": "",
   "main": "",
   "scripts": {
-    "serve": "node node_modules/http-server/bin/http-server -o --cors"
+    "serve": "node node_modules/http-server/bin/http-server -o --cors -p 8888"
   },
   "author": "Jan Biasi <jan.biasi@namics.com>",
   "license": "MIT",
