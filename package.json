@@ -4,7 +4,11 @@
   "description": "",
   "main": "",
   "scripts": {
-    "serve": "node node_modules/http-server/bin/http-server -o --cors -p 8888"
+    "serve": "node node_modules/http-server/bin/http-server -o"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/janbiasi/tun-ostschweiz.git"
   },
   "author": "Jan Biasi <jan.biasi@namics.com>",
   "license": "MIT",
@@ -16,5 +20,8 @@
     "gulp-if": "^2.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.1"
+  },
+  "dependencies": {
+    "http-server": "^0.8.5"
   }
 }
