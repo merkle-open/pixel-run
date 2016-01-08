@@ -179,15 +179,24 @@
         console.log('Loading module %s ...', this.name);
         var conf = this.settings;
 
-        var game = new Phaser.Game(conf.width, conf.height, Phaser[conf.mode], '', {
+        var game = new Phaser.Game(conf.width, conf.height, Phaser[conf.mode], 'mainState');
+
+        var mainState = {
             preload: App.Media.load,
             create: App.World.create,
             update: App.Renderer.update
-        });
+        };
+
+        game.state.add('main', mainState);
+        game.state.start('main');
 
         this.get = function() {
             // Encapsulate the game Object
             return game;
+        };
+
+        this.restart = function() {
+            game.state.start('main');
         }
 
     });
@@ -199,16 +208,11 @@
 
     Root.Media = Root.$createModule('media', {
         paths: {
-            sky: 'assets/img/sky.png',
-            platform: 'assets/img/platform.png',
-            coin: 'assets/img/star.png',
-            avatar: 'assets/img/dude.png'
+            bird: 'assets/img/bird.png',
+            pipe: 'assets/img/pipe.png'
         },
         sprites: {
-            avatar: {
-                posX: 32,
-                posY: 48
-            }
+
         }
     }, function(App) {
         console.log('Loading module %s ...', this.name);
@@ -216,10 +220,9 @@
 
         this.load = function() {
             var game = App.Game.get();
-            game.load.image('sky', conf.paths.sky);
-            game.load.image('platform', conf.paths.platform);
-            game.load.image('coin', conf.paths.coin);
-            game.load.spritesheet('avatar', conf.paths.avatar, conf.sprites.avatar.posX, conf.sprites.avatar.posY);
+            game.stage.backgroundColor = '#71c5cf';
+            game.load.image('bird', conf.paths.bird);
+            game.load.image('pipe', conf.paths.pipe); 
         }
     });
 
@@ -228,70 +231,41 @@
 (function(window, undefined) {
     'use strict';
 
-    Root.Renderer = Root.$createModule('renderer', function(App) {
+    Root.Renderer = Root.$createModule('renderer', {
+        bird: {
+            maxAngle: 20
+        }
+    }, function(App) {
         console.log('Loading module %s ...', this.name);
 
         var module = this;
 
-        this._makePlayerMovable = function(game, player) {
-            var cursors = game.input.keyboard.createCursorKeys();
-
-            //  Reset the players velocity (movement)
-            player.body.velocity.x = 0;
-
-            if (cursors.left.isDown) {
-                player.body.velocity.x = -150;
-                player.animations.play('left');
-            } else if (cursors.right.isDown) {
-                player.body.velocity.x = 150;
-                player.animations.play('right');
-            } else {
-                player.animations.stop();
-                player.frame = 4;
-            }
-
-            //  Allow the player to jump if they are touching the ground.
-            if (cursors.up.isDown && player.body.touching.down) {
-                player.body.velocity.y = -350;
-            }
-
-            module.cursors = cursors;
-        }
-
-        this._addCollisionDetection = function(game, obj, target) {
-            game.physics.arcade.collide(obj, target);
-        }
-
-        this._addCollectable = function(game, items, platforms, player) {
-            module._addCollisionDetection(game, items, platforms);
-            game.physics.arcade.overlap(player, items, module._collect, null, this);
-        }
-
-        this._kill = function(obj, target) {
-            target.kill();
-        }
-
-        this._collect = function(obj, target) {
-            module._kill(obj, target);
-            var settings = Root.Game.settings;
-            var updated = Root.Util.$createReplacer(settings.hud.scoreText);
-
-            App.World.score.count += settings.hud.collectPoints;
-            App.World.score.text.text = updated.replace({
-                count: App.World.score.count
-            });
-        }
-
         this.update = function() {
-            var game = App.Game.get();
-            var player = App.World.player;
-            var platforms = App.World.platforms;
-            var collectable = App.World.collectable;
+            var game = Root.Game.get();
+            var bird = Root.World.bird;
+            var pipes = Root.World.pipes;
 
-            module._addCollisionDetection(game, player, platforms);
-            module._makePlayerMovable(game, player);
-            module._addCollectable(game, collectable, platforms, player);
-        }
+            module._restartIfDead(game, Root.World.bird);
+            module._killOnOverlap(game, bird, pipes, module, function() {
+                game.state.start('main');
+            });
+        };
+
+        this._restartIfDead = function(game, target) {
+            if(target.inWorld === false) {
+                Root.Game.restart();
+            }
+        };
+
+        this._killOnOverlap = function(game, bird, pipes, ctx, restart) {
+            game.physics.arcade.overlap(bird, pipes, restart);
+        };
+
+        this._angleObject = function(item, maxAngle) {
+            if (item.angle < module.settings.bird.maxAngle) {
+                item.angle += 1;
+            }
+        };
 
     });
 
@@ -301,124 +275,106 @@
     'use strict';
 
     Root.World = Root.$createModule('world', {
-        avatar: 'avatar',
-        collectable: 'coin',
-        sky: 'sky',
-        ground: 'platform'
+        media: {
+            bird: 'bird',
+            pipe: 'pipe'
+        },
+        pipes: {
+            count: 20,
+            timer: 1500
+        },
+        bird: {
+            jumpVelocity: -350
+        },
+        gravity: 1000
     }, function(App) {
         console.log('Loading module %s ...', this.name);
 
         var module = this;
         var conf = module.settings;
 
-        this._createPlatforms = function(game) {
-            //  We're going to be using physics, so enable the Arcade Physics system
-            game.physics.startSystem(Phaser.Physics.ARCADE);
-
-            //  A simple background for our game
-            game.add.sprite(0, 0, conf.sky);
-
-            //  The platforms group contains the ground and the 2 ledges we can jump on
-            var platforms = game.add.group();
-            platforms.enableBody = true;
-
-            // Here we create the ground.
-            var ground = platforms.create(0, game.world.height - 64, conf.ground);
-
-            //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-            ground.scale.setTo(2, 2);
-            ground.body.immovable = true;
-
-            var ledge = platforms.create(400, 400, conf.ground);
-            ledge.body.immovable = true;
-            ledge = platforms.create(-150, 250, conf.ground);
-            ledge.body.immovable = true;
-
-            module.ledge = ledge;
-            module.ground = ground;
-            module.platforms = platforms;
-        }
-
-        this._createPlayer = function(game) {
-            var player;
-
-            // The player and its settings
-            player = game.add.sprite(32, game.world.height - 150, conf.avatar);
-
-            // We need to enable physics on the player
-            game.physics.arcade.enable(player);
-
-            // Player physics properties. Give the little guy a slight bounce.
-            player.body.bounce.y = 0.2;
-            player.body.gravity.y = 300;
-            player.body.collideWorldBounds = true;
-
-            // Our two animations, walking left and right.
-            player.animations.add('left', [0, 1, 2, 3], 10, true);
-            player.animations.add('right', [5, 6, 7, 8], 10, true);
-
-            module.player = player;
-        }
-
-        this._createCollectibe = function(game, settings) {
-            var container = game.add.group();
-            container.enableBody = true;
-
-            settings = settings || {};
-            settings.bounce = settings.bounce || 0.7;
-            settings.gravity = settings.gravity || 6;
-            settings.count = settings.count || 0;
-            settings.space = settings.space || 70;
-
-            //  Here we'll create 12 of them evenly spaced apart
-            for (var i = 0; i < settings.count; i++) {
-                //  Create a star inside of the 'stars' group
-                var item = container.create(i * 70, 0, settings.media);
-                item.body.gravity.y = settings.gravity;
-                item.body.bounce.y = settings.bounce + Math.random() * 0.2;
-            }
-
-            module.collectable = container;
-        }
-
-        this._createScore = function(game, settings) {
-            settings.size = settings.size || '32px';
-            settings.color = settings.color || '#ffffff';
-
-            var score = 0;
-            var text = settings.text || 'Score: {count}';
-            text = Root.Util.$createReplacer(text);
-            text = text.replace({ count: score });
-
-            var scoreText = game.add.text(16, 16, text, {
-                fontSize: settings.size,
-                fill: settings.color
-            });
-
-            module.score = {
-                text: scoreText,
-                count: score
-            };
-        }
-
         this.create = function() {
             var game = App.Game.get();
+            module._createScore(game);
+            module._createBird(game);
+            module._createPipes(game);
+            module._addRecreationTimer(game, module._addRowOfPipes);
+        };
 
-            module._createPlatforms(game);
-            module._createPlayer(game);
-            module._createCollectibe(game, {
-                count: 20,
-                gravity: 1000,
-                bounce: 0.3,
-                space: 70,
-                media: conf.collectable
+        this._createBird = function(game) {
+            // Set the physics system
+            game.physics.startSystem(Phaser.Physics.ARCADE);
+
+            // Display the bird on the screen
+            var bird = game.add.sprite(100, 245, conf.media.bird);
+
+            // Add gravity to the bird to make it fall
+            game.physics.arcade.enable(bird);
+            bird.body.gravity.y = conf.gravity;
+            bird.enableBody = true;
+
+            // Call the 'jump' function when the spacekey is hit
+            var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            spaceKey.onDown.add(function() {
+                bird.body.velocity.y = conf.bird.jumpVelocity;
+
+                // Create an animation on the bird
+                game.add.tween(bird).to({
+                    angle: -20
+                }, 100).start();
+            }, this);
+            bird.anchor.setTo(-0.2, 0.5);
+
+            module.bird = bird;
+        };
+
+        this._createPipes = function(game) {
+            var pipes = game.add.group(); // Create a group
+            pipes.enableBody = true;  // Add physics to the group
+            pipes.createMultiple(conf.pipes.count, conf.media.pipe); // Create 20 pipes
+            module.pipes = pipes;
+        };
+
+        this._addOnePipe = function(x, y) {
+            // Get the first dead pipe of our group
+            var pipe = module.pipes.getFirstDead();
+
+            // Set the new position of the pipe
+            pipe.reset(x, y);
+
+            // Add velocity to the pipe to make it move left
+            pipe.body.velocity.x = -200;
+
+            // Kill the pipe when it's no longer visible
+            pipe.checkWorldBounds = true;
+            pipe.outOfBoundsKill = true;
+        };
+
+        this._addRowOfPipes = function() {
+            // Pick where the hole will be
+            var hole = Math.floor(Math.random() * 5) + 1;
+
+            module.score += 1;
+            module.labelScore.text = this.score;
+
+            // Add the 6 pipes
+            for (var i = 0; i < 8; i++) {
+                if (i != hole && i != hole + 1)  {
+                    module._addOnePipe(400, i * 60 + 10);
+                }
+            }
+        };
+
+        this._createScore = function(game) {
+            module.score = 0;
+            module.labelScore = game.add.text(20, 20, "0", {
+                font: "30px Arial", fill: "#fff"
             });
-            module._createScore(game, {
-                fontSize: '30px',
-                color: '#fff',
-                text: Root.Game.settings.hud.scoreText
-            });
-        }
+        };
+
+        this._addRecreationTimer = function(game, handler) {
+            module.timer = game.time.events.loop(conf.pipes.timer, handler, module);
+        };
     });
 
 })(window);
