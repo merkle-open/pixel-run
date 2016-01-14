@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "jquery": "~2.1.4",
-    "phaser": "~2.4.4"
+    "phaser": "~2.4.4",
+    "browser-storage": "~1.2.0"
   }
 }

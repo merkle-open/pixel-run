@@ -11,18 +11,20 @@
         }
     }, function(App) {
         console.log('Loading module %s ...', this.name);
-        var conf = this.settings;
+
+        var module = this;
+        var conf = module.settings;
 
         var game = new Phaser.Game(conf.width, conf.height, Phaser[conf.mode], '', {
-            preload: App.Media.load,
-            create: App.World.create,
-            update: App.Renderer.update
+            preload: App.Media.init,
+            create: App.World.init,
+            update: App.Renderer.init
         });
 
         this.get = function() {
             // Encapsulate the game Object
             return game;
-        }
+        };
 
     });
 

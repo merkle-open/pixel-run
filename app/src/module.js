@@ -10,7 +10,7 @@
     };
 
     Root.$$defaults = function() {
-        Root._config.debug = backup.debug || false;
+        Root._config.debug = backup ? (backup.debug || false) : false;
     };
 
     Root.$$factory = function() {
