@@ -12,6 +12,10 @@
             //  Reset the players velocity (movement)
             player.body.velocity.x = 0;
 
+            game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
+            var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+
             if (cursors.left.isDown) {
                 player.body.velocity.x = -150;
                 player.animations.play('left');
@@ -24,9 +28,16 @@
             }
 
             //  Allow the player to jump if they are touching the ground.
-            if (cursors.up.isDown && player.body.touching.down) {
+            if ((cursors.up.isDown) && player.body.touching.down) {
                 player.body.velocity.y = -350;
             }
+
+            spaceKey.onDown.add(function() {
+                if(!player.body.touching.down) {
+                    return false;
+                }
+                player.body.velocity.y = -350;
+            })
 
             module.cursors = cursors;
         }

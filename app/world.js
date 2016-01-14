@@ -1,4 +1,4 @@
-(function(window, undefined) {
+ (function(window, undefined) {
     'use strict';
 
     Root.World = Root.$createModule('world', {
