@@ -4,57 +4,9 @@
     <meta charset="utf-8">
     <title>Highscore</title>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-    <style media="screen">
-        *,
-        *:after,
-        *:before {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background: url('./assets/img/score/background.jpg') no-repeat center center fixed;
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
-            background-size: cover;
-        }
-
-        .leaderboard {
-            border-radius: 3px;
-            padding: 30px;
-            max-width: 500px;
-            margin: 20px auto;
-            background-color: #fff;
-            box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.4)
-        }
-
-        h1 {
-            margin: 0 0 40px 0;
-            text-align: center;
-            font-size: 40px;
-        }
-
-        .score-item {
-            font-size: 17px;
-            width: 100%;
-            margin: 10px 0;
-        }
-
-        .score-item > * {
-            width: 33%;
-            display: inline-block;
-        }
-
-        .score-item span {
-            width: auto;
-        }
-
-        .score-item .rank {
-            width: 12%;
-        }
-    </style>
+    <link href="dist/application.css" rel="stylesheet">
 </head>
-<body>
+<body class="page-highscore">
     <div class="leaderboard">
         <h1>Scoreboard</h1>
         <div class="score-board">

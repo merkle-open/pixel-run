@@ -2,9 +2,10 @@
     'use strict';
 
     Root.Game = Root.$createModule('game', {
-        width: 800,
-        height: 600,
+        width: '100%',
+        height: '100%',
         mode: 'AUTO',
+        id: 'canvas-game',
         hud: {
             scoreText: 'Score: {count}',
             collectPoints: 10
@@ -15,16 +16,21 @@
         var module = this;
         var conf = module.settings;
 
-        var game = new Phaser.Game(conf.width, conf.height, Phaser[conf.mode], '', {
+        var game = new Phaser.Game(conf.width, conf.height, Phaser[conf.mode], conf.id, {
             preload: App.Media.init,
             create: App.World.init,
             update: App.Renderer.init
         });
 
+        // Initialize the main interface
+        Root.HUD.init();
+
         this.get = function() {
             // Encapsulate the game Object
             return game;
         };
+
+        this.$node = $('#' + conf.id);
 
     });
 

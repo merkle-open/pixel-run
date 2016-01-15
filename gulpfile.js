@@ -7,6 +7,7 @@ var header = require('gulp-header');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
+var minify = require('gulp-cssnano');
 var config = require('./build.json');
 
 gulp.task('clean:dist', function() {
@@ -23,22 +24,40 @@ gulp.task('build:dependencies', ['clean:dist'], function() {
         .pipe(gulp.dest(config.dependencies.target));
 });
 
-gulp.task('build:app', ['clean:dist:app'], function() {
+gulp.task('build:app', function() {
     return gulp.src(config.app.files)
         .pipe(gulpif(config.app.minify === true, uglify()))
         .pipe(concat(config.app.name + '.js'))
         .pipe(gulp.dest(config.app.target));
 });
 
+gulp.task('build:styles', function() {
+    return gulp.src(config.styles.files)
+        .pipe(gulpif(config.styles.minify === true, minify()))
+        .pipe(concat(config.styles.name + '.css'))
+        .pipe(gulp.dest(config.styles.target));
+});
+
+gulp.task('build:all', [
+    'clean:dist:app',
+    'build:styles',
+    'build:app'
+]);
+
 gulp.task('watch:app', function() {
     var watcher = gulp.watch(config.app.files, ['build:app']);
     watcher.on('change', function(event) {
         console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     });
+
+    var styler = gulp.watch(config.styles.files, ['build:styles']);
+    styler.on('change', function(event) {
+        console.log('Style ' + event.path + ' was ' + event.type + ', running tasks...');
+    });
 });
 
 gulp.task('default', [
     'build:dependencies',
-    'build:app',
+    'build:all',
     'watch:app'
 ]);

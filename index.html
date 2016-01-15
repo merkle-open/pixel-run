@@ -3,20 +3,21 @@
 <head>
     <meta charset="utf-8">
     <title>TunOstschweiz - Namics Game</title>
+    <link href="dist/application.css" rel="stylesheet">
 </head>
 <body>
-    <button type="button" id="startgame">Start Game</button>
+    <header class="hud-fullscreen-banner">
+        <button type="button" name="hud-req-fs" class="action-open">Fullscreen</button>
+        <button type="button" name="hud-cls-bn" class="action-close">Close</button>
+    </header>
+    <div id="canvas-game"></div>
     <script src="dist/dependencies.js" charset="utf-8"></script>
-    <script type="text/javascript">
-        Root = {
-            debug: true
-        };
-    </script>
     <script src="dist/application.js" charset="utf-8"></script>
     <script type="text/javascript">
         Root.$preload([
             'util'
         ]).$start([
+            'hud',
             'media',
             'world',
             'renderer',

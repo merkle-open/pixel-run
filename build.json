@@ -6,6 +6,7 @@
         "target": "./dist",
         "name": "dependencies",
         "files": [
+            "./app/src/config*.js",
             "./bower_components/jquery/dist/jquery.min.js",
             "./bower_components/phaser/build/phaser.min.js",
             "./bower_components/browser-storage/browser-storage.min.js"
@@ -18,7 +19,16 @@
         "files": [
             "./app/src/module.js",
             "./app/src/*.js",
-            "./app/*.js"
+            "./app/*.js",
+            "./assets/js/**/*.js"
+        ]
+    },
+    "styles": {
+        "minify": false,
+        "target": "./dist",
+        "name": "application",
+        "files": [
+            "./assets/css/**/*.css"
         ]
     }
 }

@@ -117,6 +117,13 @@
     window.Root = Root;
 })(window);
 
+(function(window) {
+    'use strict';
+
+    // Before application is loaded
+
+})(window);
+
 (function(window, undefined) {
     'use strict';
 
@@ -168,9 +175,10 @@
     'use strict';
 
     Root.Game = Root.$createModule('game', {
-        width: 800,
-        height: 600,
+        width: '100%',
+        height: '100%',
         mode: 'AUTO',
+        id: 'canvas-game',
         hud: {
             scoreText: 'Score: {count}',
             collectPoints: 10
@@ -181,18 +189,55 @@
         var module = this;
         var conf = module.settings;
 
-        var game = new Phaser.Game(conf.width, conf.height, Phaser[conf.mode], '', {
+        var game = new Phaser.Game(conf.width, conf.height, Phaser[conf.mode], conf.id, {
             preload: App.Media.init,
             create: App.World.init,
             update: App.Renderer.init
         });
+
+        // Initialize the main interface
+        Root.HUD.init();
 
         this.get = function() {
             // Encapsulate the game Object
             return game;
         };
 
+        this.$node = $('#' + conf.id);
+
     });
+
+})(window);
+
+(function(window, undefined) {
+   'use strict';
+
+   Root.HUD = Root.$createModule('hud', {
+
+   }, function(App) {
+       console.log('Loading module %s ...', this.name);
+
+       var module = this;
+
+       module.init = function() {
+           module.fullScreenBanner();
+       };
+
+       module.fullScreenBanner = function() {
+           var $banner = $('.hud-fullscreen-banner');
+           var $close = $banner.find('.action-close');
+           var $fullscreen = $banner.find('.action-open');
+
+           $fullscreen.on('click', function() {
+               fullScreen(Root.Game.$node[0]);
+           });
+
+           $close.on('click', function() {
+               $banner.slideUp();
+           });
+       };
+
+   });
 
 })(window);
 
@@ -246,3 +291,26 @@
     });
 
 })(window);
+
+$(document).ready(function() {
+    'use strict';
+
+    if (
+        document.fullscreenEnabled ||
+        document.webkitFullscreenEnabled ||
+        document.mozFullScreenEnabled ||
+        document.msFullscreenEnabled
+    ) {
+        window.fullScreen = function(node) {
+            if (node.requestFullscreen) {
+                node.requestFullscreen();
+            } else if (node.webkitRequestFullscreen) {
+                node.webkitRequestFullscreen();
+            } else if (node.mozRequestFullScreen) {
+                node.mozRequestFullScreen();
+            } else if (node.msRequestFullscreen) {
+                node.msRequestFullscreen();
+            }
+        }
+    }
+});

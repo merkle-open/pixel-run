@@ -1,0 +1,87 @@
+.hud-fullscreen-banner {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                0 5px 5px -3px rgba(0, 0, 0, 0.4);
+}
+
+.hud-fullscreen-banner button {
+    border: none;
+    border-radius: 5px;
+    background-color: #000;
+    color: #fff;
+    padding: 8px 12px;
+    margin-right: 10px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+#js-canvas-game {
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+}
+
+*,
+*:after,
+*:before {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body.page-highscore {
+    background: url('../assets/img/score/background.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.page-highscore .leaderboard {
+    border-radius: 3px;
+    padding: 30px;
+    max-width: 500px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 
+                0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                0 5px 5px -3px rgba(0, 0, 0, 0.4);
+}
+
+.page-highscore h1 {
+    margin: 0 0 40px 0;
+    text-align: center;
+    font-size: 40px;
+}
+
+.page-highscore .score-item {
+    font-size: 17px;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.page-highscore .score-item > * {
+    width: 33%;
+    display: inline-block;
+}
+
+.page-highscore .score-item span {
+    width: auto;
+}
+
+.page-highscore .score-item .rank {
+    width: 12%;
+}
