@@ -15,11 +15,20 @@
             doubleJump: true,
             placementOffset: 32,
             players: {
+                baseName: 'player',
+                mimeType: 'png',
                 amount: 2,
-                variations: ['green', 'yellow', 'red', 'blue']
-            },
-            gravity: {
-
+                variations: ['green', 'yellow', 'red', 'blue'],
+                keymap: ['up', 'down', 'left', 'right'],
+                bounce: {
+                    y: 0.2
+                },
+                gravity: {
+                    y: 900
+                },
+                velocity: {
+                    y: -400
+                }
             }
         }
     };

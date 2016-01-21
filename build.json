@@ -19,6 +19,7 @@
         "name": "application",
         "files": [
             "./app/util/*.js",
+            "./app/classes/*.js",
             "./app/states/*.js",
             "./app/main.js"
         ]

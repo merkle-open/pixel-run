@@ -17,7 +17,11 @@ gulp.task('clean:dist:app', function() {
     return remove(config.app.target + '/' + config.app.name + '.*');
 });
 
-gulp.task('build:dependencies', ['clean:dist'], function() {
+gulp.task('clean:dist:dependencies', function() {
+    return remove(config.dependencies.target + '/' + config.dependencies.name + '.*');
+});
+
+gulp.task('build:dependencies', ['clean:dist:dependencies'], function() {
     return gulp.src(config.dependencies.files)
         .pipe(concat(config.dependencies.name + '.js'))
         .pipe(gulp.dest(config.dependencies.target));

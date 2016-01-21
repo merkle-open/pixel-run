@@ -53,6 +53,71 @@
 (function(window, undefined) {
     'use strict';
 
+    var root = window.Container;
+
+    function Player(game, index, posX, posY, variation) {
+        this.$baseSprite = root.settings.game.players.baseName;
+        this.$mimeType = root.settings.game.players.mimeType;
+        this.id = index;
+        this.type = variation;
+        this.jumpKey = root.settings.game.players.keymap[index];
+        this.injector = game;
+        this.doubleJump = false;
+
+        Phaser.Sprite.call(this, game, posX, posY, this.$getSpritesheet());
+        game.add.existing(this);
+
+        return this;
+    };
+
+    Player.prototype = Object.create(Phaser.Sprite.prototype);
+    Player.prototype.constructor = Player;
+
+    Player.prototype.$getSpritesheet = function() {
+        this.type = this.type === undefined ? '-' + root.settings.game.players.variations[index] : '';
+        return this.$baseSprite + this.type;
+    };
+
+    Player.prototype.$addActionKey = function() {
+        var cursors = this.injector.input.keyboard.createCursorKeys();
+        return this.$actionKey = cursors[this.jumpKey];
+    };
+
+    Player.prototype.$update = function() {
+        var listenTo = this.$addActionKey();
+        if(listenTo.isDown) {
+            this.jump();
+        }
+    };
+
+    Player.prototype.init = function() {
+        this.injector.physics.arcade.enable(this);
+        this.body.bounce.y = root.settings.game.players.bounce.y;
+        this.body.gravity.y = root.settings.game.players.gravity.y;
+        this.body.collideWorldBounds = true;
+    };
+
+    Player.prototype.jump = function() {
+        if(this.body.touching.down) {
+            this.body.velocity.y = root.settings.game.players.velocity.y;
+        }
+        /* DOUBLE JUMP LOGIC
+        if(this.body.touching.down && !this.doubleJump) {
+            this.body.velocity.y = -350;
+            this.doubleJump = true;
+        } else if(!this.body.touching.down && this.doubleJump) {
+            this.body.velocity.y = -550;
+            this.doubleJump = false;
+        } */
+    };
+
+    window.Factory.Player = Player;
+
+})(window);
+
+(function(window, undefined) {
+    'use strict';
+
     var game = Container.game;
     var config = Container.settings.physics;
 
@@ -65,8 +130,7 @@
             this.load.image('sky', 'assets/img/sky.png');
             this.load.image('ground', 'assets/img/platform.png');
             this.load.image('star', 'assets/img/star.png');
-            this.load.spritesheet('dude', 'assets/img/dude.png', 32, 48);
-
+            this.load.spritesheet('player', 'assets/img/dude.png', 32, 48);
         },
         create: function() {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -79,9 +143,6 @@
                 this.scale.forceLandscape = false;
             }
             this.state.start('Preload');
-        },
-        loadAssets: function() {
-
         }
     };
 
@@ -98,6 +159,9 @@
     };
 
     Container.Game.prototype = {
+        preload: function() {
+            Container.World = {};
+        },
         create: function() {
             this.add.sprite(0, 0, 'sky');
 
@@ -113,39 +177,25 @@
             ledge = platforms.create(-150, 250, 'ground');
             ledge.body.immovable = true;
 
-            Container.platforms = platforms;
-            Container.ground = ground;
-            Container.ledge = ledge;
-            Container.cursors = this.input.keyboard.createCursorKeys();
-            Container.players = [];
-
-            this._createControls();
+            Container.World.platforms = platforms;
+            Container.World.ground = ground;
+            Container.World.ledge = ledge;
+            Container.World.players = [];
+            this.$createPlayers();
         },
         update: function() {
-            this.physics.arcade.collide(Container.players, Container.platforms);
+            this.physics.arcade.collide(Container.World.players, Container.World.ground);
+            Container.World.players.forEach(function(player) {
+                player.$update();
+            });
         },
-        _createControls: function() {
-            var avaible = ['up', 'down', 'left', 'right'];
+        $createPlayers: function() {
+            var self = this;
             for(var i = 0; i < config.players.amount; i++) {
-                var player = this._createPlayer(i, avaible[i]);
-                if(Container.cursors[avaible[i]].isDown) {
-                    Container.players[i].body.velocity.y = -350;
-                }
+                var instance = new Factory.Player(self, i, 0, 0, '');
+                instance.init();
+                Container.World.players.push(instance);
             }
-        },
-        _createPlayer: function(index, control) {
-            var player = this._buildPlayerInstance(config.players.variations[index], index);
-            Container.players.push(player);
-            return player;
-        },
-        _buildPlayerInstance: function(sprite, index) {
-            var offset = (index === 0 ? 0.5 : index + 1) * (config.placementOffset * 2);
-            var player = this.add.sprite(offset, this.world.height - 150, 'dude');
-            this.physics.arcade.enable(player);
-            player.body.bounce.y = 0.2;
-            player.body.gravity.y = 300;
-            player.body.collideWorldBounds = true;
-            return player;
         }
     };
 

@@ -43,6 +43,7 @@ null===this.snapshot?void console.warn("Video.grab cannot run because Phaser.Bit
     window.Util = {};
     window.Game = {};
     window.Container = {};
+    window.Factory = {};
 
 })(window);
 
@@ -63,11 +64,20 @@ null===this.snapshot?void console.warn("Video.grab cannot run because Phaser.Bit
             doubleJump: true,
             placementOffset: 32,
             players: {
+                baseName: 'player',
+                mimeType: 'png',
                 amount: 2,
-                variations: ['green', 'yellow', 'red', 'blue']
-            },
-            gravity: {
-
+                variations: ['green', 'yellow', 'red', 'blue'],
+                keymap: ['up', 'down', 'left', 'right'],
+                bounce: {
+                    y: 0.2
+                },
+                gravity: {
+                    y: 900
+                },
+                velocity: {
+                    y: -400
+                }
             }
         }
     };
