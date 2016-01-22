@@ -37,12 +37,13 @@
             this.physics.arcade.collide(Container.World.players, Container.World.ground);
             Container.World.players.forEach(function(player) {
                 player.$update();
+                player.run();
             });
         },
         $createPlayers: function() {
             var self = this;
             for(var i = 0; i < config.players.amount; i++) {
-                var instance = new Factory.Player(self, i, 0, 0, '');
+                var instance = new Factory.Player(self, i, config.players.offset.x * i, config.players.offset.y, '');
                 instance.init();
                 Container.World.players.push(instance);
             }

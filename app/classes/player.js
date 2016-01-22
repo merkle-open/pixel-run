@@ -5,6 +5,7 @@
 
     function Player(game, index, posX, posY, variation) {
         this.$baseSprite = root.settings.game.players.baseName;
+        this.$basePath = root.settings.paths.player;
         this.$mimeType = root.settings.game.players.mimeType;
         this.id = index;
         this.type = variation;
@@ -43,6 +44,10 @@
         this.body.bounce.y = root.settings.game.players.bounce.y;
         this.body.gravity.y = root.settings.game.players.gravity.y;
         this.body.collideWorldBounds = true;
+    };
+
+    Player.prototype.run = function() {
+        this.body.velocity.x = root.settings.game.players.velocity.x;
     };
 
     Player.prototype.jump = function() {

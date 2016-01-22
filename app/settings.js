@@ -2,6 +2,11 @@
     'use strict';
 
     Container.settings = {
+        paths: {
+            player: 'assets/img/avatars/',
+            tilemap: 'assets/tilemap/',
+            tiles: 'assets/tilemap/tiles/' 
+        },
         render: {
             width: 800,
             height: 600,
@@ -13,8 +18,11 @@
         },
         game: {
             doubleJump: true,
-            placementOffset: 32,
             players: {
+                offset: {
+                    x: 32,
+                    y: 300
+                },
                 baseName: 'player',
                 mimeType: 'png',
                 amount: 2,
@@ -27,7 +35,8 @@
                     y: 900
                 },
                 velocity: {
-                    y: -400
+                    y: -400,
+                    x: 150
                 }
             }
         }

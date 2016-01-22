@@ -57,6 +57,7 @@
 
     function Player(game, index, posX, posY, variation) {
         this.$baseSprite = root.settings.game.players.baseName;
+        this.$basePath = root.settings.paths.player;
         this.$mimeType = root.settings.game.players.mimeType;
         this.id = index;
         this.type = variation;
@@ -97,6 +98,10 @@
         this.body.collideWorldBounds = true;
     };
 
+    Player.prototype.run = function() {
+        this.body.velocity.x = root.settings.game.players.velocity.x;
+    };
+
     Player.prototype.jump = function() {
         if(this.body.touching.down) {
             this.body.velocity.y = root.settings.game.players.velocity.y;
@@ -120,6 +125,7 @@
 
     var game = Container.game;
     var config = Container.settings.physics;
+    var paths = Container.settings.paths;
 
     Container.Boot = function(game) {
         // Empty class wrapper
@@ -187,12 +193,13 @@
             this.physics.arcade.collide(Container.World.players, Container.World.ground);
             Container.World.players.forEach(function(player) {
                 player.$update();
+                player.run();
             });
         },
         $createPlayers: function() {
             var self = this;
             for(var i = 0; i < config.players.amount; i++) {
-                var instance = new Factory.Player(self, i, 0, 0, '');
+                var instance = new Factory.Player(self, i, config.players.offset.x * i, config.players.offset.y, '');
                 instance.init();
                 Container.World.players.push(instance);
             }

@@ -3,6 +3,7 @@
 
     var game = Container.game;
     var config = Container.settings.physics;
+    var paths = Container.settings.paths;
 
     Container.Boot = function(game) {
         // Empty class wrapper
