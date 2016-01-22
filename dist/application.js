@@ -64,6 +64,42 @@
 
     var root = window.Container;
 
+    function LoaderHandler(game, type, name, path) {
+        this.type = type;
+        this.name = name;
+        this.path = path;
+
+        return this.$generateHandler();
+    };
+
+    LoaderHandler.prototype = {
+        image: function(game, name, path) {
+            return function() {
+                game.load.image(Util.hyphenate(key), path);
+            }
+        },
+        sprite: function(game, name, path, x, y) {
+            return function() {
+                game.load.spritesheet(name, path, x, y);
+            }
+        },
+        tilemap: function(game, name, path) {
+            return function() {
+                return new window.Factory.Tilemap(game, name, path);
+            }
+        }
+    };
+
+
+    window.Factory.LoaderHandler = LoaderHandler;
+
+})(window);
+
+(function(window, undefined) {
+    'use strict';
+
+    var root = window.Container;
+
     function Player(game, index, posX, posY, variation) {
         this.$baseSprite = root.settings.game.players.baseName;
         this.$basePath = root.settings.paths.player;
@@ -132,6 +168,44 @@
 (function(window, undefined) {
     'use strict';
 
+    var root = window.Container;
+
+    function Tilemap(game, name, path, type) {
+        this.type = type || Phaser.Tilemap.TILED_JSON;
+        this.name = name;
+        this.injector = game;
+        this.path = path;
+        this.map = null;
+        this.layers = {};
+
+        Phaser.Tilemap.call(this, name, path, null, this.type);
+        return this;
+    };
+
+    Tilemap.prototype = Object.create(Phaser.Tilemap.prototype);
+    Tilemap.prototype.constructor = Tilemap;
+
+    Tilemap.prototype.addToGame = function(game) {
+        game = game || this.game || null;
+        return this.map = game.add.tilemap(this.name);
+    };
+
+    Tilemap.prototype.createLayer = function(name) {
+        var layer = this.map.createLayer();
+        return this.layers[name] = layer;
+    };
+
+    Tilemap.prototype.setCollision = function(layer, start, end) {
+        this.map.setCollisionBetween(start, end, true, layer);
+    };
+
+    window.Factory.Tilemap = Tilemap;
+
+})(window);
+
+(function(window, undefined) {
+    'use strict';
+
     var game = Container.game;
     var config = Container.settings.physics;
     var paths = Container.settings.paths;
@@ -149,6 +223,10 @@
                 x: 32,
                 y: 48
             }
+        },
+        tilemaps: {
+            ground: "assets/img/world/tilemaps/ground.json",
+            lesh: "assets/img/world/tilemaps/lesh.json"
         }
     };
 
@@ -158,13 +236,27 @@
 
     Container.Boot.prototype = {
         preload: function() {
-            for(var img in loader.images) {
-                this.load.image(Util.hyphenate(img), loader.images[img]);
+            var self = this;
+            this.$loadEach([
+                {
+                    collection: loader.images,
+                    handler: function(key, path) {
+                        self.load.image(Util.hyphenate(key), path);
+                    }
+                },
+                {
+                    collection: loader.sprites,
+                    handler: function(key, props) {
+                        self.load.spritesheet(Util.hyphenate(key), props.path, props.x, props.y);
+                    }
+                }
+            ]);
+
+            this.load.tilemap('lesh', 'assets/img/world/tilemaps/lesh.json');
+            for(var i = 1; i <= 10; i++) {
+                this.load.image('groundLayer' + i, 'assets/img/world/tiles/groundLayer' + i + '.png');
             }
-            for(var sprite in loader.sprites) {
-                var opts = loader.sprites[sprite];
-                this.load.spritesheet(Util.hyphenate(sprite), opts.path, opts.x, opts.y);
-            }
+
         },
         create: function() {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -177,6 +269,20 @@
                 this.scale.forceLandscape = false;
             }
             this.state.start('Preload');
+        },
+        $loadEach: function(collection, handler) {
+            var self = this;
+            if(typeof collection === 'object' && handler) {
+                for(var key in collection) {
+                    handler(key, collection[key]);
+                }
+            } else if(Array.isArray(collection) && !handler) {
+                collection.forEach(function(child) {
+                    self.$loadEach(child['collection'], child['handler']);
+                });
+            } else {
+                throw new Error('BootState: $loadEach requires an object collection and handler or an array');
+            }
         }
     };
 
@@ -212,6 +318,13 @@
             ledge = platforms.create(-150, 250, 'ground');
             ledge.body.immovable = true;
 
+            // Tilemap
+            this.map = this.game.add.tilemap('lesh');
+
+            // FAILS
+            this.map.addTilesetImage('groundLayer1', 'groundLayer1');
+
+
             Container.World.platforms = platforms;
             Container.World.ground = ground;
             Container.World.ledge = ledge;
@@ -235,8 +348,9 @@
         },
         $createPlayers: function(callback) {
             var self = this;
+            var offset = config.players.offset;
             for(var i = 0; i < config.players.amount; i++) {
-                var instance = new Factory.Player(self, i, config.players.offset.x * i, config.players.offset.y, 'player-default');
+                var instance = new Factory.Player(self, i, offset.x * i, offset.y, 'player-default');
                 instance.init();
                 Container.World.players.push(instance);
             }
@@ -253,18 +367,29 @@
 
     Container.Preload = function(game) {
         this.ready = false;
+        this.error = null;
         this.background = null;
     };
 
     Container.Preload.prototype = {
         preload: function() {
-            this.physics.startSystem(Phaser.Physics.ARCADE);
+            try {
+                this.physics.startSystem(Phaser.Physics.ARCADE);
+                this.ready = true;
+            } catch(notReady) {
+                this.error = notReady;
+            }
         },
         create: function() {
-            this.state.start('Game');
+            if(this.ready) {
+                this.state.start('Game');
+            } else {
+                throw this.error;
+            }
         },
         quit: function(pointer) {
             alert('Goodbye');
+            this.ready = false;
         }
     };
 
