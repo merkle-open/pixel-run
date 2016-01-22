@@ -7,17 +7,18 @@
 
     var loader = {
         images: {
-            sky: "assets/img/sky.png",
-            ground: "assets/img/platform.png",
-            star: "assets/img/star.png",
-            player: "assets/img/avatars/player.png"
+            player: 'assets/img/avatars/player.png',
+            demoTile: 'assets/img/world/tiles/demo.png'
         },
         sprites: {
             playerExample: {
-                path: "assets/img/dude.png",
+                path: 'assets/img/dude.png',
                 x: 32,
                 y: 48
             }
+        },
+        tilemaps: {
+            demoTilemap: 'assets/img/world/tilemaps/demo.json'
         }
     };
 
@@ -27,13 +28,30 @@
 
     Container.Boot.prototype = {
         preload: function() {
-            for(var img in loader.images) {
-                this.load.image(Util.hyphenate(img), loader.images[img]);
-            }
-            for(var sprite in loader.sprites) {
-                var opts = loader.sprites[sprite];
-                this.load.spritesheet(Util.hyphenate(sprite), opts.path, opts.x, opts.y);
-            }
+            var self = this;
+            this.$loadEach([
+                {
+                    collection: loader.images,
+                    handler: function(key, path) {
+                        console.info('$loadEach Image > %s', key);
+                        self.load.image(key, path);
+                    }
+                },
+                {
+                    collection: loader.sprites,
+                    handler: function(key, props) {
+                        console.info('$loadEach Sprites > %s', key);
+                        self.load.spritesheet(key, props.path, props.x, props.y);
+                    }
+                },
+                {
+                    collection: loader.tilemaps,
+                    handler: function(key, path) {
+                        console.info('$loadEach Tilemaps %s', key);
+                        self.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
+                    }
+                }
+            ]);
         },
         create: function() {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -46,6 +64,20 @@
                 this.scale.forceLandscape = false;
             }
             this.state.start('Preload');
+        },
+        $loadEach: function(collection, handler) {
+            var self = this;
+            if(typeof collection === 'object' && handler) {
+                for(var key in collection) {
+                    handler(key, collection[key]);
+                }
+            } else if(Array.isArray(collection) && !handler) {
+                collection.forEach(function(child) {
+                    self.$loadEach(child['collection'], child['handler']);
+                });
+            } else {
+                throw new Error('BootState: $loadEach requires an object collection and handler or an array');
+            }
         }
     };
 
