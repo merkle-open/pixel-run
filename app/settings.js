@@ -8,8 +8,8 @@
             tiles: 'assets/tilemap/tiles/'
         },
         render: {
-            width: 800,
-            height: 600,
+            width: '100%',
+            height: '100%',
             mode: Phaser.AUTO,
             node: 'startgame'
         },
