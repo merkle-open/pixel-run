@@ -143,6 +143,10 @@
         this.body.collideWorldBounds = true;
     };
 
+    Player.prototype.collide = function(target, die) {
+        this.injector.game.arcade.collide(this, target, die, null);
+    };
+
     Player.prototype.run = function() {
         this.body.velocity.x = root.settings.game.players.velocity.x;
     };
@@ -170,20 +174,20 @@
 
     var root = window.Container;
 
-    function Tilemap(game, name, path, type) {
-        this.type = type || Phaser.Tilemap.TILED_JSON;
+    function Tilemap(game, name) {
         this.name = name;
         this.injector = game;
-        this.path = path;
         this.map = null;
         this.layers = {};
-
-        Phaser.Tilemap.call(this, name, path, null, this.type);
         return this;
     };
 
     Tilemap.prototype = Object.create(Phaser.Tilemap.prototype);
     Tilemap.prototype.constructor = Tilemap;
+
+    Tilemap.prototype.addImage = function(tileset, asset) {
+        return this.map.addTilesetImage(tileset, asset);
+    };
 
     Tilemap.prototype.addToGame = function(game) {
         game = game || this.game || null;
@@ -191,12 +195,26 @@
     };
 
     Tilemap.prototype.createLayer = function(name) {
-        var layer = this.map.createLayer();
+        var layer = this.map.createLayer(name);
         return this.layers[name] = layer;
     };
 
     Tilemap.prototype.setCollision = function(layer, start, end) {
-        this.map.setCollisionBetween(start, end, true, layer);
+        try {
+            var collide = this.map.setCollisionBetween(start, end, true, layer);
+            console.log(collide)
+            return collide;
+        } catch(noCollide) {
+            throw new Error('Tilemap.setCollision faield: ' + noCollide.message);
+        }
+    };
+
+    Tilemap.prototype.resize = function(targetLayer) {
+        try {
+            this.layers[targetLayer].resizeWorld();
+        } catch(resizeErr) {
+            throw new Error('Tilemap.resize failed: ' + resizeErr.message);
+        }
     };
 
     window.Factory.Tilemap = Tilemap;
@@ -212,21 +230,18 @@
 
     var loader = {
         images: {
-            sky: "assets/img/sky.png",
-            ground: "assets/img/platform.png",
-            star: "assets/img/star.png",
-            player: "assets/img/avatars/player.png"
+            player: 'assets/img/avatars/player.png',
+            demoTile: 'assets/img/world/tiles/demo.png'
         },
         sprites: {
             playerExample: {
-                path: "assets/img/dude.png",
+                path: 'assets/img/dude.png',
                 x: 32,
                 y: 48
             }
         },
         tilemaps: {
-            ground: "assets/img/world/tilemaps/ground.json",
-            lesh: "assets/img/world/tilemaps/lesh.json"
+            demoTilemap: 'assets/img/world/tilemaps/demo.json'
         }
     };
 
@@ -241,22 +256,25 @@
                 {
                     collection: loader.images,
                     handler: function(key, path) {
-                        self.load.image(Util.hyphenate(key), path);
+                        console.info('$loadEach Image > %s', key);
+                        self.load.image(key, path);
                     }
                 },
                 {
                     collection: loader.sprites,
                     handler: function(key, props) {
-                        self.load.spritesheet(Util.hyphenate(key), props.path, props.x, props.y);
+                        console.info('$loadEach Sprites > %s', key);
+                        self.load.spritesheet(key, props.path, props.x, props.y);
+                    }
+                },
+                {
+                    collection: loader.tilemaps,
+                    handler: function(key, path) {
+                        console.info('$loadEach Tilemaps %s', key);
+                        self.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
                     }
                 }
             ]);
-
-            this.load.tilemap('lesh', 'assets/img/world/tilemaps/lesh.json');
-            for(var i = 1; i <= 10; i++) {
-                this.load.image('groundLayer' + i, 'assets/img/world/tiles/groundLayer' + i + '.png');
-            }
-
         },
         create: function() {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -301,34 +319,13 @@
     Container.Game.prototype = {
         preload: function() {
             Container.World = {};
+            Container.World.players = [];
         },
         create: function() {
             var self = this;
-            this.add.sprite(0, 0, 'sky');
 
-            var platforms = this.add.group();
-            platforms.enableBody = true;
-
-            var ground = platforms.create(0, this.world.height - 64, 'ground');
-            ground.scale.setTo(2, 2);
-            ground.body.immovable = true;
-
-            var ledge = platforms.create(400, 400, 'ground');
-            ledge.body.immovable = true;
-            ledge = platforms.create(-150, 250, 'ground');
-            ledge.body.immovable = true;
-
-            // Tilemap
-            this.map = this.game.add.tilemap('lesh');
-
-            // FAILS
-            this.map.addTilesetImage('groundLayer1', 'groundLayer1');
-
-
-            Container.World.platforms = platforms;
-            Container.World.ground = ground;
-            Container.World.ledge = ledge;
-            Container.World.players = [];
+            // Instanciate the tilemap
+            this.$createTilemap();
 
             // Create players set in settings file under /app
             this.$createPlayers(function() {
@@ -337,14 +334,22 @@
             });
         },
         update: function() {
-            this.physics.arcade.collide(Container.World.players, Container.World.ground);
+            var self = this;
             Container.World.players.forEach(function(player) {
+                Container.game.physics.arcade.collide(player, Container.World.tilemap);
                 player.$update();
                 player.run();
             });
         },
         render: function() {
             this.game.debug.text('FPS ' + (this.game.time.fps || '--'), 20, 70, "#00ff00", "20px Courier");
+        },
+        $createTilemap: function() {
+            var map = new Factory.Tilemap(this, 'demoTilemap');
+            map.addToGame(this);
+            map.addImage('demo', 'demoTile');
+            map.createLayer('layer1'); // Works until here
+            map.resize('layer1');
         },
         $createPlayers: function(callback) {
             var self = this;
