@@ -54,7 +54,7 @@ null===this.snapshot?void console.warn("Video.grab cannot run because Phaser.Bit
         paths: {
             player: 'assets/img/avatars/',
             tilemap: 'assets/tilemap/',
-            tiles: 'assets/tilemap/tiles/' 
+            tiles: 'assets/tilemap/tiles/'
         },
         render: {
             width: 800,
@@ -66,6 +66,7 @@ null===this.snapshot?void console.warn("Video.grab cannot run because Phaser.Bit
             mode: Phaser.Physics.ARCADE
         },
         game: {
+            tilemap: 'tilemap-default',
             doubleJump: true,
             players: {
                 offset: {

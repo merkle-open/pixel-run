@@ -19,6 +19,15 @@
 (function(window, undefined) {
     'use strict';
 
+    Util.hyphenate = function(str) {
+        return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+    };
+
+})(window);
+
+(function(window, undefined) {
+    'use strict';
+
     function Replacer(input, data) {
         this.input = input;
         this.data = data;
@@ -127,22 +136,41 @@
     var config = Container.settings.physics;
     var paths = Container.settings.paths;
 
+    var loader = {
+        images: {
+            sky: "assets/img/sky.png",
+            ground: "assets/img/platform.png",
+            star: "assets/img/star.png",
+            player: "assets/img/avatars/player.png"
+        },
+        sprites: {
+            playerExample: {
+                path: "assets/img/dude.png",
+                x: 32,
+                y: 48
+            }
+        }
+    };
+
     Container.Boot = function(game) {
         // Empty class wrapper
     };
 
     Container.Boot.prototype = {
         preload: function() {
-            this.load.image('sky', 'assets/img/sky.png');
-            this.load.image('ground', 'assets/img/platform.png');
-            this.load.image('star', 'assets/img/star.png');
-            this.load.spritesheet('player', 'assets/img/dude.png', 32, 48);
+            for(var img in loader.images) {
+                this.load.image(Util.hyphenate(img), loader.images[img]);
+            }
+            for(var sprite in loader.sprites) {
+                var opts = loader.sprites[sprite];
+                this.load.spritesheet(Util.hyphenate(sprite), opts.path, opts.x, opts.y);
+            }
         },
         create: function() {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.pageAlignHorizontally = true;
             if (!this.game.device.desktop) {
-                this.scale.minWidth = 150;
+                this.scale.minWidth = 250;
                 this.scale.minHeight = 250;
                 this.scale.maxWidth = 600;
                 this.scale.maxHeight = 1000;
@@ -169,6 +197,7 @@
             Container.World = {};
         },
         create: function() {
+            var self = this;
             this.add.sprite(0, 0, 'sky');
 
             var platforms = this.add.group();
@@ -187,7 +216,12 @@
             Container.World.ground = ground;
             Container.World.ledge = ledge;
             Container.World.players = [];
-            this.$createPlayers();
+
+            // Create players set in settings file under /app
+            this.$createPlayers(function() {
+                // Follow the first player with the camera
+                self.camera.follow(Container.World.players[Container.World.players.length - 1]);
+            });
         },
         update: function() {
             this.physics.arcade.collide(Container.World.players, Container.World.ground);
@@ -196,13 +230,17 @@
                 player.run();
             });
         },
-        $createPlayers: function() {
+        render: function() {
+            this.game.debug.text('FPS ' + (this.game.time.fps || '--'), 20, 70, "#00ff00", "20px Courier");
+        },
+        $createPlayers: function(callback) {
             var self = this;
             for(var i = 0; i < config.players.amount; i++) {
-                var instance = new Factory.Player(self, i, config.players.offset.x * i, config.players.offset.y, '');
+                var instance = new Factory.Player(self, i, config.players.offset.x * i, config.players.offset.y, 'player-default');
                 instance.init();
                 Container.World.players.push(instance);
             }
+            callback();
         }
     };
 
