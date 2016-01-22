@@ -17,37 +17,4 @@ npm run serve
 [MIT License](LICENSE)
 
 ## API
-
-#### $createModule
-
-```js
-Root.Example = Root.$createModule('example', function(App) {
-    /**
-     * You can access the current module via `this` and
-     * use all other modules via App.<module>
-     */
-
-    if(App.World.load()) {
-        this.worldLoaded = true;
-    }
-});
-```
-
-#### $start
-
-```js
-/**
- * You can pass an array with arguments to the $start
- * method, which defines the order in which the factories
- * will be initialized.
- */
-
-var order = [
-    'first',
-    'second',
-    'last'
-];
-
-Root.$start(order);
-
-```
+tbd.
