@@ -46,6 +46,10 @@
         this.body.collideWorldBounds = true;
     };
 
+    Player.prototype.collide = function(target, die) {
+        this.injector.game.arcade.collide(this, target, die, null);
+    };
+
     Player.prototype.run = function() {
         this.body.velocity.x = root.settings.game.players.velocity.x;
     };
