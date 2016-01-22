@@ -7,7 +7,7 @@
         "name": "dependencies",
         "files": [
             "./bower_components/jquery/dist/jquery.min.js",
-            "./bower_components/phaser/build/phaser.min.js",
+            "./bower_components/phaser/build/phaser.js",
             "./bower_components/browser-storage/browser-storage.min.js",
             "./app/provider.js",
             "./app/settings.js"
