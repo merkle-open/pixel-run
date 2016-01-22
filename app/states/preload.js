@@ -5,18 +5,29 @@
 
     Container.Preload = function(game) {
         this.ready = false;
+        this.error = null;
         this.background = null;
     };
 
     Container.Preload.prototype = {
         preload: function() {
-            this.physics.startSystem(Phaser.Physics.ARCADE);
+            try {
+                this.physics.startSystem(Phaser.Physics.ARCADE);
+                this.ready = true;
+            } catch(notReady) {
+                this.error = notReady;
+            }
         },
         create: function() {
-            this.state.start('Game');
+            if(this.ready) {
+                this.state.start('Game');
+            } else {
+                throw this.error;
+            }
         },
         quit: function(pointer) {
             alert('Goodbye');
+            this.ready = false;
         }
     };
 
