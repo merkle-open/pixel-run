@@ -53,7 +53,15 @@ at the very start of the variable name.
 
 ##### Signature
 ```js
-new Factory.Player(game: Phaser.Game, index: Number, posX: Number, posY: Number [, variation: String])
+new Factory.Player(game: Phaser.Game, index: Number, posX: Number, posY: Number [, variation: String]): Player
+```
+
+#### Tilemap
+Creates and handles tilemaps in an easy way.
+
+##### Signature
+```js
+new Factory.Tilemap(game: Phaser.game, name: String): Tilemap
 ```
 
 ### Game
