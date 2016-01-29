@@ -19,6 +19,19 @@
             // Instanciate the tilemap
             this.$createTilemap();
 
+            window.Container.Map = new Factory.Map({
+                tilemap: {
+                    name: 'demoTilemap',
+                    tiles: {
+                        name: 'demo',
+                        id: 'demoTile'
+                    },
+                    layer: {
+                        name: 'layer1'
+                    }
+                }
+            });
+
             // Create players set in settings file under /app
             this.$createPlayers(function() {
                 // Follow the first player with the camera

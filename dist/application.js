@@ -100,6 +100,40 @@
 
     var root = window.Container;
 
+    function MapGenerator(options) {
+        this.tilemap = options.tilemap;
+        this.settings = options.gameSettings;
+        this.factory = {};
+        return this;
+    }
+
+    MapGenerator.protoytpe = {
+        updater: function(handler) {
+            return function() {
+                handler(root, window);
+            }
+        },
+        $createTilemap: function(game) {
+            var map = new Factory.Tilemap(game, this.tilemap.name);
+            map.addToGame(game);
+            map.addImage(this.tilemap.tile.name, this.tilemap.tile.id);
+            map.createLayer(this.tilemap.layer.name); // Works until here
+            map.resize(this.tilemap.layer.name);
+        },
+        apply: function(handler) {
+            return handler(this);
+        }
+    };
+
+    window.Factory.Map = MapGenerator;
+
+})(window);
+
+(function(window, undefined) {
+    'use strict';
+
+    var root = window.Container;
+
     function Player(game, index, posX, posY, variation) {
         this.$baseSprite = root.settings.game.players.baseName;
         this.$basePath = root.settings.paths.player;
@@ -326,6 +360,19 @@
 
             // Instanciate the tilemap
             this.$createTilemap();
+
+            window.Container.Map = new Factory.Map({
+                tilemap: {
+                    name: 'demoTilemap',
+                    tiles: {
+                        name: 'demo',
+                        id: 'demoTile'
+                    },
+                    layer: {
+                        name: 'layer1'
+                    }
+                }
+            });
 
             // Create players set in settings file under /app
             this.$createPlayers(function() {
