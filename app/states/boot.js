@@ -8,7 +8,8 @@
     var loader = {
         images: {
             player: 'assets/img/avatars/player.png',
-            demoTile: 'assets/img/world/tiles/demo.png'
+            demoTile: 'assets/img/world/tiles/demo.png',
+            sky: 'assets/img/sky.png'
         },
         sprites: {
             playerExample: {
@@ -57,6 +58,7 @@
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.pageAlignHorizontally = true;
             if (!this.game.device.desktop) {
+                // Adding mobile support (phaser example)
                 this.scale.minWidth = 250;
                 this.scale.minHeight = 250;
                 this.scale.maxWidth = 600;

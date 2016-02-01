@@ -16,21 +16,11 @@
         create: function() {
             var self = this;
 
+            // Adding background image
+            this.$createBackground();
+
             // Instanciate the tilemap
             this.$createTilemap();
-
-            window.Container.Map = new Factory.Map({
-                tilemap: {
-                    name: 'demoTilemap',
-                    tiles: {
-                        name: 'demo',
-                        id: 'demoTile'
-                    },
-                    layer: {
-                        name: 'layer1'
-                    }
-                }
-            });
 
             // Create players set in settings file under /app
             this.$createPlayers(function() {
@@ -41,7 +31,7 @@
         update: function() {
             var self = this;
             Container.World.players.forEach(function(player) {
-                Container.game.physics.arcade.collide(player, Container.World.tilemap);
+                Container.game.physics.arcade.collide(player, Container.World.tilemapLayer);
                 player.$update();
                 player.run();
             });
@@ -49,12 +39,28 @@
         render: function() {
             this.game.debug.text('FPS ' + (this.game.time.fps || '--'), 20, 70, "#00ff00", "20px Courier");
         },
+        $createBackground: function() {
+            var background = new Factory.Sprite(this, 'sky');
+            background.add(0, 0);
+        },
         $createTilemap: function() {
-            var map = new Factory.Tilemap(this, 'demoTilemap');
-            map.addToGame(this);
-            map.addImage('demo', 'demoTile');
-            map.createLayer('layer1'); // Works until here
-            map.resize('layer1');
+            var self = this;
+            Container.procedures.addTilemap.run({
+                game: self,
+                tilemap: 'demoTilemap',
+                layer: {
+                    name: 'layer1',
+                    start: 0,
+                    end: 1000
+                },
+                tile: {
+                    name: 'demo',
+                    asset: 'demoTile'
+                }
+            }, function(result) {
+                Container.World.tilemap = result.tilemap.map;
+                Container.World.tilemapLayer = result.layer;
+            });
         },
         $createPlayers: function(callback) {
             var self = this;
