@@ -36,6 +36,15 @@
                 player.run();
             });
         },
+        $noPlayersAlive: function() {
+            var noAlive = true;
+            Container.World.players.forEach(function(player) {
+                if(player.alive) {
+                    noAlive = true;
+                }
+            });
+            return noAlive;
+        },
         $createBackground: function() {
             //var background = new Factory.Sprite(this, 'background-space');
             //background.add(0, 0);
