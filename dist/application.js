@@ -192,6 +192,13 @@
     };
 
     /**
+     * Let a player die
+     */
+    Player.prototype.die = function() {
+        this.kill();
+    };
+
+    /**
      * Generates the action key settings and creates the right
      * cursor for each player instance.
      * @return {Key}            Phaser key stack
@@ -203,11 +210,17 @@
 
     /**
      * General player update method, containing the jump logic
+     * and die stuff
      */
     Player.prototype.$update = function() {
-        if(this.y === 0) {
-            alert('die?');
+        if(this.y === Container.settings.render.height - 20) {
+            this.die();
         }
+
+        if(this.x <= Container.game.camera.view.x - 70) {
+            this.die();
+        }
+
         var listenTo = this.$addActionKey();
         if(listenTo.isDown) {
             this.jump();
@@ -516,6 +529,15 @@
                 player.$update();
                 player.run();
             });
+        },
+        $noPlayersAlive: function() {
+            var noAlive = true;
+            Container.World.players.forEach(function(player) {
+                if(player.alive) {
+                    noAlive = true;
+                }
+            });
+            return noAlive;
         },
         $createBackground: function() {
             //var background = new Factory.Sprite(this, 'background-space');
