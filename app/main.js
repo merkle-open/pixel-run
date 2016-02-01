@@ -9,6 +9,7 @@
     game.state.add('Boot', Container.Boot);
     game.state.add('Preload', Container.Preload);
     game.state.add('Game', Container.Game);
+    game.state.add('Procedures', Container.Procedures);
     game.state.start('Boot'); //starting the boot state
 
     Container.game = game;
