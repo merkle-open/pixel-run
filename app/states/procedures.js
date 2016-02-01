@@ -1,6 +1,8 @@
 (function(window, undefined) {
     'use strict';
 
+    var Contianer = window.Container;
+
     Container.Procedures = function(game) {
         // Empty class wrapper
     };

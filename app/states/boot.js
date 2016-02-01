@@ -7,19 +7,15 @@
 
     var loader = {
         images: {
-            player: 'assets/img/avatars/player.png',
-            demoTile: 'assets/img/world/tiles/demo.png',
-            sky: 'assets/img/sky.png'
+            spaceBackground: 'assets/img/backgrounds/background-space.png',
+            spaceTile: 'assets/img/world/space/tiles/tile-space.png',
+            spaceConsultant: 'assets/img/avatars/space/avatar-space-consultant.png',
+            spaceTechie: 'assets/img/avatars/space/avatar-space-techie.png',
+            spaceDesigner: 'assets/img/avatars/space/avatar-space-designer.png'
         },
-        sprites: {
-            playerExample: {
-                path: 'assets/img/dude.png',
-                x: 32,
-                y: 48
-            }
-        },
+
         tilemaps: {
-            demoTilemap: 'assets/img/world/tilemaps/demo.json'
+            spaceTilemap: 'assets/img/world/space/tilemap-space.json'
         }
     };
 
@@ -30,31 +26,17 @@
     Container.Boot.prototype = {
         preload: function() {
             var self = this;
-            this.$loadEach([
-                {
-                    collection: loader.images,
-                    handler: function(key, path) {
-                        console.info('$loadEach Image > %s', key);
-                        self.load.image(key, path);
-                    }
-                },
-                {
-                    collection: loader.sprites,
-                    handler: function(key, props) {
-                        console.info('$loadEach Sprites > %s', key);
-                        self.load.spritesheet(key, props.path, props.x, props.y);
-                    }
-                },
-                {
-                    collection: loader.tilemaps,
-                    handler: function(key, path) {
-                        console.info('$loadEach Tilemaps %s', key);
-                        self.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
-                    }
-                }
-            ]);
+
+            this.load.tilemap('tilemap-space', 'assets/img/world/space/tilemap-space.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.image('background-space', 'assets/img/backgrounds/background-space.png');
+            this.load.image('tile-space', 'assets/img/world/space/tiles/tile-space.png');
+            this.load.image('avatar-space-consultant', 'assets/img/avatars/space/avatar-space-consultant.png');
+            this.load.image('avatar-space-techie', 'assets/img/avatars/space/avatar-space-techie.png');
+            this.load.image('avatar-space-designer', 'assets/img/avatars/space/avatar-space-designer.png');
+
         },
         create: function() {
+            /*
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.pageAlignHorizontally = true;
             if (!this.game.device.desktop) {
@@ -64,22 +46,8 @@
                 this.scale.maxWidth = 600;
                 this.scale.maxHeight = 1000;
                 this.scale.forceLandscape = false;
-            }
+            }*/
             this.state.start('Preload');
-        },
-        $loadEach: function(collection, handler) {
-            var self = this;
-            if(typeof collection === 'object' && handler) {
-                for(var key in collection) {
-                    handler(key, collection[key]);
-                }
-            } else if(Array.isArray(collection) && !handler) {
-                collection.forEach(function(child) {
-                    self.$loadEach(child['collection'], child['handler']);
-                });
-            } else {
-                throw new Error('BootState: $loadEach requires an object collection and handler or an array');
-            }
         }
     };
 
