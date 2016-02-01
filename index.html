@@ -3,9 +3,26 @@
 <head>
     <meta charset="utf-8">
     <title>TunOstschweiz - Namics Game</title>
-    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="dist/bin/app.min.css">
+    <link rel="icon" href="assets/img/avatars/player.png" type="image/png">
 </head>
 <body>
+    <div class="preload-wrapper" id="js-hide-start">
+        <div class="content">
+            <div class="grid">
+                <div class="col-1-2">
+                    <select id="js-world">
+                        <option value="space" selected>Space</option>
+                        <option value="world2">World 2</option>
+                        <option value="world3">World 3</option>
+                    </select>
+                </div>
+                <div class="col-1-2">
+                    <button role="button" id="js-start-game">Start Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <main id="startgame"></main>
     <script src="dist/dependencies.js" charset="utf-8"></script>
     <script src="dist/application.js" charset="utf-8"></script>
