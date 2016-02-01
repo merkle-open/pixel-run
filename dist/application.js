@@ -130,7 +130,7 @@
      */
     function Player(game, index, posX, posY, variation) {
         this.$baseSprite = root.settings.game.players.baseName;
-        this.$basePath = root.settings.paths.player;
+        this.$basePath = root.settings.game.players.basePath + root.settings.worldType + '/';
         this.$mimeType = root.settings.game.players.mimeType;
         this.id = index;
         this.type = variation;
@@ -146,36 +146,6 @@
 
     Player.prototype = Object.create(Phaser.Sprite.prototype);
     Player.prototype.constructor = Player;
-
-    /**
-     * Generates the path to the right spritesheet of each
-     * player and its variation
-     * @return {String}         Path to the asset
-     */
-    Player.prototype.$getSpritesheet = function() {
-        this.type = this.type === undefined ? '-' + root.settings.game.players.variations[index] : '';
-        return this.$baseSprite + this.type;
-    };
-
-    /**
-     * Generates the action key settings and creates the right
-     * cursor for each player instance.
-     * @return {Key}            Phaser key stack
-     */
-    Player.prototype.$addActionKey = function() {
-        var cursors = this.injector.input.keyboard.createCursorKeys();
-        return this.$actionKey = cursors[this.jumpKey];
-    };
-
-    /**
-     * General player update method, containing the jump logic
-     */
-    Player.prototype.$update = function() {
-        var listenTo = this.$addActionKey();
-        if(listenTo.isDown) {
-            this.jump();
-        }
-    };
 
     /**
      * Initializes a player with the right physic settings
@@ -208,7 +178,7 @@
      * Let the player jump
      */
     Player.prototype.jump = function() {
-        if(this.body.touching.down) {
+        if(this.body.onFloor()) {
             this.body.velocity.y = root.settings.game.players.velocity.y;
         }
         /* DOUBLE JUMP LOGIC
@@ -219,6 +189,39 @@
             this.body.velocity.y = -550;
             this.doubleJump = false;
         } */
+    };
+
+    /**
+     * Generates the action key settings and creates the right
+     * cursor for each player instance.
+     * @return {Key}            Phaser key stack
+     */
+    Player.prototype.$addActionKey = function() {
+        var cursors = this.injector.input.keyboard.createCursorKeys();
+        return this.$actionKey = cursors[this.jumpKey];
+    };
+
+    /**
+     * General player update method, containing the jump logic
+     */
+    Player.prototype.$update = function() {
+        if(this.y === 0) {
+            alert('die?');
+        }
+        var listenTo = this.$addActionKey();
+        if(listenTo.isDown) {
+            this.jump();
+        }
+    };
+
+    /**
+     * Generates the path to the right spritesheet of each
+     * player and its variation
+     * @return {String}         Path to the asset
+     */
+    Player.prototype.$getSpritesheet = function() {
+        this.type = this.type === undefined ? '-' + root.settings.game.players.variations[this.id] : '';
+        return this.$baseSprite + root.settings.worldType + this.type;
     };
 
     window.Factory.Player = Player;
@@ -430,19 +433,15 @@
 
     var loader = {
         images: {
-            player: 'assets/img/avatars/player.png',
-            demoTile: 'assets/img/world/tiles/demo.png',
-            sky: 'assets/img/sky.png'
+            spaceBackground: 'assets/img/backgrounds/background-space.png',
+            spaceTile: 'assets/img/world/space/tiles/tile-space.png',
+            spaceConsultant: 'assets/img/avatars/space/avatar-space-consultant.png',
+            spaceTechie: 'assets/img/avatars/space/avatar-space-techie.png',
+            spaceDesigner: 'assets/img/avatars/space/avatar-space-designer.png'
         },
-        sprites: {
-            playerExample: {
-                path: 'assets/img/dude.png',
-                x: 32,
-                y: 48
-            }
-        },
+
         tilemaps: {
-            demoTilemap: 'assets/img/world/tilemaps/demo.json'
+            spaceTilemap: 'assets/img/world/space/tilemap-space.json'
         }
     };
 
@@ -453,31 +452,17 @@
     Container.Boot.prototype = {
         preload: function() {
             var self = this;
-            this.$loadEach([
-                {
-                    collection: loader.images,
-                    handler: function(key, path) {
-                        console.info('$loadEach Image > %s', key);
-                        self.load.image(key, path);
-                    }
-                },
-                {
-                    collection: loader.sprites,
-                    handler: function(key, props) {
-                        console.info('$loadEach Sprites > %s', key);
-                        self.load.spritesheet(key, props.path, props.x, props.y);
-                    }
-                },
-                {
-                    collection: loader.tilemaps,
-                    handler: function(key, path) {
-                        console.info('$loadEach Tilemaps %s', key);
-                        self.load.tilemap(key, path, null, Phaser.Tilemap.TILED_JSON);
-                    }
-                }
-            ]);
+
+            this.load.tilemap('tilemap-space', 'assets/img/world/space/tilemap-space.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.image('background-space', 'assets/img/backgrounds/background-space.png');
+            this.load.image('tile-space', 'assets/img/world/space/tiles/tile-space.png');
+            this.load.image('avatar-space-consultant', 'assets/img/avatars/space/avatar-space-consultant.png');
+            this.load.image('avatar-space-techie', 'assets/img/avatars/space/avatar-space-techie.png');
+            this.load.image('avatar-space-designer', 'assets/img/avatars/space/avatar-space-designer.png');
+
         },
         create: function() {
+            /*
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.scale.pageAlignHorizontally = true;
             if (!this.game.device.desktop) {
@@ -487,22 +472,8 @@
                 this.scale.maxWidth = 600;
                 this.scale.maxHeight = 1000;
                 this.scale.forceLandscape = false;
-            }
+            }*/
             this.state.start('Preload');
-        },
-        $loadEach: function(collection, handler) {
-            var self = this;
-            if(typeof collection === 'object' && handler) {
-                for(var key in collection) {
-                    handler(key, collection[key]);
-                }
-            } else if(Array.isArray(collection) && !handler) {
-                collection.forEach(function(child) {
-                    self.$loadEach(child['collection'], child['handler']);
-                });
-            } else {
-                throw new Error('BootState: $loadEach requires an object collection and handler or an array');
-            }
         }
     };
 
@@ -546,37 +517,45 @@
                 player.run();
             });
         },
-        render: function() {
-            this.game.debug.text('FPS ' + (this.game.time.fps || '--'), 20, 70, "#00ff00", "20px Courier");
-        },
         $createBackground: function() {
-            var background = new Factory.Sprite(this, 'sky');
-            background.add(0, 0);
+            //var background = new Factory.Sprite(this, 'background-space');
+            //background.add(0, 0);
         },
         $createTilemap: function() {
             var self = this;
+
+            var map = new Factory.Tilemap(self, 'tilemap-space');
+            map.addToGame(self);
+            map.addImage('tile-space', 'tile-space');
+            var layer = map.createLayer('world');
+            map.setCollision('world', 0, 1000);
+            map.resize('world');
+            Container.World.tilemapLayer = layer;
+
+
+            /*
             Container.procedures.addTilemap.run({
                 game: self,
-                tilemap: 'demoTilemap',
+                tilemap: 'tilemap-space',
                 layer: {
-                    name: 'layer1',
+                    name: 'world',
                     start: 0,
-                    end: 1000
+                    end: 10000
                 },
                 tile: {
-                    name: 'demo',
-                    asset: 'demoTile'
+                    name: 'tile-space',
+                    asset: 'tile-space'
                 }
             }, function(result) {
                 Container.World.tilemap = result.tilemap.map;
                 Container.World.tilemapLayer = result.layer;
-            });
+            }); */
         },
         $createPlayers: function(callback) {
             var self = this;
             var offset = config.players.offset;
             for(var i = 0; i < config.players.amount; i++) {
-                var instance = new Factory.Player(self, i, offset.x * i, offset.y, 'player-default');
+                var instance = new Factory.Player(self, i, offset.x * i, offset.y);
                 instance.init();
                 Container.World.players.push(instance);
             }
@@ -624,6 +603,8 @@
 (function(window, undefined) {
     'use strict';
 
+    var Contianer = window.Container;
+
     Container.Procedures = function(game) {
         // Empty class wrapper
     };
@@ -668,6 +649,11 @@
     };
 
     Store.prototype = {
+        /**
+         * Sets a new score for a new holder
+         * @param  {String} name        Name of score holder
+         * @param  {Number} value       Score value
+         */
         score: function(name, value) {
             if(!Local.has('score') || !Array.isArray(Local.get('score'))) {
                 this.resetScore();
@@ -679,14 +665,28 @@
             });
             Local.set('score', old);
         },
-        getScore: function() {
-            return this._orderScore(Local.get('score'));
-        },
+        /**
+         * Get the highscore as a number. Set objfy to true,
+         * to get the holder and score in object value.
+         * @param  {Boolean} objfy      If should objectify the highscore
+         * @return {Number|Object}      Highscore
+         */
         getHighscore: function(objfy) {
-            var result = this.getScore()[0];
+            var result = this.$getScore()[0];
             return objfy ? result : result.score;
         },
-        _orderScore: function(score) {
+        /**
+         * Reset the local store and empty all previous values
+         */
+        resetScore: function() {
+            Local.set('score', []);
+        },
+        /**
+         * Private helper to order the score descending
+         * @param  {Array} score        Highscore array
+         * @return {Array}              Ordered array
+         */
+        $orderScore: function(score) {
             function compare(a, b) {
                 if(a.score > b.score) {
                     return -1;
@@ -698,8 +698,12 @@
             }
             return score.sort(compare);
         },
-        resetScore: function() {
-            Local.set('score', []);
+        /**
+         * Get the highest score in array form (private method)
+         * @return {Array} scores
+         */
+        $getScore: function() {
+            return this.$orderScore(Local.get('score'));
         }
     };
 
@@ -721,15 +725,34 @@
 
     var config = Container.settings.render;
 
-    var game = new Phaser.Game(config.width, config.height, config.mode, config.node);
+    var fade = function(element) {
+        var op = 1;  // initial opacity
+        var timer = setInterval(function () {
+            if (op <= 0.1){
+                clearInterval(timer);
+                element.style.display = 'none';
+            }
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            op -= op * 0.1;
+        }, 50);
+    };
 
-    //adding all the required states
-    game.state.add('Boot', Container.Boot);
-    game.state.add('Preload', Container.Preload);
-    game.state.add('Game', Container.Game);
-    game.state.add('Procedures', Container.Procedures);
-    game.state.start('Boot'); //starting the boot state
+    document.getElementById('js-start-game').addEventListener('click', function() {
+        fade(document.getElementById('js-hide-start'));
+        Container.settings.worldType = document.getElementById('js-world').value;
 
-    Container.game = game;
+
+        var game = new Phaser.Game(config.width, config.height, config.mode, config.node);
+
+        //adding all the required states
+        game.state.add('Boot', Container.Boot);
+        game.state.add('Preload', Container.Preload);
+        game.state.add('Game', Container.Game);
+        game.state.add('Procedures', Container.Procedures);
+        game.state.start('Boot'); //starting the boot state
+
+        Container.game = game;
+    });
 
 })(window);
