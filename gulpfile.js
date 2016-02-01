@@ -17,6 +17,10 @@ gulp.task('clean:dist:app', function() {
     return remove(config.app.target + '/' + config.app.name + '.*');
 });
 
+gulp.task('clean:dist:bundle', function() {
+    return remove(config.bundle.target + '/' + config.bundle.name + '.*');
+})
+
 gulp.task('clean:dist:dependencies', function() {
     return remove(config.dependencies.target + '/' + config.dependencies.name + '.*');
 });
@@ -34,6 +38,13 @@ gulp.task('build:app', ['clean:dist:app'], function() {
         .pipe(gulp.dest(config.app.target));
 });
 
+gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies'], function() {
+    return gulp.src(config.app.target + '/*.js')
+        .pipe(uglify())
+        .pipe(concat(config.bundle.name + '.min.js'))
+        .pipe(gulp.dest(config.app.target));
+});
+
 gulp.task('watch:app', function() {
     var watcher = gulp.watch(config.app.files, ['build:app']);
     watcher.on('change', function(event) {
@@ -46,7 +57,9 @@ gulp.task('watch:dependencies', function() {
     watcher.on('change', function(event) {
         console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     });
-});;
+});
+
+gulp.task('bundle', ['build:bundle']);
 
 gulp.task('default', [
     'build:dependencies',

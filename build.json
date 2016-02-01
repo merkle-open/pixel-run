@@ -2,6 +2,10 @@
     "clean": {
         "dist": "./dist/**/*.*"
     },
+    "bundle": {
+        "name": "bundle",
+        "target": "./dist"
+    },
     "dependencies": {
         "target": "./dist",
         "name": "dependencies",
