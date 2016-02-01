@@ -13,7 +13,7 @@
      */
     function Player(game, index, posX, posY, variation) {
         this.$baseSprite = root.settings.game.players.baseName;
-        this.$basePath = root.settings.paths.player;
+        this.$basePath = root.settings.game.players.basePath + root.settings.worldType + '/';
         this.$mimeType = root.settings.game.players.mimeType;
         this.id = index;
         this.type = variation;
@@ -29,36 +29,6 @@
 
     Player.prototype = Object.create(Phaser.Sprite.prototype);
     Player.prototype.constructor = Player;
-
-    /**
-     * Generates the path to the right spritesheet of each
-     * player and its variation
-     * @return {String}         Path to the asset
-     */
-    Player.prototype.$getSpritesheet = function() {
-        this.type = this.type === undefined ? '-' + root.settings.game.players.variations[index] : '';
-        return this.$baseSprite + this.type;
-    };
-
-    /**
-     * Generates the action key settings and creates the right
-     * cursor for each player instance.
-     * @return {Key}            Phaser key stack
-     */
-    Player.prototype.$addActionKey = function() {
-        var cursors = this.injector.input.keyboard.createCursorKeys();
-        return this.$actionKey = cursors[this.jumpKey];
-    };
-
-    /**
-     * General player update method, containing the jump logic
-     */
-    Player.prototype.$update = function() {
-        var listenTo = this.$addActionKey();
-        if(listenTo.isDown) {
-            this.jump();
-        }
-    };
 
     /**
      * Initializes a player with the right physic settings
@@ -91,7 +61,7 @@
      * Let the player jump
      */
     Player.prototype.jump = function() {
-        if(this.body.touching.down) {
+        if(this.body.onFloor()) {
             this.body.velocity.y = root.settings.game.players.velocity.y;
         }
         /* DOUBLE JUMP LOGIC
@@ -102,6 +72,39 @@
             this.body.velocity.y = -550;
             this.doubleJump = false;
         } */
+    };
+
+    /**
+     * Generates the action key settings and creates the right
+     * cursor for each player instance.
+     * @return {Key}            Phaser key stack
+     */
+    Player.prototype.$addActionKey = function() {
+        var cursors = this.injector.input.keyboard.createCursorKeys();
+        return this.$actionKey = cursors[this.jumpKey];
+    };
+
+    /**
+     * General player update method, containing the jump logic
+     */
+    Player.prototype.$update = function() {
+        if(this.y === 0) {
+            alert('die?');
+        }
+        var listenTo = this.$addActionKey();
+        if(listenTo.isDown) {
+            this.jump();
+        }
+    };
+
+    /**
+     * Generates the path to the right spritesheet of each
+     * player and its variation
+     * @return {String}         Path to the asset
+     */
+    Player.prototype.$getSpritesheet = function() {
+        this.type = this.type === undefined ? '-' + root.settings.game.players.variations[this.id] : '';
+        return this.$baseSprite + root.settings.worldType + this.type;
     };
 
     window.Factory.Player = Player;
