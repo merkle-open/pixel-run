@@ -1,6 +1,7 @@
 {
-  "name": "to-game",
-  "version": "1.0.0",
+  "name": "tun-game",
+  "header": "Pixel. Run. Namics. (Tun Ostschweiz)",
+  "version": "0.0.2-beta",
   "description": "",
   "main": "",
   "scripts": {
@@ -11,11 +12,14 @@
     "url": "https://github.com/janbiasi/tun-ostschweiz.git"
   },
   "author": "Jan Biasi <jan.biasi@namics.com>",
+  "homepage": "http://namics.com/",
+  "company": "Namics AG",
   "license": "MIT",
   "devDependencies": {
     "del": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
+    "gulp-cssmin": "^0.1.7",
     "gulp-header": "^1.7.1",
     "gulp-if": "^2.0.0",
     "gulp-rename": "^1.2.2",
