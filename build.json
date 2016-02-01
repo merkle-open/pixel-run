@@ -3,18 +3,16 @@
         "dist": "./dist/**/*.*"
     },
     "bundle": {
-        "name": "bundle",
-        "target": "./dist"
+        "name": "app",
+        "target": "./dist/bin"
     },
     "dependencies": {
         "target": "./dist",
         "name": "dependencies",
         "files": [
-            "./bower_components/jquery/dist/jquery.min.js",
             "./bower_components/phaser/build/phaser.js",
             "./bower_components/browser-storage/browser-storage.min.js",
-            "./app/provider.js",
-            "./app/settings.js"
+            "./app/provider/*.js"
         ]
     },
     "app": {
@@ -26,6 +24,15 @@
             "./app/classes/*.js",
             "./app/states/*.js",
             "./app/main.js"
+        ]
+    },
+    "styles": {
+        "target": "./dist/bin",
+        "name": "app",
+        "files": [
+            "./assets/css/reset.css",
+            "./assets/css/grid.css",
+            "./assets/css/*.css"
         ]
     }
 }
