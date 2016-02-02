@@ -14,14 +14,15 @@
          * @param  {String} name        Name of score holder
          * @param  {Number} value       Score value
          */
-        score: function(name, value) {
+        score: function(name, value, map) {
             if(!Local.has('score') || !Array.isArray(Local.get('score'))) {
                 this.resetScore();
             }
             var old = Local.get('score');
             old.push({
                 holder: name,
-                score: value
+                score: value,
+                map: map
             });
             Local.set('score', old);
         },

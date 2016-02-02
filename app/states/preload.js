@@ -20,7 +20,7 @@
         },
         create: function() {
             if(this.ready) {
-                this.state.start('Procedures');
+                this.state.start('Game');
             } else {
                 throw this.error;
             }

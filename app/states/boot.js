@@ -13,7 +13,6 @@
             spaceTechie: 'assets/img/avatars/space/avatar-space-techie.png',
             spaceDesigner: 'assets/img/avatars/space/avatar-space-designer.png'
         },
-
         tilemaps: {
             spaceTilemap: 'assets/img/world/space/tilemap-space.json'
         }
