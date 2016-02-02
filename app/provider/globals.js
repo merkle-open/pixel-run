@@ -5,5 +5,6 @@
     window.Game = {};
     window.Container = {};
     window.Factory = {};
+    window.Session = {};
 
 })(window);

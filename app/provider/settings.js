@@ -36,6 +36,11 @@
                     x: 250
                 }
             }
+        },
+        worlds: {
+            space: {
+                contrast: '#ffffff'
+            }
         }
     };
 
