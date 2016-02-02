@@ -1,6 +1,18 @@
 (function(window, undefined) {
     'use strict';
 
+    Util.calculate = {
+        score: function(pixels) {
+            var calc = pixels / 100;
+            return Math.round(calc);
+        }
+    };
+
+})(window);
+
+(function(window, undefined) {
+    'use strict';
+
     /**
      * Generates a clone of an object (without proto values)
      * @param  {Object} obj         Object to clone
@@ -137,6 +149,7 @@
         this.jumpKey = root.settings.game.players.keymap[index];
         this.injector = game;
         this.doubleJump = false;
+        this.score = null;
 
         Phaser.Sprite.call(this, game, posX, posY, this.$getSpritesheet());
         game.add.existing(this);
@@ -179,22 +192,21 @@
      */
     Player.prototype.jump = function() {
         if(this.body.onFloor()) {
+            Container.Audio.jump.play();
             this.body.velocity.y = root.settings.game.players.velocity.y;
         }
-        /* DOUBLE JUMP LOGIC
-        if(this.body.touching.down && !this.doubleJump) {
-            this.body.velocity.y = -350;
-            this.doubleJump = true;
-        } else if(!this.body.touching.down && this.doubleJump) {
-            this.body.velocity.y = -550;
-            this.doubleJump = false;
-        } */
     };
 
     /**
      * Let a player die
      */
     Player.prototype.die = function() {
+        var session = Session[$index.session[this.id]];
+
+        Container.Audio.die.play();
+        session.text.option('extension', '(dead)');
+        session.text.$update();
+        session.score = this.score;
         this.kill();
     };
 
@@ -213,6 +225,7 @@
      * and die stuff
      */
     Player.prototype.$update = function() {
+        this.score = Util.calculate.score(this.x);
         if(this.y === Container.settings.render.height - 20) {
             this.die();
         }
@@ -304,6 +317,111 @@
 (function(window, undefined) {
     'use strict';
 
+    var Container = window.Container;
+
+    /**
+     * Score text base class which generates the
+     * text with the Util.Replacer class.
+     * @param {Game} game           Game reference
+     * @param {String} player       Name of the player
+     * @param {Number} score        Current game score
+     */
+    function ScoreText(game, player, score) {
+        var wtype = Container.settings.worldType;
+        this.template = '{name}: {score} {extension}';
+        this.injector = game;
+        this.player = player;
+        this.score = score || 0;
+        this.opts = {
+            extension: '',
+            fontSize: '20px',
+            fill: Container.settings.worlds[wtype].contrast || '#ffffff'
+        };
+
+        return this;
+    }
+
+    ScoreText.prototype = {
+        /**
+         * Returns the compiled text
+         * @return {String}         Compiled text
+         */
+        get: function() {
+            return Util.replace(this.template, {
+                name: this.player,
+                score: this.score,
+                extension: this.opts.extension
+            });
+        },
+        /**
+         * Set the score with a new value and updates the text.
+         * @param  {Number} score   Score value
+         */
+        set: function(score) {
+            this.score = score;
+            this.$update();
+        },
+        /**
+         * Increase the score with a value and updates the text.
+         * @param  {Number} add     Increasement value
+         */
+        increase: function(add) {
+            this.score = (this.score + add);
+            this.$update();
+        },
+        /**
+         * Add a new option to the internal options.
+         * @param  {String} key     Key of option
+         * @param  {*} value        Option value
+         */
+        option: function(key, value) {
+            this.opts[key] = value;
+        },
+        /**
+         * Add the text to a specific position on x and y. Set
+         * the third parameter to `true` to position it relative to
+         * the camera bounds.
+         * @param  {Number} x                   X axis position
+         * @param  {Number} y                   Y axis position
+         * @param  {Boolean} fixedToCamera      If text should be fixed to camera
+         * @return {Text}
+         */
+        add: function(x, y, fixedToCamera) {
+            var wtype = Container.settings.worldType;
+
+            x = x || 0;
+            y = y || 0;
+
+            this.$text = this.injector.add.text(x, y, this.get(), {
+                font: this.opts.fontSize + ' Roboto',
+                fill: this.opts.fill
+            });
+
+            this.$text.fixedToCamera = fixedToCamera || false;
+            if(fixedToCamera) {
+                this.$text.cameraOffset.setTo(x, y);
+            }
+
+            return this;
+        },
+        /**
+         * Updates the internal text. This method is private and should
+         * not be called from outside.
+         * @param  {[type]} score [description]
+         * @return {[type]}       [description]
+         */
+        $update: function(score) {
+            this.$text.setText(this.get());
+        }
+    };
+
+    window.Factory.ScoreText = ScoreText;
+
+})(window);
+
+(function(window, undefined) {
+    'use strict';
+
     var root = window.Container;
     var util = window.Util;
     var id = 0;
@@ -348,62 +466,6 @@
     };
 
     window.Factory.Sprite = Sprite;
-
-})(window);
-
-(function(window, undefined) {
-    'use strict';
-
-    var Container = window.Container;
-
-    function Text(game, player, score) {
-        this.template = '{name}: {score}';
-        this.injector = game;
-        this.player = player;
-        this.score = score || 0;
-        this.opts = {
-            fontSize: '100px'
-        };
-
-        return this;
-    }
-
-    Text.prototype = {
-        get: function() {
-            return Util.replace(this.template, {
-                name: this.player,
-                score: this.score
-            });
-        },
-        set: function(score) {
-            this.score = score;
-        },
-        increase: function(add) {
-            this.score = (this.score + add);
-        },
-        option: function(key, value) {
-            this.opts[key] = value;
-        },
-        add: function(x, y) {
-            var wtype = Container.settings.worldType;
-
-            x = x || 0;
-            y = y || 0;
-
-            this.$text = this.injector.add.text(x, y, this.get(), {
-                font: this.opts.fontSize + ' Roboto',
-                fill: Container.settings.worlds[wtype].contrast || '#ffffff'
-            });
-
-            this.$text.fixedToCamera = true;
-            //this.$text.anchor.set();
-        },
-        $update: function(score) {
-            this.$text.setText(this.get());
-        }
-    };
-
-    window.Factory.Text = Text;
 
 })(window);
 
@@ -496,52 +558,46 @@
 (function(window, undefined) {
     'use strict';
 
-    var game = Container.game;
-    var config = Container.settings.physics;
-    var paths = Container.settings.paths;
-
-    var loader = {
-        images: {
-            spaceBackground: 'assets/img/backgrounds/background-space.png',
-            spaceTile: 'assets/img/world/space/tiles/tile-space.png',
-            spaceConsultant: 'assets/img/avatars/space/avatar-space-consultant.png',
-            spaceTechie: 'assets/img/avatars/space/avatar-space-techie.png',
-            spaceDesigner: 'assets/img/avatars/space/avatar-space-designer.png'
-        },
-        tilemaps: {
-            spaceTilemap: 'assets/img/world/space/tilemap-space.json'
-        }
-    };
-
     Container.Boot = function(game) {
         // Empty class wrapper
     };
 
     Container.Boot.prototype = {
         preload: function() {
-            var self = this;
-
-            this.load.tilemap('tilemap-space', 'assets/img/world/space/tilemap-space.json', null, Phaser.Tilemap.TILED_JSON);
-            this.load.image('background-space', 'assets/img/backgrounds/background-space.png');
-            this.load.image('tile-space', 'assets/img/world/space/tiles/tile-space.png');
-            this.load.image('avatar-space-consultant', 'assets/img/avatars/space/avatar-space-consultant.png');
-            this.load.image('avatar-space-techie', 'assets/img/avatars/space/avatar-space-techie.png');
-            this.load.image('avatar-space-designer', 'assets/img/avatars/space/avatar-space-designer.png');
-
+            // Load worlds and audio effects
+            this.$loadWorldDependencies();
+            this.$loadAudioFX();
         },
+        /**
+         * Start the preloader state
+         */
         create: function() {
-            /*
-            this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-            this.scale.pageAlignHorizontally = true;
-            if (!this.game.device.desktop) {
-                // Adding mobile support (phaser example)
-                this.scale.minWidth = 250;
-                this.scale.minHeight = 250;
-                this.scale.maxWidth = 600;
-                this.scale.maxHeight = 1000;
-                this.scale.forceLandscape = false;
-            }*/
             this.state.start('Preload');
+        },
+        /**
+         * Load all dependencies for all worlds saved under settings
+         */
+        $loadWorldDependencies: function() {
+            var self = this;
+            var worldKeys = Object.keys(Container.settings.worlds);
+            worldKeys.forEach(function(w) {
+                self.load.tilemap('tilemap-' + w, 'assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
+                self.load.image('background-' + w, 'assets/img/backgrounds/background-' + w + '.png');
+                self.load.image('tile-' + w, 'assets/img/world/' + w + '/tiles/tile-' + w + '.png');
+                self.load.image('avatar-' + w + '-consultant', 'assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
+                self.load.image('avatar-' + w + '-techie', 'assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
+                self.load.image('avatar-' + w + '-designer', 'assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
+            });
+        },
+        /**
+         * Load all audio effects and samples
+         */
+        $loadAudioFX: function() {
+            var self = this;
+            var fxSounds = Container.settings.audio.fx;
+            fxSounds.forEach(function(fxSound) {
+                self.load.audio('fx-' + fxSound, 'assets/audio/fx/' + fxSound + '.mp3');
+            });
         }
     };
 
@@ -550,23 +606,20 @@
 (function(window, undefined) {
     'use strict';
 
-    var game = Container.game;
     var config = Container.settings.game;
+    var ttlDie = 0;
+    var ttlLastPos = null;
 
     Container.Game = function(game) {
         // Wrapper
     };
 
     Container.Game.prototype = {
-        preload: function() {
-            Container.World = {};
-            Container.World.players = [];
-        },
         create: function() {
             var self = this;
 
-            // Create sessions and score texts for the players
-            this.$createScoreTexts();
+            // Loading all audio effects
+            this.$createAudioFX();
 
             // Adding background image
             this.$createBackground();
@@ -580,53 +633,64 @@
                 // Follow the first player with the camera
                 self.camera.follow(self.$furthestPlayer().player);
             });
+
+            // Create sessions and score texts for the players
+            this.$createScoreTexts();
         },
         update: function() {
             var self = this;
+            var alivePlayers = self.$getAlivePlayers();
 
             // Follow the first player if the first player dies etc.
             self.camera.follow(self.$furthestPlayer().player);
 
-            // Quit the game if no players are alive
-            if(self.$allPlayersAlive().allAlive === false) {
+            if(alivePlayers.length === 0) {
+                // Quit the game if no players are alive
                 self.exit();
+            } else if(alivePlayers.length === 1) {
+                // TODO: If just one player is alive and he/she is blocked
+                // by an obstacle by more than 5 seconds, the game should end!
+                // Tipp: Player.body.blocked.right && Player.body.blocked.down
             }
 
-            Container.World.players.forEach(function(player) {
+            for(var name in Session) {
+                var player = Session[name].player();
+
                 // Let the players collide with the tilemap
                 Container.game.physics.arcade.collide(player, Container.World.tilemapLayer);
+
+                // Update the score text with the current position
+                Session[name].text.set(Util.calculate.score(player.x));
 
                 // Run update and jump detection/loops
                 player.$update();
                 player.run();
-            });
+            }
         },
         /**
          * Finishes the game
          */
         exit: function() {
+            var self = this;
             this.finished = true;
-            this.message = 'All player died!';
+            $.fadeOut(document.getElementById(Container.settings.render.node), function() {
+                Container.game.lockRender = true;
+                self.$savePlayerScores();
+                window.location.href = 'scores.html';
+            });
         },
         /**
-         * Checks if all players are alive and how many are alive.
-         * @return {Object}         Alive and allAlive
+         * Gets all players which are still alive
+         * @return {Array}          Alive players
          */
-        $allPlayersAlive: function() {
-            var allAlive = true;
-            var notAlive = 0;
-
+        $getAlivePlayers: function() {
+            var alive = [];
             Container.World.players.forEach(function(player) {
-                if(player.alive === false) {
-                    allAlive = false;
-                    notAlive++
+                if(player.alive === true) {
+                    alive.push(player);
                 }
             });
-
-            return {
-                alive: (Container.World.players.length - notAlive),
-                allAlive: !!(Container.World.players.length > notAlive)
-            };
+            return alive;
         },
         /**
          * Get the furthest player in game, used for the camera
@@ -649,26 +713,64 @@
                 position: posFirst
             };
         },
-        $createPlayerSession: function(name, pid) {
-            Session[name] = {
+        /**
+         * Creates all audio FX nodes and inject it to the Audio Container
+         */
+        $createAudioFX: function() {
+            var self = this;
+            var fxSounds = Container.settings.audio.fx;
+
+            fxSounds.forEach(function(fxSound) {
+                Container.Audio[fxSound] = {
+                    node: self.add.audio('fx-' + fxSound),
+                    play: function() {
+                        Container.Audio[fxSound].node.restart();
+                    }
+                };
+            });
+        },
+        /**
+         * Creates a session for a single player with the needed
+         * properties and references to the name, ID, color and the
+         * Phaser Player itself.
+         * @param  {String} name        Player name
+         * @param  {Number} pid         Player ID
+         * @return {Object}             Session Player
+         */
+        $createPlayerSession: function(username, realname, pid) {
+            var worlds = Container.settings.worlds;
+            var wtype = Container.settings.worldType;
+            $index.session[pid] = name;
+
+            return Session[username] = {
                 id: pid,
-                name: name
+                name: realname,
+                username: username,
+                color: worlds[wtype].colors[pid],
+                player: function() {
+                    return Container.World.players[pid];
+                }
             };
         },
+        /**
+         * Creates the score texts for each player. Before that,
+         * it will create a session for every player.
+         */
         $createScoreTexts: function() {
             var self = this;
             var pid = 0;
             var players = Container.settings.currentPlayers;
 
             players.forEach(function(name) {
-                name = name.trim().replace(' ', '');
-                self.$createPlayerSession(name, pid);
+                name = name.trim();
+                var username = name.replace(' ', '')
+                self.$createPlayerSession(username, name, pid);
 
-                var text = new Factory.Text(self, name, 0);
-                //text.$text.fixedToCamera = true;
-                text.add(150, 250 * (pid + 1));
+                var text = new Factory.ScoreText(self, username.toUpperCase(), 0);
+                text.option('fill', Session[username].color);
+                text.add(20, 22 * (pid + 1), true);
 
-                Session[name].text = text;
+                Session[username].text = text;
 
                 pid++;
             });
@@ -718,6 +820,15 @@
             }
 
             return callback(Container.World.players);
+        },
+        /**
+         * Save the score of all session players in localstorage
+         */
+        $savePlayerScores: function() {
+            for(var name in Session) {
+                var user = Session[name];
+                Container.Store.score(user.name, user.score, Container.settings.worldType);
+            }
         }
     };
 
@@ -846,11 +957,16 @@
 
     var $ = window.$;
     var config = Container.settings.render;
+    var startButton = document.getElementById('js-start-game');
 
-    document.getElementById('js-start-game').addEventListener('click', function() {
+    if(!startButton) {
+        return false;
+    }
+
+    startButton.addEventListener('click', function() {
 
         // Hide the overlay resp. fade it out
-        $.fade(document.getElementById('js-hide-start'));
+        $.fadeOut(document.getElementById('js-hide-start'));
 
         // Get the current selected world and players
         Container.settings.worldType = document.getElementById('js-world').value;

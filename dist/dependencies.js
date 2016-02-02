@@ -96263,12 +96263,13 @@ PIXI.TextureSilentFail = true;
      * Fade out <element> with opacity filter in CSS3
      * @param  {Node} element   HTML Node
      */
-    $.fade = function(element) {
+    $.fadeOut = function(element, callback) {
         var op = 1;  // initial opacity
         var timer = setInterval(function () {
             if (op <= 0.1){
                 clearInterval(timer);
                 element.style.display = 'none';
+                (callback || Util.noop)();
             }
             element.style.opacity = op;
             element.style.filter = 'alpha(opacity=' + op * 100 + ")";
@@ -96276,6 +96277,36 @@ PIXI.TextureSilentFail = true;
         }, 50);
     };
 
+    /**
+     * Fade in <element> with opacity filter in CSS3
+     * @param  {Node} element   HTML Node
+     */
+    $.fadeIn = function(element, callback) {
+        var op = 0;  // initial opacity
+        var timer = setInterval(function () {
+            if (op >= 1){
+                clearInterval(timer);
+                element.style.display = 'block';
+                (callback || Util.noop)();
+            }
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            op += op * 0.1;
+        }, 50);
+    };
+
+    $.requestFullscreen = function(elem) {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        }
+    };
+    
     window.$ = $;
 
 })(window);
@@ -96284,10 +96315,20 @@ PIXI.TextureSilentFail = true;
     'use strict';
 
     window.Util = {};
-    window.Game = {};
-    window.Container = {};
+    window.Game = {
+        roundWinner: null
+    };
+    window.Container = {
+        World: {
+            players: []
+        },
+        Audio: {}
+    };
     window.Factory = {};
     window.Session = {};
+    window.$index = {
+        session: {}
+    };
 
 })(window);
 
@@ -96295,6 +96336,12 @@ PIXI.TextureSilentFail = true;
     'use strict';
 
     Container.settings = {
+        audio: {
+            fx: [
+                'jump',
+                'die'
+            ]
+        },
         render: {
             width: '100%',
             height: 1000,
@@ -96332,7 +96379,8 @@ PIXI.TextureSilentFail = true;
         },
         worlds: {
             space: {
-                contrast: '#ffffff'
+                contrast: '#ffffff',
+                colors: ['#50bcff', '#a8c614', '#ff5050'],
             }
         }
     };
