@@ -56,7 +56,10 @@ gulp.task('build:app', ['clean:dist:app'], function() {
 });
 
 gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies'], function() {
-    return gulp.src(config.app.target + '/*.js')
+    return gulp.src([
+            config.dependencies.target + '/' + config.dependencies.name + '*.js',
+            config.app.target + '/' + config.app.name + '*.js'
+        ])
         .pipe(uglify())
         .pipe(concat(config.bundle.name + '.min.js'))
         //.pipe(banner)
