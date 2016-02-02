@@ -1,9 +1,19 @@
-input, select, textarea, button {
+body {
+    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    color: #000;
+}
+
+*:focus {
+    outline: 0;
+}
+
+input, select, textarea, button, .player-selector {
+    font-size: 18px;
     border: 1px solid #eee;
     border-radius: 4px;
     background-color: #fff;
     color: #222;
-    padding: 5px;
+    padding: 8px;
     box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12),0 1px 1px 0 rgba(0,0,0,.24);
     -moz-box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12),0 1px 1px 0 rgba(0,0,0,.24);
     -webkit-box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12),0 1px 1px 0 rgba(0,0,0,.24);
@@ -25,4 +35,11 @@ button.inverse {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+#js-player-list {
+    margin-top: 10px;
+    width: 100%;
+    display: block;
+    margin-top: 10px;
 }

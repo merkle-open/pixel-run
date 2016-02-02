@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.eot');
+    src: url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.woff') format('woff'),
+         url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.ttf') format('truetype'),
+         url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.svg#robotoblack') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
