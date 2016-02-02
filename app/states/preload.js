@@ -1,3 +1,7 @@
+/**
+ * /app/states/preload.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
 (function(window, undefined) {
     'use strict';
 

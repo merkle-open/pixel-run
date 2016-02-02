@@ -1,3 +1,7 @@
+/**
+ * /app/provider/extend.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
 (function(window, undefined) {
     'use strict';
 
@@ -61,7 +65,7 @@
             elem.webkitRequestFullscreen();
         }
     };
-    
+
     window.$ = $;
 
 })(window);

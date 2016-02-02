@@ -96243,6 +96243,10 @@ PIXI.TextureSilentFail = true;
  * @license MIT
  */
 !function(t,e){"use strict";function s(i){this.__global__=i||t||e,this.__use__="localStorage",this.__class__=s,this._snapshots=[],this._validateInitialState(),this.has=function(t){return this._getNativeRoot()[t]?!0:!1},this.get=function(t,s){return t?this.has(t)?this._converter.decode(this._getNativeRoot()[t]):e:this.all()},this.all=function(t){var e=t?this._getNative():this._getNativeRoot(),s={_root:e,_store:this};for(var i in e)e.hasOwnProperty(i)&&(s[i]=this._converter.decode(e[i]));return s},this.set=function(t,e){if("object"!=typeof t)try{var s=this._getNativeRoot();s[t]=this._converter.encode(e)}catch(i){console.error('Couldn\'t set "%s" in %s: %s',"store."+t+" = "+typeof e,this.__use__,i.message)}else for(var o in t)this.set(o,t[o])},this.remove=function(t){if(this.has(t))try{delete this._getNative()[t]}catch(e){console.error("Couldn't delete %s: %s",t,e.message)}},this.flush=function(){try{this._getNative().clear()}catch(t){console.error("Couldn't clear %s: %s",this.__use__,t.message)}},this.each=function(t){var e=this._getNative();for(var s in e)e.hasOwnProperty(s)&&t(JSON.parse(e[s]),s,e)},this.use=function(t){this.__use__=t,this._validateStorage()},this.count=function(){return this.keys().length},this.keys=function(){return Object.keys(this._getNative())},this.serialize=function(){var t=this.all(),e=JSON.stringify(this._getNative());return this._saveSnapshot(t,e)}}s.prototype={_validateInitialState:function(){this._validateStorage()&&null===this._validateSelectedStorage()&&(this.__global__.Store=e)},_validateSelectedStorage:function(){return null===this._getNative()?(console.error("Storage type %s not avaible!",this.__use__),!1):!0},_validateStorage:function(){return typeof Storage===e?(console.warn("Storage is not supportet by your browser, please update"),this.__supported__=!1,!1):(this.__supported__=!0,!0)},_getNative:function(){var t=this.__global__[this.__use__];if(!t)throw new Error("No storage found to execute action!");return t},_getNativeRoot:function(){var t=this._getNative();return"string"==typeof this._namespace?JSON.parse(t[this._namespace]):t},_generateNamespace:function(t){return t=""+t,t=t.replace("-","_").replace(" ","_")},_converter:{decode:function(t){return JSON.parse(t)},encode:function(t){return JSON.stringify(t)}},_saveSnapshot:function(t,e){return this._snapshots.length>10&&this._snapshots.pop(),this._snapshots.push({origin:t,serialized:e,at:(new Date).toUTCString()}),this._snapshots[0]}},t.Store=new s(t)}(window);
+/**
+ * /app/provider/extend.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
 (function(window, undefined) {
     'use strict';
 
@@ -96306,11 +96310,15 @@ PIXI.TextureSilentFail = true;
             elem.webkitRequestFullscreen();
         }
     };
-    
+
     window.$ = $;
 
 })(window);
 
+/**
+ * /app/provider/global.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
 (function(window, undefined) {
     'use strict';
 
@@ -96332,6 +96340,10 @@ PIXI.TextureSilentFail = true;
 
 })(window);
 
+/**
+ * /app/provider/settings.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
 (function(window, undefined) {
     'use strict';
 

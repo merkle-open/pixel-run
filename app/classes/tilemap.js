@@ -1,3 +1,7 @@
+/**
+ * /app/classes/tilemap.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
 (function(window, undefined) {
     'use strict';
 
