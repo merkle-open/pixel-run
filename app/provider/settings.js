@@ -2,6 +2,12 @@
     'use strict';
 
     Container.settings = {
+        audio: {
+            fx: [
+                'jump',
+                'die'
+            ]
+        },
         render: {
             width: '100%',
             height: 1000,
@@ -39,7 +45,8 @@
         },
         worlds: {
             space: {
-                contrast: '#ffffff'
+                contrast: '#ffffff',
+                colors: ['#50bcff', '#a8c614', '#ff5050'],
             }
         }
     };
