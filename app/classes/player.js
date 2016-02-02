@@ -1,3 +1,7 @@
+/**
+ * /app/classes/player.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
 (function(window, undefined) {
     'use strict';
 
@@ -20,6 +24,7 @@
         this.jumpKey = root.settings.game.players.keymap[index];
         this.injector = game;
         this.doubleJump = false;
+        this.score = null;
 
         Phaser.Sprite.call(this, game, posX, posY, this.$getSpritesheet());
         game.add.existing(this);
@@ -62,22 +67,21 @@
      */
     Player.prototype.jump = function() {
         if(this.body.onFloor()) {
+            Container.Audio.jump.play();
             this.body.velocity.y = root.settings.game.players.velocity.y;
         }
-        /* DOUBLE JUMP LOGIC
-        if(this.body.touching.down && !this.doubleJump) {
-            this.body.velocity.y = -350;
-            this.doubleJump = true;
-        } else if(!this.body.touching.down && this.doubleJump) {
-            this.body.velocity.y = -550;
-            this.doubleJump = false;
-        } */
     };
 
     /**
      * Let a player die
      */
     Player.prototype.die = function() {
+        var session = Session[$index.session[this.id]];
+
+        Container.Audio.die.play();
+        session.text.option('extension', '(dead)');
+        session.text.$update();
+        session.score = this.score;
         this.kill();
     };
 
@@ -96,6 +100,7 @@
      * and die stuff
      */
     Player.prototype.$update = function() {
+        this.score = Util.calculate.score(this.x);
         if(this.y === Container.settings.render.height - 20) {
             this.die();
         }
