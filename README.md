@@ -31,11 +31,11 @@ gulp watch:dependencies
 #### Dependencies
 * Gulp *(NPM)*
 * Phaser *(Bower)*
-* jQuery *(Bower)*
+* ~~jQuery *(Bower)*~~
 * BrowserStorage *(NPM)*
 
 ## License
-[MIT License](LICENSE)
+[MIT Licensed](LICENSE) by [Namics AG](http://namics.com/).
 
 ## API
 
@@ -56,12 +56,84 @@ at the very start of the variable name.
 new Factory.Player(game: Phaser.Game, index: Number, posX: Number, posY: Number [, variation: String]): Player
 ```
 
+###### init
+Initializes the player with arcade physics and collision settings. Must be called before any other function to work in the game!
+
+```js
+Player.init()
+```
+
+###### collide
+Adds a collision handler between the player and another target element defined before.
+```js
+Player.collide(target: Phaser.Tilemap [, die: Function])
+```
+
+###### run
+Let the player run on the x-axis with the speed defined in the global settings
+```js
+Player.run()
+```
+
+###### jump
+Let the player jump with the velocity set in the global settings. Auto-checks if the body
+is on the floor right then to provide a save jump.
+```js
+Player.jump()
+```
+
 #### Tilemap
 Creates and handles tilemaps in an easy way.
 
 ##### Signature
 ```js
-new Factory.Tilemap(game: Phaser.game, name: String): Tilemap
+new Factory.Tilemap(game: Phaser.Game, name: String): Tilemap
+```
+
+##### Methods
+
+###### addImage
+Adds a new tileset image for placing in the tilemap
+```js
+Tilemap.addImage(key: String, asset: String)
+```
+
+###### addToGame
+Adds the tilemap to the game (resp. injecting into it) given to the constructor or uses the parameter as injector point.
+```js
+Tilemap.addToGame([game: Phaser.Game])
+```
+
+###### createLayer
+Creates a layer defined in the tilemap.
+```js
+Tilemap.createLayer(layer: String): TilemapLayer
+```
+
+###### setCollision
+Sets resp. enable the collision on a specific layer.
+```js
+Tilemap.setCollision(layer: String, start: Number, end: Number)
+```
+
+###### resize
+Resizes the game to fit a specific layer.
+```js
+Tilemap.resize(layer: String)
+```
+
+#### Sprite
+Creates spritesheet for background images and other images positioned in the game with absolute coordinates (x and y).
+
+##### Signature
+```js
+new Factory.Sprite(game: Phaser.Game, key: String): Sprite
+```
+
+###### add
+Adds the spritesheet to a certain position in the game.
+```js
+Sprite.add(x: Number, y: Number)
 ```
 
 ### Game
@@ -87,8 +159,8 @@ the utility stuff. If you want to change something in the Jump N Run game itself
 Used for saving and persisting the highscores of the players. There are two main methods with a short example below.
 
 ```js
-Container.Store.score('Max Mustermann', 891);
-Container.Store.score('Hans Ruedi', 12);
+Container.Store.score('Max Mustermann', 891, 'Map 1');
+Container.Store.score('Hans Ruedi', 12, 'Map 1');
 Container.Store.getHighscore(); // 891
-Container.Store.getHighscore(true); // { score: 891, holder: 'Max Mustermann' }
+Container.Store.getHighscore(true); // { score: 891, holder: 'Max Mustermann', map: 'Map 1' }
 ```
