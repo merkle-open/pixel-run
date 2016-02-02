@@ -3,11 +3,16 @@
 
     var $ = window.$;
     var config = Container.settings.render;
+    var startButton = document.getElementById('js-start-game');
 
-    document.getElementById('js-start-game').addEventListener('click', function() {
+    if(!startButton) {
+        return false;
+    }
+
+    startButton.addEventListener('click', function() {
 
         // Hide the overlay resp. fade it out
-        $.fade(document.getElementById('js-hide-start'));
+        $.fadeOut(document.getElementById('js-hide-start'));
 
         // Get the current selected world and players
         Container.settings.worldType = document.getElementById('js-world').value;
