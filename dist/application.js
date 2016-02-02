@@ -354,6 +354,62 @@
 (function(window, undefined) {
     'use strict';
 
+    var Container = window.Container;
+
+    function Text(game, player, score) {
+        this.template = '{name}: {score}';
+        this.injector = game;
+        this.player = player;
+        this.score = score || 0;
+        this.opts = {
+            fontSize: '100px'
+        };
+
+        return this;
+    }
+
+    Text.prototype = {
+        get: function() {
+            return Util.replace(this.template, {
+                name: this.player,
+                score: this.score
+            });
+        },
+        set: function(score) {
+            this.score = score;
+        },
+        increase: function(add) {
+            this.score = (this.score + add);
+        },
+        option: function(key, value) {
+            this.opts[key] = value;
+        },
+        add: function(x, y) {
+            var wtype = Container.settings.worldType;
+
+            x = x || 0;
+            y = y || 0;
+
+            this.$text = this.injector.add.text(x, y, this.get(), {
+                font: this.opts.fontSize + ' Roboto',
+                fill: Container.settings.worlds[wtype].contrast || '#ffffff'
+            });
+
+            this.$text.fixedToCamera = true;
+            //this.$text.anchor.set();
+        },
+        $update: function(score) {
+            this.$text.setText(this.get());
+        }
+    };
+
+    window.Factory.Text = Text;
+
+})(window);
+
+(function(window, undefined) {
+    'use strict';
+
     var root = window.Container;
 
     /**
@@ -452,7 +508,6 @@
             spaceTechie: 'assets/img/avatars/space/avatar-space-techie.png',
             spaceDesigner: 'assets/img/avatars/space/avatar-space-designer.png'
         },
-
         tilemaps: {
             spaceTilemap: 'assets/img/world/space/tilemap-space.json'
         }
@@ -510,6 +565,9 @@
         create: function() {
             var self = this;
 
+            // Create sessions and score texts for the players
+            this.$createScoreTexts();
+
             // Adding background image
             this.$createBackground();
 
@@ -518,70 +576,148 @@
 
             // Create players set in settings file under /app
             this.$createPlayers(function() {
+
                 // Follow the first player with the camera
-                self.camera.follow(Container.World.players[Container.World.players.length - 1]);
+                self.camera.follow(self.$furthestPlayer().player);
             });
         },
         update: function() {
             var self = this;
+
+            // Follow the first player if the first player dies etc.
+            self.camera.follow(self.$furthestPlayer().player);
+
+            // Quit the game if no players are alive
+            if(self.$allPlayersAlive().allAlive === false) {
+                self.exit();
+            }
+
             Container.World.players.forEach(function(player) {
+                // Let the players collide with the tilemap
                 Container.game.physics.arcade.collide(player, Container.World.tilemapLayer);
+
+                // Run update and jump detection/loops
                 player.$update();
                 player.run();
             });
         },
-        $noPlayersAlive: function() {
-            var noAlive = true;
+        /**
+         * Finishes the game
+         */
+        exit: function() {
+            this.finished = true;
+            this.message = 'All player died!';
+        },
+        /**
+         * Checks if all players are alive and how many are alive.
+         * @return {Object}         Alive and allAlive
+         */
+        $allPlayersAlive: function() {
+            var allAlive = true;
+            var notAlive = 0;
+
             Container.World.players.forEach(function(player) {
-                if(player.alive) {
-                    noAlive = true;
+                if(player.alive === false) {
+                    allAlive = false;
+                    notAlive++
                 }
             });
-            return noAlive;
+
+            return {
+                alive: (Container.World.players.length - notAlive),
+                allAlive: !!(Container.World.players.length > notAlive)
+            };
         },
+        /**
+         * Get the furthest player in game, used for the camera
+         * following procedure.
+         * @return {Object}         Player and position
+         */
+        $furthestPlayer: function() {
+            var firstPlayer = Container.World.players[0];
+            var posFirst = Container.World.players[0].x;
+
+            Container.World.players.forEach(function(player) {
+                if(player.x > posFirst) {
+                    posFirst = player.x;
+                    firstPlayer = player;
+                }
+            });
+
+            return {
+                player: firstPlayer,
+                position: posFirst
+            };
+        },
+        $createPlayerSession: function(name, pid) {
+            Session[name] = {
+                id: pid,
+                name: name
+            };
+        },
+        $createScoreTexts: function() {
+            var self = this;
+            var pid = 0;
+            var players = Container.settings.currentPlayers;
+
+            players.forEach(function(name) {
+                name = name.trim().replace(' ', '');
+                self.$createPlayerSession(name, pid);
+
+                var text = new Factory.Text(self, name, 0);
+                //text.$text.fixedToCamera = true;
+                text.add(150, 250 * (pid + 1));
+
+                Session[name].text = text;
+
+                pid++;
+            });
+        },
+        /**
+         * Creates the background layer for current world type
+         */
         $createBackground: function() {
-            //var background = new Factory.Sprite(this, 'background-space');
-            //background.add(0, 0);
+            var background = new Factory.Sprite(this, 'background-' + Container.settings.worldType);
+            background.add(0, 0);
         },
+        /**
+         * Creates the tilemap and layers for the current world type
+         */
         $createTilemap: function() {
             var self = this;
+            var worldType = Container.settings.worldType;
 
-            var map = new Factory.Tilemap(self, 'tilemap-space');
+            // Create a new tilemap with the worldType
+            var map = new Factory.Tilemap(self, 'tilemap-' + worldType);
             map.addToGame(self);
-            map.addImage('tile-space', 'tile-space');
+            map.addImage('tile-' + worldType, 'tile-' + worldType);
+
+            // Create the ground and platform layers named 'world'
             var layer = map.createLayer('world');
+
+            // Add collision detection and resize the game to layer size
             map.setCollision('world', 0, 1000);
             map.resize('world');
+
             Container.World.tilemapLayer = layer;
-
-
-            /*
-            Container.procedures.addTilemap.run({
-                game: self,
-                tilemap: 'tilemap-space',
-                layer: {
-                    name: 'world',
-                    start: 0,
-                    end: 10000
-                },
-                tile: {
-                    name: 'tile-space',
-                    asset: 'tile-space'
-                }
-            }, function(result) {
-                Container.World.tilemap = result.tilemap.map;
-                Container.World.tilemapLayer = result.layer;
-            }); */
         },
+        /**
+         * Create players defined in the global settings
+         * @param  {Function} callback      Callback handler
+         * @return {*}                      Callback return value
+         */
         $createPlayers: function(callback) {
             var self = this;
             var offset = config.players.offset;
+
+            // Create players for the amount defined in settings.players
             for(var i = 0; i < config.players.amount; i++) {
                 var instance = new Factory.Player(self, i, offset.x * i, offset.y);
                 instance.init();
                 Container.World.players.push(instance);
             }
-            callback();
+
+            return callback(Container.World.players);
         }
     };
 
@@ -609,7 +745,7 @@
         },
         create: function() {
             if(this.ready) {
-                this.state.start('Procedures');
+                this.state.start('Game');
             } else {
                 throw this.error;
             }
@@ -617,44 +753,6 @@
         quit: function(pointer) {
             alert('Goodbye');
             this.ready = false;
-        }
-    };
-
-})(window);
-
-(function(window, undefined) {
-    'use strict';
-
-    var Contianer = window.Container;
-
-    Container.Procedures = function(game) {
-        // Empty class wrapper
-    };
-
-    Container.Procedures.prototype = {
-        preload: function() {
-            Container.procedures = {};
-        },
-        create: function() {
-            /**
-             * Adding a tilemap to the game procedure
-             * @procedure addTilemap
-             */
-            new Factory.Procedure('addTilemap', function(data) {
-                var map = new Factory.Tilemap(data.game, data.tilemap);
-                map.addToGame(data.game);
-                map.addImage(data.tile.name, data.tile.asset);
-                var layer = map.createLayer(data.layer.name);
-                map.setCollision(data.layer.name, data.layer.start, data.layer.end);
-                map.resize(data.layer.name);
-
-                return {
-                    tilemap: map,
-                    layer: layer
-                };
-            });
-
-            this.state.start('Game');
         }
     };
 
@@ -676,14 +774,15 @@
          * @param  {String} name        Name of score holder
          * @param  {Number} value       Score value
          */
-        score: function(name, value) {
+        score: function(name, value, map) {
             if(!Local.has('score') || !Array.isArray(Local.get('score'))) {
                 this.resetScore();
             }
             var old = Local.get('score');
             old.push({
                 holder: name,
-                score: value
+                score: value,
+                map: map
             });
             Local.set('score', old);
         },
@@ -745,26 +844,20 @@
 (function(window, undefined) {
     'use strict';
 
+    var $ = window.$;
     var config = Container.settings.render;
 
-    var fade = function(element) {
-        var op = 1;  // initial opacity
-        var timer = setInterval(function () {
-            if (op <= 0.1){
-                clearInterval(timer);
-                element.style.display = 'none';
-            }
-            element.style.opacity = op;
-            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-            op -= op * 0.1;
-        }, 50);
-    };
-
     document.getElementById('js-start-game').addEventListener('click', function() {
-        fade(document.getElementById('js-hide-start'));
+
+        // Hide the overlay resp. fade it out
+        $.fade(document.getElementById('js-hide-start'));
+
+        // Get the current selected world and players
         Container.settings.worldType = document.getElementById('js-world').value;
+        Container.settings.currentPlayers = document.getElementById('js-player-list').value.split(',');
+        Container.settings.game.players.amount = Container.settings.currentPlayers.length;
 
-
+        // Create a new phaser game
         var game = new Phaser.Game(config.width, config.height, config.mode, config.node);
 
         //adding all the required states
@@ -774,6 +867,7 @@
         game.state.add('Procedures', Container.Procedures);
         game.state.start('Boot'); //starting the boot state
 
+        // Make game accessable
         Container.game = game;
     });
 
