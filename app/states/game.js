@@ -1,23 +1,20 @@
 (function(window, undefined) {
     'use strict';
 
-    var game = Container.game;
     var config = Container.settings.game;
+    var ttlDie = 0;
+    var ttlLastPos = null;
 
     Container.Game = function(game) {
         // Wrapper
     };
 
     Container.Game.prototype = {
-        preload: function() {
-            Container.World = {};
-            Container.World.players = [];
-        },
         create: function() {
             var self = this;
 
-            // Create sessions and score texts for the players
-            this.$createScoreTexts();
+            // Loading all audio effects
+            this.$createAudioFX();
 
             // Adding background image
             this.$createBackground();
@@ -31,53 +28,64 @@
                 // Follow the first player with the camera
                 self.camera.follow(self.$furthestPlayer().player);
             });
+
+            // Create sessions and score texts for the players
+            this.$createScoreTexts();
         },
         update: function() {
             var self = this;
+            var alivePlayers = self.$getAlivePlayers();
 
             // Follow the first player if the first player dies etc.
             self.camera.follow(self.$furthestPlayer().player);
 
-            // Quit the game if no players are alive
-            if(self.$allPlayersAlive().allAlive === false) {
+            if(alivePlayers.length === 0) {
+                // Quit the game if no players are alive
                 self.exit();
+            } else if(alivePlayers.length === 1) {
+                // TODO: If just one player is alive and he/she is blocked
+                // by an obstacle by more than 5 seconds, the game should end!
+                // Tipp: Player.body.blocked.right && Player.body.blocked.down
             }
 
-            Container.World.players.forEach(function(player) {
+            for(var name in Session) {
+                var player = Session[name].player();
+
                 // Let the players collide with the tilemap
                 Container.game.physics.arcade.collide(player, Container.World.tilemapLayer);
+
+                // Update the score text with the current position
+                Session[name].text.set(Util.calculate.score(player.x));
 
                 // Run update and jump detection/loops
                 player.$update();
                 player.run();
-            });
+            }
         },
         /**
          * Finishes the game
          */
         exit: function() {
+            var self = this;
             this.finished = true;
-            this.message = 'All player died!';
+            $.fadeOut(document.getElementById(Container.settings.render.node), function() {
+                Container.game.lockRender = true;
+                self.$savePlayerScores();
+                window.location.href = 'scores.html';
+            });
         },
         /**
-         * Checks if all players are alive and how many are alive.
-         * @return {Object}         Alive and allAlive
+         * Gets all players which are still alive
+         * @return {Array}          Alive players
          */
-        $allPlayersAlive: function() {
-            var allAlive = true;
-            var notAlive = 0;
-
+        $getAlivePlayers: function() {
+            var alive = [];
             Container.World.players.forEach(function(player) {
-                if(player.alive === false) {
-                    allAlive = false;
-                    notAlive++
+                if(player.alive === true) {
+                    alive.push(player);
                 }
             });
-
-            return {
-                alive: (Container.World.players.length - notAlive),
-                allAlive: !!(Container.World.players.length > notAlive)
-            };
+            return alive;
         },
         /**
          * Get the furthest player in game, used for the camera
@@ -100,26 +108,64 @@
                 position: posFirst
             };
         },
-        $createPlayerSession: function(name, pid) {
-            Session[name] = {
+        /**
+         * Creates all audio FX nodes and inject it to the Audio Container
+         */
+        $createAudioFX: function() {
+            var self = this;
+            var fxSounds = Container.settings.audio.fx;
+
+            fxSounds.forEach(function(fxSound) {
+                Container.Audio[fxSound] = {
+                    node: self.add.audio('fx-' + fxSound),
+                    play: function() {
+                        Container.Audio[fxSound].node.restart();
+                    }
+                };
+            });
+        },
+        /**
+         * Creates a session for a single player with the needed
+         * properties and references to the name, ID, color and the
+         * Phaser Player itself.
+         * @param  {String} name        Player name
+         * @param  {Number} pid         Player ID
+         * @return {Object}             Session Player
+         */
+        $createPlayerSession: function(username, realname, pid) {
+            var worlds = Container.settings.worlds;
+            var wtype = Container.settings.worldType;
+            $index.session[pid] = name;
+
+            return Session[username] = {
                 id: pid,
-                name: name
+                name: realname,
+                username: username,
+                color: worlds[wtype].colors[pid],
+                player: function() {
+                    return Container.World.players[pid];
+                }
             };
         },
+        /**
+         * Creates the score texts for each player. Before that,
+         * it will create a session for every player.
+         */
         $createScoreTexts: function() {
             var self = this;
             var pid = 0;
             var players = Container.settings.currentPlayers;
 
             players.forEach(function(name) {
-                name = name.trim().replace(' ', '');
-                self.$createPlayerSession(name, pid);
+                name = name.trim();
+                var username = name.replace(' ', '')
+                self.$createPlayerSession(username, name, pid);
 
-                var text = new Factory.Text(self, name, 0);
-                //text.$text.fixedToCamera = true;
-                text.add(150, 250 * (pid + 1));
+                var text = new Factory.ScoreText(self, username.toUpperCase(), 0);
+                text.option('fill', Session[username].color);
+                text.add(20, 22 * (pid + 1), true);
 
-                Session[name].text = text;
+                Session[username].text = text;
 
                 pid++;
             });
@@ -169,6 +215,15 @@
             }
 
             return callback(Container.World.players);
+        },
+        /**
+         * Save the score of all session players in localstorage
+         */
+        $savePlayerScores: function() {
+            for(var name in Session) {
+                var user = Session[name];
+                Container.Store.score(user.name, user.score, Container.settings.worldType);
+            }
         }
     };
 
