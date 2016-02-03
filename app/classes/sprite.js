@@ -5,6 +5,7 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('Sprite.class');
     var root = window.Container;
     var util = window.Util;
     var id = 0;
@@ -41,7 +42,14 @@
         return this;
     };
 
+    /**
+     * Adds the sprite to a specific x and y position in the game
+     * @param  {Number} x           Coordinates on X
+     * @param  {Number} y           Coordinates on Y
+     * @return {Sprite} this
+     */
     Sprite.prototype.add = function(x, y) {
+        debug.info('Sprite mounted ->', this.image, x, y);
         x = util.default(x, 0);
         y = util.default(y, 0);
         this.injector.add.sprite(x, y, this.image);

@@ -5,6 +5,7 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('ScoreText.class');
     var Container = window.Container;
 
     /**
@@ -80,15 +81,19 @@
             x = x || 0;
             y = y || 0;
 
+            // Create basic text node and inject it to the game
             this.$text = this.injector.add.text(x, y, this.get(), {
                 font: this.opts.fontSize + ' Roboto',
                 fill: this.opts.fill
             });
 
+            // Is the text fixed to the camera?
             this.$text.fixedToCamera = fixedToCamera || false;
             if(fixedToCamera) {
                 this.$text.cameraOffset.setTo(x, y);
             }
+
+            debug.info('Text added with props x, y, fixed ->', x, y, fixedToCamera);
 
             return this;
         },

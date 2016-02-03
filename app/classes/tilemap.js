@@ -5,6 +5,7 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('Tilemap.class');
     var root = window.Container;
 
     /**
@@ -30,6 +31,7 @@
      * @param  {String} asset           Asset of the tileset
      */
     Tilemap.prototype.addImage = function(tileset, asset) {
+        debug.info('Tilemap image added with asset ->', tileset, asset);
         return this.map.addTilesetImage(tileset, asset);
     };
 
@@ -51,6 +53,7 @@
      * @return {TilemapLayer}       Phaser tilemap layer
      */
     Tilemap.prototype.createLayer = function(name) {
+        debug.info('Layer created ->', name);
         var layer = this.map.createLayer(name);
         return this.layers[name] = layer;
     };
@@ -64,6 +67,7 @@
      * @param  {Number} end         Endpoint of collision
      */
     Tilemap.prototype.setCollision = function(layer, start, end) {
+        debug.info('Collision set on layer with start/end ->', layer, start, end);
         try {
             var collide = this.map.setCollisionBetween(start, end, true, layer);
             return collide;
@@ -79,8 +83,9 @@
     Tilemap.prototype.resize = function(targetLayer) {
         try {
             this.layers[targetLayer].resizeWorld();
+            debug.warn('World resized to the layer ->', targetLayer);
         } catch(resizeErr) {
-            throw new Error('Tilemap.resize failed: ' + resizeErr.message);
+            debug.throw('Tilemap.resize failed: ' + resizeErr.message, 0);
         }
     };
 

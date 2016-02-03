@@ -5,6 +5,7 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('Player.class');
     var root = window.Container;
 
     /**
@@ -27,6 +28,7 @@
         this.score = null;
 
         Phaser.Sprite.call(this, game, posX, posY, this.$getSpritesheet());
+        this.$addActionKey();
         game.add.existing(this);
 
         return this;
@@ -76,12 +78,15 @@
      * Let a player die
      */
     Player.prototype.die = function() {
+        debug.info('Player died with id ->', this.id);
         var session = Session[$index.session[this.id]];
+        debug.info('Updating player session ->', session);
 
         Container.Audio.die.play();
         session.text.option('extension', '(dead)');
         session.text.$update();
         session.score = this.score;
+        this.dead = true;
         this.kill();
     };
 
@@ -91,8 +96,8 @@
      * @return {Key}            Phaser key stack
      */
     Player.prototype.$addActionKey = function() {
-        var cursors = this.injector.input.keyboard.createCursorKeys();
-        return this.$actionKey = cursors[this.jumpKey];
+        debug.info('Player created actionKey ->', this.jumpKey);
+        return this.$actionKey = Container.cursors[this.jumpKey];
     };
 
     /**
@@ -109,8 +114,7 @@
             this.die();
         }
 
-        var listenTo = this.$addActionKey();
-        if(listenTo.isDown) {
+        if(this.$actionKey.isDown) {
             this.jump();
         }
     };
