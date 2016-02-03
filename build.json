@@ -12,7 +12,9 @@
         "files": [
             "./bower_components/phaser/build/phaser.js",
             "./bower_components/browser-storage/browser-storage.min.js",
-            "./app/provider/*.js"
+            "./app/provider/extend.js",
+            "./app/provider/globals.js",
+            "./app/provider/settings.js"
         ]
     },
     "app": {
@@ -20,7 +22,7 @@
         "target": "./dist",
         "name": "application",
         "files": [
-            "./app/util/*.js",
+            "./app/provider/util.js",
             "./app/classes/*.js",
             "./app/states/*.js",
             "./app/main.js"
