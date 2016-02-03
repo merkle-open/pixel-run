@@ -1,41 +1,23 @@
-(function(window, undefined) {
-    'use strict';
-
-    Util.calculate = {
-        score: function(pixels) {
-            var calc = pixels / 100;
-            return Math.round(calc);
-        }
-    };
-
-})(window);
-
+/**
+ * /app/provider/util.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
 (function(window, undefined) {
     'use strict';
 
     /**
-     * Generates a clone of an object (without proto values)
-     * @param  {Object} obj         Object to clone
-     * @return {Object}             Cloned object
+     * Custom error type for all avaible game failures,
+     * can be thrown with the debugger or called manually.
+     * @param {String} message      Reason
      */
-    Util.clone = function(obj) {
-        if (!obj || typeof obj !== 'object') {
-            return obj;
-        }
-        var copy = obj.constructor();
-        for (var attr in obj) {
-            if (obj.hasOwnProperty(attr) && attr !== '_saveState') {
-                copy[attr] = obj[attr];
-            }
-        }
-        return copy;
-    };
+    function GameError(message) {
+        this.name = 'GameError';
+        this.message = (message || 'Undefined error');
+    }
 
-})(window);
+    GameError.prototype = Error.prototype;
+    window.GameError = GameError;
 
-(function(window, undefined) {
-    'use strict';
-    
     Util.noop = function() {
         // Basic no-operation method
     };
@@ -60,11 +42,25 @@
         } else {
             return input;
         }
-    }
-})(window);
+    };
 
-(function(window, undefined) {
-    'use strict';
+    /**
+     * Generates a clone of an object (without proto values)
+     * @param  {Object} obj         Object to clone
+     * @return {Object}             Cloned object
+     */
+    Util.clone = function(obj) {
+        if (!obj || typeof obj !== 'object') {
+            return obj;
+        }
+        var copy = obj.constructor();
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr) && attr !== '_saveState') {
+                copy[attr] = obj[attr];
+            }
+        }
+        return copy;
+    };
 
     /**
      * Hyphenates a camelCased string
@@ -74,11 +70,6 @@
     Util.hyphenate = function(str) {
         return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
     };
-
-})(window);
-
-(function(window, undefined) {
-    'use strict';
 
     /**
      * Creates a new replacer instance
@@ -125,6 +116,87 @@
 
     Util.Replacer = Replacer;
 
+    function Debugger(namespace) {
+        this.enabled = window.Container.settings.debug === true;
+        this.namespace = namespace || 'undefined';
+    }
+
+    Debugger.prototype = {
+        /**
+         * Apply arguments to the warn function if enabled
+         */
+        warn: function() {
+            if(console && console.warn) {
+                this.$out(arguments, function(args) {
+                    console.warn.apply(console, args);
+                });
+            }
+        },
+        /**
+         * Apply arguments to the info function if enabled
+         */
+        info: function() {
+            if(console && console.info) {
+                this.$out(arguments, function(args) {
+                    console.info.apply(console, args);
+                });
+            }
+        },
+        /**
+         * Apply arguments to the error function if enabled
+         */
+        error: function() {
+            if(console && console.error) {
+                this.$out(arguments, function(args) {
+                    console.error.apply(console, args);
+                });
+            }
+        },
+        /**
+         * Apply arguments to the log function if enabled
+         */
+        log: function() {
+            if(console) {
+                this.$out(arguments, function(args) {
+                    console.log.apply(console, args);
+                });
+            }
+        },
+        /**
+         * Throws a new game error with a status and reason
+         * @param  {String} reason      Error reason
+         * @param  {String} status      Error status
+         */
+        throw: function(reason, status) {
+            throw new GameError(reason + '(' + status + ')');
+        },
+        /**
+         * Output provider (internal method)
+         * @param  {[type]} handle [description]
+         * @return {[type]}        [description]
+         */
+        $out: function(values, handle) {
+            var args = Array.prototype.slice.call(values);
+            args.unshift('[' + this.namespace + ']:');
+            handle(args);
+        }
+    };
+
+    Util.Debugger = Debugger;
+
+    Util.calculate = {
+        /**
+         * Calculates the score from the x-axis value
+         * of a player in the game
+         * @param  {Number} pixels      Pixel value
+         * @return {Number}             Player score
+         */
+        score: function(pixels) {
+            var calc = pixels / 100;
+            return Math.round(calc);
+        }
+    };
+
 })(window);
 
 /**
@@ -134,6 +206,7 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('Player.class');
     var root = window.Container;
 
     /**
@@ -156,6 +229,7 @@
         this.score = null;
 
         Phaser.Sprite.call(this, game, posX, posY, this.$getSpritesheet());
+        this.$addActionKey();
         game.add.existing(this);
 
         return this;
@@ -205,12 +279,15 @@
      * Let a player die
      */
     Player.prototype.die = function() {
+        debug.info('Player died with id ->', this.id);
         var session = Session[$index.session[this.id]];
+        debug.info('Updating player session ->', session);
 
         Container.Audio.die.play();
         session.text.option('extension', '(dead)');
         session.text.$update();
         session.score = this.score;
+        this.dead = true;
         this.kill();
     };
 
@@ -220,8 +297,8 @@
      * @return {Key}            Phaser key stack
      */
     Player.prototype.$addActionKey = function() {
-        var cursors = this.injector.input.keyboard.createCursorKeys();
-        return this.$actionKey = cursors[this.jumpKey];
+        debug.info('Player created actionKey ->', this.jumpKey);
+        return this.$actionKey = Container.cursors[this.jumpKey];
     };
 
     /**
@@ -238,8 +315,7 @@
             this.die();
         }
 
-        var listenTo = this.$addActionKey();
-        if(listenTo.isDown) {
+        if(this.$actionKey.isDown) {
             this.jump();
         }
     };
@@ -265,6 +341,7 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('ScoreText.class');
     var Container = window.Container;
 
     /**
@@ -340,15 +417,19 @@
             x = x || 0;
             y = y || 0;
 
+            // Create basic text node and inject it to the game
             this.$text = this.injector.add.text(x, y, this.get(), {
                 font: this.opts.fontSize + ' Roboto',
                 fill: this.opts.fill
             });
 
+            // Is the text fixed to the camera?
             this.$text.fixedToCamera = fixedToCamera || false;
             if(fixedToCamera) {
                 this.$text.cameraOffset.setTo(x, y);
             }
+
+            debug.info('Text added with props x, y, fixed ->', x, y, fixedToCamera);
 
             return this;
         },
@@ -374,6 +455,7 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('Sprite.class');
     var root = window.Container;
     var util = window.Util;
     var id = 0;
@@ -410,7 +492,14 @@
         return this;
     };
 
+    /**
+     * Adds the sprite to a specific x and y position in the game
+     * @param  {Number} x           Coordinates on X
+     * @param  {Number} y           Coordinates on Y
+     * @return {Sprite} this
+     */
     Sprite.prototype.add = function(x, y) {
+        debug.info('Sprite mounted ->', this.image, x, y);
         x = util.default(x, 0);
         y = util.default(y, 0);
         this.injector.add.sprite(x, y, this.image);
@@ -428,6 +517,7 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('Tilemap.class');
     var root = window.Container;
 
     /**
@@ -453,6 +543,7 @@
      * @param  {String} asset           Asset of the tileset
      */
     Tilemap.prototype.addImage = function(tileset, asset) {
+        debug.info('Tilemap image added with asset ->', tileset, asset);
         return this.map.addTilesetImage(tileset, asset);
     };
 
@@ -474,6 +565,7 @@
      * @return {TilemapLayer}       Phaser tilemap layer
      */
     Tilemap.prototype.createLayer = function(name) {
+        debug.info('Layer created ->', name);
         var layer = this.map.createLayer(name);
         return this.layers[name] = layer;
     };
@@ -487,6 +579,7 @@
      * @param  {Number} end         Endpoint of collision
      */
     Tilemap.prototype.setCollision = function(layer, start, end) {
+        debug.info('Collision set on layer with start/end ->', layer, start, end);
         try {
             var collide = this.map.setCollisionBetween(start, end, true, layer);
             return collide;
@@ -502,8 +595,9 @@
     Tilemap.prototype.resize = function(targetLayer) {
         try {
             this.layers[targetLayer].resizeWorld();
+            debug.warn('World resized to the layer ->', targetLayer);
         } catch(resizeErr) {
-            throw new Error('Tilemap.resize failed: ' + resizeErr.message);
+            debug.throw('Tilemap.resize failed: ' + resizeErr.message, 0);
         }
     };
 
@@ -570,9 +664,8 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('states.game');
     var config = Container.settings.game;
-    var ttlDie = 0;
-    var ttlLastPos = null;
 
     Container.Game = function(game) {
         // Wrapper
@@ -591,15 +684,18 @@
             // Instanciate the tilemap
             this.$createTilemap();
 
+            // Create cursor keys for all players
+            Container.cursors = this.input.keyboard.createCursorKeys();
+
+            // Create sessions and score texts for the players
+            this.$createScoreTexts();
+
             // Create players set in settings file under /app
             this.$createPlayers(function() {
 
                 // Follow the first player with the camera
                 self.camera.follow(self.$furthestPlayer().player);
             });
-
-            // Create sessions and score texts for the players
-            this.$createScoreTexts();
         },
         update: function() {
             var self = this;
@@ -626,9 +722,12 @@
                 // Update the score text with the current position
                 Session[name].text.set(Util.calculate.score(player.x));
 
-                // Run update and jump detection/loops
-                player.$update();
-                player.run();
+                // Run update and jump detection/loops if the player
+                // is alive and not already dead
+                if(player.dead !== true) {
+                    player.$update();
+                    player.run();
+                }
             }
         },
         /**
@@ -637,9 +736,10 @@
         exit: function() {
             var self = this;
             this.finished = true;
+            self.$savePlayerScores();
+            debug.info('Game is finished! Player scores are saved in Storage');
             $.fadeOut(document.getElementById(Container.settings.render.node), function() {
                 Container.game.lockRender = true;
-                self.$savePlayerScores();
                 window.location.href = 'scores.html';
             });
         },
@@ -704,7 +804,7 @@
         $createPlayerSession: function(username, realname, pid) {
             var worlds = Container.settings.worlds;
             var wtype = Container.settings.worldType;
-            $index.session[pid] = name;
+            $index.session[pid] = username;
 
             return Session[username] = {
                 id: pid,
@@ -762,7 +862,7 @@
             var layer = map.createLayer('world');
 
             // Add collision detection and resize the game to layer size
-            map.setCollision('world', 0, 1000);
+            map.setCollision('world', 0, 5000);
             map.resize('world');
 
             Container.World.tilemapLayer = layer;

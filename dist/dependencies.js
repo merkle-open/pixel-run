@@ -96348,6 +96348,7 @@ PIXI.TextureSilentFail = true;
     'use strict';
 
     Container.settings = {
+        debug: true,
         audio: {
             fx: [
                 'jump',
