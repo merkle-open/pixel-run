@@ -5,9 +5,8 @@
 (function(window, undefined) {
     'use strict';
 
+    var debug = new Util.Debugger('states.game');
     var config = Container.settings.game;
-    var ttlDie = 0;
-    var ttlLastPos = null;
 
     Container.Game = function(game) {
         // Wrapper
@@ -26,15 +25,18 @@
             // Instanciate the tilemap
             this.$createTilemap();
 
+            // Create cursor keys for all players
+            Container.cursors = this.input.keyboard.createCursorKeys();
+
+            // Create sessions and score texts for the players
+            this.$createScoreTexts();
+
             // Create players set in settings file under /app
             this.$createPlayers(function() {
 
                 // Follow the first player with the camera
                 self.camera.follow(self.$furthestPlayer().player);
             });
-
-            // Create sessions and score texts for the players
-            this.$createScoreTexts();
         },
         update: function() {
             var self = this;
@@ -61,9 +63,12 @@
                 // Update the score text with the current position
                 Session[name].text.set(Util.calculate.score(player.x));
 
-                // Run update and jump detection/loops
-                player.$update();
-                player.run();
+                // Run update and jump detection/loops if the player
+                // is alive and not already dead
+                if(player.dead !== true) {
+                    player.$update();
+                    player.run();
+                }
             }
         },
         /**
@@ -72,9 +77,10 @@
         exit: function() {
             var self = this;
             this.finished = true;
+            self.$savePlayerScores();
+            debug.info('Game is finished! Player scores are saved in Storage');
             $.fadeOut(document.getElementById(Container.settings.render.node), function() {
                 Container.game.lockRender = true;
-                self.$savePlayerScores();
                 window.location.href = 'scores.html';
             });
         },
@@ -139,7 +145,7 @@
         $createPlayerSession: function(username, realname, pid) {
             var worlds = Container.settings.worlds;
             var wtype = Container.settings.worldType;
-            $index.session[pid] = name;
+            $index.session[pid] = username;
 
             return Session[username] = {
                 id: pid,
@@ -197,7 +203,7 @@
             var layer = map.createLayer('world');
 
             // Add collision detection and resize the game to layer size
-            map.setCollision('world', 0, 1000);
+            map.setCollision('world', 0, 5000);
             map.resize('world');
 
             Container.World.tilemapLayer = layer;
