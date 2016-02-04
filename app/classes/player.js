@@ -5,6 +5,8 @@
 (function(window, undefined) {
     'use strict';
 
+    var KILL_BOUNDS = 20;
+
     var debug = new Util.Debugger('Player.class');
     var root = window.Container;
 
@@ -20,6 +22,7 @@
         this.$baseSprite = root.settings.game.players.baseName;
         this.$basePath = root.settings.game.players.basePath + root.settings.worldType + '/';
         this.$mimeType = root.settings.game.players.mimeType;
+        this.jumpOn = root.settings.game.jumpOn;
         this.id = index;
         this.type = variation;
         this.jumpKey = root.settings.game.players.keymap[index];
@@ -83,11 +86,23 @@
         debug.info('Updating player session ->', session);
 
         Container.Audio.die.play();
-        session.text.option('extension', '(dead)');
-        session.text.$update();
+        this.$updateText('dead');
         session.score = this.score;
         this.dead = true;
         this.kill();
+    };
+
+    /**
+     * Update the players text with value
+     * @return {String}         Value
+     */
+    Player.prototype.$updateText = function(val) {
+        if(val !== undefined) {
+            console.log('Updating text');
+            var session = Session[$index.session[this.id]];
+            session.text.option('extension', '(' + val + ')');
+            session.text.$update();
+        }
     };
 
     /**
@@ -106,15 +121,15 @@
      */
     Player.prototype.$update = function() {
         this.score = Util.calculate.score(this.x);
-        if(this.y === Container.settings.render.height - 20) {
+        if(this.y >= Container.settings.render.height - Container.settings.game.players.height - KILL_BOUNDS) {
             this.die();
         }
 
         if(this.x <= Container.game.camera.view.x - 70) {
             this.die();
         }
-
-        if(this.$actionKey.isDown) {
+        var listener = this.jumpOn === 'push' ? 'isDown' : 'isUp';
+        if(this.$actionKey[listener]) {
             this.jump();
         }
     };
