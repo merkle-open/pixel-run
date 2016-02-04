@@ -12,14 +12,14 @@ var commentify = require('gulp-header');
 var config = require('./build.json');
 var pkg = require('./package.json');
 
-var banner = commentify(['/**',
+var banner = ['/**',
   ' * <%= pkg.header %> ',
   ' * @author <%= pkg.author %>',
   ' * @version v<%= pkg.version %>',
   ' * @link <%= pkg.homepage %>',
   ' * @license <%= pkg.license %> Licensed by <%= pkg.company %>',
   ' */',
-  ''].join('\n'), { pkg: pkg });
+  ''].join('\n');
 
 gulp.task('clean:dist', function() {
     return remove(config.clean.dist);
@@ -51,7 +51,7 @@ gulp.task('build:app', ['clean:dist:app'], function() {
     return gulp.src(config.app.files)
         .pipe(gulpif(config.app.minify === true, uglify()))
         .pipe(concat(config.app.name + '.js'))
-        //.pipe(banner)
+        .pipe(commentify(banner, { pkg: pkg }))
         .pipe(gulp.dest(config.app.target));
 });
 
@@ -62,7 +62,7 @@ gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies
         ])
         .pipe(uglify())
         .pipe(concat(config.bundle.name + '.min.js'))
-        //.pipe(banner)
+        .pipe(commentify(banner, { pkg: pkg }))
         .pipe(gulp.dest(config.bundle.target));
 });
 
@@ -70,6 +70,7 @@ gulp.task('build:styles', ['clean:dist:styles'], function() {
     return gulp.src(config.styles.files)
         .pipe(cssmin())
         .pipe(concat(config.styles.name + '.min.css'))
+        .pipe(commentify(banner, { pkg: pkg }))
         .pipe(gulp.dest(config.styles.target));
 });
 
