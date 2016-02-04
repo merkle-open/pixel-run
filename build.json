@@ -11,10 +11,11 @@
         "name": "dependencies",
         "files": [
             "./bower_components/phaser/build/phaser.js",
-            "./bower_components/browser-storage/browser-storage.min.js",
-            "./app/provider/extend.js",
+            "./bower_components/jquery/dist/jquery.js",
+            "./bower_components/browser-storage/browser-storage.js",
             "./app/provider/globals.js",
-            "./app/provider/settings.js"
+            "./app/provider/settings.js",
+            "./app/provider/steps.js"
         ]
     },
     "app": {
@@ -23,6 +24,7 @@
         "name": "application",
         "files": [
             "./app/provider/util.js",
+            "./app/provider/store.js",
             "./app/classes/*.js",
             "./app/states/*.js",
             "./app/main.js"
