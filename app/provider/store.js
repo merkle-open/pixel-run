@@ -47,28 +47,11 @@
             Local.set('score', []);
         },
         /**
-         * Private helper to order the score descending
-         * @param  {Array} score        Highscore array
-         * @return {Array}              Ordered array
-         */
-        $orderScore: function(score) {
-            function compare(a, b) {
-                if(a.score > b.score) {
-                    return -1;
-                } else if (a.score < b.score) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-            return score.sort(compare);
-        },
-        /**
          * Get the highest score in array form (private method)
          * @return {Array} scores
          */
         $getScore: function() {
-            return this.$orderScore(Local.get('score'));
+            return Util.orderScore(Local.get('score'));
         }
     };
 

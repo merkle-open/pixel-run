@@ -17,6 +17,10 @@
     };
     window.Factory = {};
     window.Session = {};
+    window.HUD = {
+        $store: {},
+        Factory: {}
+    };
     window.$index = {
         session: {}
     };

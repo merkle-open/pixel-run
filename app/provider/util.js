@@ -23,6 +23,24 @@
     };
 
     /**
+     * Private helper to order the score descending
+     * @param  {Array} score        Highscore array
+     * @return {Array}              Ordered array
+     */
+    Util.orderScore = function(score) {
+        function compare(a, b) {
+            if(a.score > b.score) {
+                return -1;
+            } else if (a.score < b.score) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        return score.sort(compare);
+    };
+
+    /**
      * Set the defaults for a variable. Custom handler can
      * also be used to check the value (to prevent long conditions)
      * @param  {T} input                Input value
@@ -97,7 +115,7 @@
             }
             var keys = Object.keys(data);
             keys.forEach(function(key) {
-                result = result.replace('{' + key + '}', data[key]);
+                result = Util.replaceAll(result, '{' + key + '}', data[key]);
             });
             return result;
         }
@@ -183,6 +201,77 @@
     };
 
     Util.Debugger = Debugger;
+
+    /**
+     * Like Object.keys but get the values and not keys
+     * @param  {Object} dataObject      Object target
+     * @return {Array}                  Object values
+     */
+    Util.getValues = function(dataObject) {
+        var dataArray = [];
+        for(var o in dataObject) {
+            dataArray.push(dataObject[o]);
+        }
+        return dataArray;
+    };
+
+    /**
+     * Get playerscores in compressed object form
+     * @return {Obejct}                 Compressed score info
+     */
+    Util.getPlayerScoreData = function() {
+        var summaryList = [], res, psess;
+        for(psess in Session) {
+            summaryList.push(Session[psess]);
+        }
+        res = Util.orderScore(summaryList);
+
+        return  {
+            p1: res[0] ? res[0].name : '-',
+            p2: res[1] ? res[1].name : '-',
+            p3: res[2] ? res[2].name : '-',
+            p1s: res[0] ? res[0].score : '-',
+            p2s: res[1] ? res[1].score : '-',
+            p3s: res[2] ? res[2].score : '-'
+        };
+    };
+
+    /**
+     * Replace all orccurencies in a string with a replacement
+     * @param  {String} target         Input ressource
+     * @param  {*} search               Placeholder
+     * @param  {*} replacement          Any value to replace
+     * @return {String}                 Compiled
+     */
+    Util.replaceAll = function(target, search, replacement) {
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
+    /**
+     * Gets the score in a HTML string (tr>td) for inserting
+     * it into a table body
+     * @return {String}                 HTML markup
+     */
+    Util.getScoreTable = function(opts) {
+        var generated = [];
+        var index = 1;
+        Container.Store.$getScore().forEach(function(score) {
+            generated.push('<tr><td>');
+            if(opts.index) {
+                generated.push('<strong>')
+                generated.push('# ' + index);
+                generated.push('</strong></td><td>');
+            }
+            generated.push(score.score);
+            generated.push('</td><td>');
+            generated.push(score.holder);
+            generated.push('</td><td>');
+            generated.push(score.map);
+            generated.push('</td><tr>');
+            index++;
+        });
+        return generated.join('\n');
+    };
 
     Util.calculate = {
         /**

@@ -17,19 +17,18 @@
             width: '100%',
             height: 1000,
             mode: Phaser.AUTO,
-            node: 'startgame'
+            node: 'js-launch-phaser-game'
         },
         physics: {
             mode: Phaser.Physics.ARCADE
         },
         game: {
+            jumpOn: 'push', // release
             tilemap: 'tilemap-space',
             doubleJump: true,
             players: {
-                offset: {
-                    x: 110,
-                    y: 500
-                },
+                height: 160,
+                width: 153,
                 baseName: 'avatar-',
                 basePath: 'assets/img/avatars/',
                 mimeType: 'png',
@@ -43,8 +42,8 @@
                     y: 900
                 },
                 velocity: {
-                    y: -600,
-                    x: 250
+                    y: -700,
+                    x: 350
                 }
             }
         },
