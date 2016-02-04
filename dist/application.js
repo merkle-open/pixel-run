@@ -23,6 +23,24 @@
     };
 
     /**
+     * Private helper to order the score descending
+     * @param  {Array} score        Highscore array
+     * @return {Array}              Ordered array
+     */
+    Util.orderScore = function(score) {
+        function compare(a, b) {
+            if(a.score > b.score) {
+                return -1;
+            } else if (a.score < b.score) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        return score.sort(compare);
+    };
+
+    /**
      * Set the defaults for a variable. Custom handler can
      * also be used to check the value (to prevent long conditions)
      * @param  {T} input                Input value
@@ -97,7 +115,7 @@
             }
             var keys = Object.keys(data);
             keys.forEach(function(key) {
-                result = result.replace('{' + key + '}', data[key]);
+                result = Util.replaceAll(result, '{' + key + '}', data[key]);
             });
             return result;
         }
@@ -184,6 +202,77 @@
 
     Util.Debugger = Debugger;
 
+    /**
+     * Like Object.keys but get the values and not keys
+     * @param  {Object} dataObject      Object target
+     * @return {Array}                  Object values
+     */
+    Util.getValues = function(dataObject) {
+        var dataArray = [];
+        for(var o in dataObject) {
+            dataArray.push(dataObject[o]);
+        }
+        return dataArray;
+    };
+
+    /**
+     * Get playerscores in compressed object form
+     * @return {Obejct}                 Compressed score info
+     */
+    Util.getPlayerScoreData = function() {
+        var summaryList = [], res, psess;
+        for(psess in Session) {
+            summaryList.push(Session[psess]);
+        }
+        res = Util.orderScore(summaryList);
+
+        return  {
+            p1: res[0] ? res[0].name : '-',
+            p2: res[1] ? res[1].name : '-',
+            p3: res[2] ? res[2].name : '-',
+            p1s: res[0] ? res[0].score : '-',
+            p2s: res[1] ? res[1].score : '-',
+            p3s: res[2] ? res[2].score : '-'
+        };
+    };
+
+    /**
+     * Replace all orccurencies in a string with a replacement
+     * @param  {String} target         Input ressource
+     * @param  {*} search               Placeholder
+     * @param  {*} replacement          Any value to replace
+     * @return {String}                 Compiled
+     */
+    Util.replaceAll = function(target, search, replacement) {
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
+    /**
+     * Gets the score in a HTML string (tr>td) for inserting
+     * it into a table body
+     * @return {String}                 HTML markup
+     */
+    Util.getScoreTable = function(opts) {
+        var generated = [];
+        var index = 1;
+        Container.Store.$getScore().forEach(function(score) {
+            generated.push('<tr><td>');
+            if(opts.index) {
+                generated.push('<strong>')
+                generated.push('# ' + index);
+                generated.push('</strong></td><td>');
+            }
+            generated.push(score.score);
+            generated.push('</td><td>');
+            generated.push(score.holder);
+            generated.push('</td><td>');
+            generated.push(score.map);
+            generated.push('</td><tr>');
+            index++;
+        });
+        return generated.join('\n');
+    };
+
     Util.calculate = {
         /**
          * Calculates the score from the x-axis value
@@ -200,11 +289,74 @@
 })(window);
 
 /**
+ * /app/states/store.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
+(function(window, undefined) {
+    'use strict';
+
+    var game = Container.game;
+    var Local = window.Store;
+
+    var Store = function(game) {
+        // Class wrapper
+    };
+
+    Store.prototype = {
+        /**
+         * Sets a new score for a new holder
+         * @param  {String} name        Name of score holder
+         * @param  {Number} value       Score value
+         */
+        score: function(name, value, map) {
+            if(!Local.has('score') || !Array.isArray(Local.get('score'))) {
+                this.resetScore();
+            }
+            var old = Local.get('score');
+            old.push({
+                holder: name,
+                score: value,
+                map: map
+            });
+            Local.set('score', old);
+        },
+        /**
+         * Get the highscore as a number. Set objfy to true,
+         * to get the holder and score in object value.
+         * @param  {Boolean} objfy      If should objectify the highscore
+         * @return {Number|Object}      Highscore
+         */
+        getHighscore: function(objfy) {
+            var result = this.$getScore()[0];
+            return objfy ? result : result.score;
+        },
+        /**
+         * Reset the local store and empty all previous values
+         */
+        resetScore: function() {
+            Local.set('score', []);
+        },
+        /**
+         * Get the highest score in array form (private method)
+         * @return {Array} scores
+         */
+        $getScore: function() {
+            return Util.orderScore(Local.get('score'));
+        }
+    };
+
+    Container.Store = new Store();
+
+})(window);
+
+/**
  * /app/classes/player.js
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
     'use strict';
+
+    var KILL_BOUNDS = 20;
 
     var debug = new Util.Debugger('Player.class');
     var root = window.Container;
@@ -221,6 +373,7 @@
         this.$baseSprite = root.settings.game.players.baseName;
         this.$basePath = root.settings.game.players.basePath + root.settings.worldType + '/';
         this.$mimeType = root.settings.game.players.mimeType;
+        this.jumpOn = root.settings.game.jumpOn;
         this.id = index;
         this.type = variation;
         this.jumpKey = root.settings.game.players.keymap[index];
@@ -284,11 +437,23 @@
         debug.info('Updating player session ->', session);
 
         Container.Audio.die.play();
-        session.text.option('extension', '(dead)');
-        session.text.$update();
+        this.$updateText('dead');
         session.score = this.score;
         this.dead = true;
         this.kill();
+    };
+
+    /**
+     * Update the players text with value
+     * @return {String}         Value
+     */
+    Player.prototype.$updateText = function(val) {
+        if(val !== undefined) {
+            console.log('Updating text');
+            var session = Session[$index.session[this.id]];
+            session.text.option('extension', '(' + val + ')');
+            session.text.$update();
+        }
     };
 
     /**
@@ -307,15 +472,15 @@
      */
     Player.prototype.$update = function() {
         this.score = Util.calculate.score(this.x);
-        if(this.y === Container.settings.render.height - 20) {
+        if(this.y >= Container.settings.render.height - Container.settings.game.players.height - KILL_BOUNDS) {
             this.die();
         }
 
         if(this.x <= Container.game.camera.view.x - 70) {
             this.die();
         }
-
-        if(this.$actionKey.isDown) {
+        var listener = this.jumpOn === 'push' ? 'isDown' : 'isUp';
+        if(this.$actionKey[listener]) {
             this.jump();
         }
     };
@@ -666,6 +831,7 @@
 
     var debug = new Util.Debugger('states.game');
     var config = Container.settings.game;
+    var isQuitting = false;
 
     Container.Game = function(game) {
         // Wrapper
@@ -704,7 +870,7 @@
             // Follow the first player if the first player dies etc.
             self.camera.follow(self.$furthestPlayer().player);
 
-            if(alivePlayers.length === 0) {
+            if(alivePlayers.length === 0 && !self.finished) {
                 // Quit the game if no players are alive
                 self.exit();
             } else if(alivePlayers.length === 1) {
@@ -727,6 +893,8 @@
                 if(player.dead !== true) {
                     player.$update();
                     player.run();
+                } else {
+                    player.$updateText();
                 }
             }
         },
@@ -734,14 +902,15 @@
          * Finishes the game
          */
         exit: function() {
-            var self = this;
-            this.finished = true;
-            self.$savePlayerScores();
-            debug.info('Game is finished! Player scores are saved in Storage');
-            $.fadeOut(document.getElementById(Container.settings.render.node), function() {
+            if(!this.finished) {
+                this.finished = true;
+                this.$savePlayerScores();
+                debug.info('Game is finished! Player scores are saved in Storage');
                 Container.game.lockRender = true;
-                window.location.href = 'scores.html';
-            });
+                Container.game.finishedCallback(this);
+            } else {
+                debug.warn('Game already finished, exit handler skipped.');
+            }
         },
         /**
          * Gets all players which are still alive
@@ -874,11 +1043,12 @@
          */
         $createPlayers: function(callback) {
             var self = this;
-            var offset = config.players.offset;
+            var pheight = Container.settings.game.players.height;
+            var pwidth = Container.settings.game.players.width;
 
             // Create players for the amount defined in settings.players
             for(var i = 0; i < config.players.amount; i++) {
-                var instance = new Factory.Player(self, i, offset.x * i, offset.y);
+                var instance = new Factory.Player(self, i, (pwidth + 20) * i, pheight);
                 instance.init();
                 Container.World.players.push(instance);
             }
@@ -889,9 +1059,12 @@
          * Save the score of all session players in localstorage
          */
         $savePlayerScores: function() {
-            for(var name in Session) {
-                var user = Session[name];
-                Container.Store.score(user.name, user.score, Container.settings.worldType);
+            if(!this.saved) {
+                this.saved = true;
+                for(var name in Session) {
+                    var user = Session[name];
+                    Container.Store.score(user.name, user.score, Container.settings.worldType);
+                }
             }
         }
     };
@@ -938,120 +1111,53 @@
 })(window);
 
 /**
- * /app/states/store.js
- * @author Jan Biasi <jan.biasi@namics.com>
- */
-(function(window, undefined) {
-    'use strict';
-
-    var game = Container.game;
-    var Local = window.Store;
-
-    var Store = function(game) {
-        // Class wrapper
-    };
-
-    Store.prototype = {
-        /**
-         * Sets a new score for a new holder
-         * @param  {String} name        Name of score holder
-         * @param  {Number} value       Score value
-         */
-        score: function(name, value, map) {
-            if(!Local.has('score') || !Array.isArray(Local.get('score'))) {
-                this.resetScore();
-            }
-            var old = Local.get('score');
-            old.push({
-                holder: name,
-                score: value,
-                map: map
-            });
-            Local.set('score', old);
-        },
-        /**
-         * Get the highscore as a number. Set objfy to true,
-         * to get the holder and score in object value.
-         * @param  {Boolean} objfy      If should objectify the highscore
-         * @return {Number|Object}      Highscore
-         */
-        getHighscore: function(objfy) {
-            var result = this.$getScore()[0];
-            return objfy ? result : result.score;
-        },
-        /**
-         * Reset the local store and empty all previous values
-         */
-        resetScore: function() {
-            Local.set('score', []);
-        },
-        /**
-         * Private helper to order the score descending
-         * @param  {Array} score        Highscore array
-         * @return {Array}              Ordered array
-         */
-        $orderScore: function(score) {
-            function compare(a, b) {
-                if(a.score > b.score) {
-                    return -1;
-                } else if (a.score < b.score) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-            return score.sort(compare);
-        },
-        /**
-         * Get the highest score in array form (private method)
-         * @return {Array} scores
-         */
-        $getScore: function() {
-            return this.$orderScore(Local.get('score'));
-        }
-    };
-
-    Container.Store = new Store();
-
-})(window);
-
-/**
  * /app/main.js
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
     'use strict';
 
-    var $ = window.$;
-    var config = Container.settings.render;
-    var startButton = document.getElementById('js-start-game');
+    var settings = Container.settings;
+    var config = settings.render;
+    var game = null;
 
-    if(!startButton) {
-        return false;
-    }
-
-    startButton.addEventListener('click', function() {
-
-        // Hide the overlay resp. fade it out
-        $.fadeOut(document.getElementById('js-hide-start'));
+    var pregame = new HUD.Factory.Stepper($('.pregame.steps'));
+    pregame.start(function($lastStep) {
 
         // Get the current selected world and players
-        Container.settings.worldType = document.getElementById('js-world').value;
-        Container.settings.currentPlayers = document.getElementById('js-player-list').value.split(',');
-        Container.settings.game.players.amount = Container.settings.currentPlayers.length;
+        settings.worldType = HUD.$store.world;
+        settings.currentPlayers = Util.getValues(HUD.$store.players);
+        settings.game.players.amount = settings.currentPlayers.length;
 
         // Create a new phaser game
-        var game = new Phaser.Game(config.width, config.height, config.mode, config.node);
+        game = new Phaser.Game(config.width, config.height, config.mode, config.node);
 
-        //adding all the required states
+        // Adding all required phaser-game-states
         game.state.add('Boot', Container.Boot);
         game.state.add('Preload', Container.Preload);
         game.state.add('Game', Container.Game);
         game.state.add('Procedures', Container.Procedures);
-        game.state.start('Boot'); //starting the boot state
+
+
+                // Show the last info container on end
+                game.finishedCallback = function() {
+                    var content = $('.js-finished').html();
+                    var playerScores = Util.getPlayerScoreData();
+
+                    $('.js-finished').html(Util.replace(content, playerScores));
+                    $('#' + config.node).fadeOut(function() {
+                        $('.js-finished').fadeIn();
+                    });
+                };
 
         // Make game accessable
         Container.game = game;
+
+        // Fade out the last step and start the game
+        $lastStep.fadeOut(1500, function() {
+            $('.steps').remove(); // remove the stepper container and HTML nodes
+            game.state.start('Boot'); // starting the boot state
+        });
     });
 
 })(window);
