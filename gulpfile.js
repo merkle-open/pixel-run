@@ -19,7 +19,7 @@ var banner = ['/**',
   ' * @link <%= pkg.homepage %>',
   ' * @license <%= pkg.license %> Licensed by <%= pkg.company %>',
   ' */',
-  ''].join('\n');
+  '', ''].join('\n');
 
 gulp.task('clean:dist', function() {
     return remove(config.clean.dist);

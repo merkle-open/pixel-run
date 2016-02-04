@@ -5,6 +5,7 @@
  * @link http://namics.com/
  * @license MIT Licensed by Namics AG
  */
+
 /**
  * /app/provider/util.js
  * @author Jan Biasi <jan.biasi@namics.com>
