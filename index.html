@@ -4,27 +4,117 @@
     <meta charset="utf-8">
     <title>Pixel. Run. Namics.</title>
     <link rel="stylesheet" href="dist/bin/app.min.css">
-    <link rel="icon" href="assets/img/avatars/player.png" type="image/png">
+    <link rel="icon" href="assets/img/favicon.png" type="image/png">
 </head>
 <body>
-    <div class="preload-wrapper" id="js-hide-start">
-        <div class="content">
-            <div class="grid">
-                <div class="col-1-2">
-                    <select id="js-world">
-                        <option value="space" selected>Space</option>
-                        <option value="world2" disabled>World 2</option>
-                        <option value="world3" disabled>World 3</option>
-                    </select>
-                </div>
-                <div class="col-1-2">
-                    <button role="button" id="js-start-game">Start Game</button>
+    <div class="autosize pregame steps">
+        <div class="step js-step-1 js-step-start" data-next="js-step-2" data-noprocess="true">
+            <div class="header">
+                <div class="grid">
+                    <div class="col-2-3">
+                        <h1 class="wordmark">Wilkommen. Spiel. Challenge. Jump.<br>
+                            Pixel. Run. <span class="last">Namics.</span></h1>
+                    </div>
                 </div>
             </div>
-            <input type="text" id="js-player-list" placeholder="Player 1, Player2, Player 3" value="Fabio Russo, Jan Biasi">
+            <div class="body fill">
+                <img src="assets/img/thumbnails/game.png" alt="Game Screenshot" />
+            </div>
+            <div class="footer">
+                <i class="icon icon-arrow-right next js-next"></i>
+            </div>
+        </div>
+        <div class="step hidden js-step-2" data-input="js-s2-in" data-next="js-step-3">
+            <div class="header">
+                <div class="grid">
+                    <div class="col-2-3">
+                        <h1 class="wordmark">Individuell. Auswahl. Avatar. <br>
+                            Pixel. Run. <span class="last">Namics.</span></h1>
+                    </div>
+                    <div class="col-1-3 align-right">
+                        <h2 class="question">Spielerauswahl</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="body space-xl">
+                <div class="grid js-s2-in" data-process="input" data-read="js-input" data-key="players">
+                    <div class="col-1-3" data-value="techie">
+                        <img src="assets/img/avatars/nude/techie.png" alt="Techie" />
+                        <input type="text" class="center js-input" placeholder="Techie" data-index="0">
+                    </div>
+                    <div class="col-1-3 selectable" data-value="designer">
+                        <img src="assets/img/avatars/nude/designer.png" alt="Designer" />
+                        <input type="text" class="center js-input" placeholder="Designer" data-index="1">
+                    </div>
+                    <div class="col-1-3 selectable" data-value="consultant">
+                        <img src="assets/img/avatars/nude/consultant.png" alt="Consultant" />
+                        <input type="text" class="center js-input" placeholder="Consultant" data-index="2">
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <i class="icon icon-arrow-right next js-next"></i>
+            </div>
+        </div>
+        <div class="step hidden js-step-3" data-next="js-step-4" data-input="js-s3-in">
+            <div class="header">
+                <div class="grid">
+                    <div class="col-2-3">
+                        <h1 class="wordmark">Deine Welt. Galaxie. Spielspass.<br>
+                            Pixel. Run. <span class="last">Namics.</span></h1>
+                    </div>
+                    <div class="col-1-3 align-right">
+                        <h2 class="question">Weltauswahl</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="body space-xl">
+                <div class="grid js-s3-in" data-process="select" data-use="world" data-key="world">
+                    <div class="col-1-3 js-selectable" data-world="space">
+                        <img src="assets/img/thumbnails/space.png" alt="Space World" />
+                        <h3 class="title center">Space</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <i class="icon icon-arrow-right next js-next"></i>
+            </div>
+        </div>
+        <div class="step hidden js-step-4" data-end="true">
+            <h5 class="fullscreen-text">Have Fun!</h5>
         </div>
     </div>
-    <main id="startgame"></main>
+    <main id="js-launch-phaser-game"></main>
+    <div class="hidden js-finished resume">
+        <h1>Game Over</h1>
+        <h2>Gratulation {p1}! Du hast das Spiel mit einem Score von #{p1s} gewonnen.</h2>
+        <table>
+            <thead>
+                <tr>
+                    <td>Platzierung</td>
+                    <td>Spieler</td>
+                    <td>Score</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#1</td>
+                    <td>{p1}</td>
+                    <td>{p1s}</td>
+                </tr>
+                <tr>
+                    <td>#2</td>
+                    <td>{p2}</td>
+                    <td>{p2s}</td>
+                </tr>
+                <tr>
+                    <td>#3</td>
+                    <td>{p3}</td>
+                    <td>{p3s}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <script src="dist/dependencies.js"></script>
     <script src="dist/application.js"></script>
     <!--<script src="dist/bin/app.min.js"></script>-->
