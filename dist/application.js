@@ -1,4 +1,11 @@
 /**
+ * Pixel. Run. Namics. (Tun Ostschweiz) 
+ * @author Jan Biasi <jan.biasi@namics.com>
+ * @version v0.0.2-beta
+ * @link http://namics.com/
+ * @license MIT Licensed by Namics AG
+ */
+/**
  * /app/provider/util.js
  * @author Jan Biasi <jan.biasi@namics.com>
  */
