@@ -7,6 +7,7 @@
 
     var debug = new Util.Debugger('states.game');
     var config = Container.settings.game;
+    var isQuitting = false;
 
     Container.Game = function(game) {
         // Wrapper
@@ -45,7 +46,7 @@
             // Follow the first player if the first player dies etc.
             self.camera.follow(self.$furthestPlayer().player);
 
-            if(alivePlayers.length === 0) {
+            if(alivePlayers.length === 0 && !self.finished) {
                 // Quit the game if no players are alive
                 self.exit();
             } else if(alivePlayers.length === 1) {
@@ -68,6 +69,8 @@
                 if(player.dead !== true) {
                     player.$update();
                     player.run();
+                } else {
+                    player.$updateText();
                 }
             }
         },
@@ -75,14 +78,15 @@
          * Finishes the game
          */
         exit: function() {
-            var self = this;
-            this.finished = true;
-            self.$savePlayerScores();
-            debug.info('Game is finished! Player scores are saved in Storage');
-            $.fadeOut(document.getElementById(Container.settings.render.node), function() {
+            if(!this.finished) {
+                this.finished = true;
+                this.$savePlayerScores();
+                debug.info('Game is finished! Player scores are saved in Storage');
                 Container.game.lockRender = true;
-                window.location.href = 'scores.html';
-            });
+                Container.game.finishedCallback(this);
+            } else {
+                debug.warn('Game already finished, exit handler skipped.');
+            }
         },
         /**
          * Gets all players which are still alive
@@ -215,11 +219,12 @@
          */
         $createPlayers: function(callback) {
             var self = this;
-            var offset = config.players.offset;
+            var pheight = Container.settings.game.players.height;
+            var pwidth = Container.settings.game.players.width;
 
             // Create players for the amount defined in settings.players
             for(var i = 0; i < config.players.amount; i++) {
-                var instance = new Factory.Player(self, i, offset.x * i, offset.y);
+                var instance = new Factory.Player(self, i, (pwidth + 20) * i, pheight);
                 instance.init();
                 Container.World.players.push(instance);
             }
@@ -230,9 +235,12 @@
          * Save the score of all session players in localstorage
          */
         $savePlayerScores: function() {
-            for(var name in Session) {
-                var user = Session[name];
-                Container.Store.score(user.name, user.score, Container.settings.worldType);
+            if(!this.saved) {
+                this.saved = true;
+                for(var name in Session) {
+                    var user = Session[name];
+                    Container.Store.score(user.name, user.score, Container.settings.worldType);
+                }
             }
         }
     };
