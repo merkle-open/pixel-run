@@ -145,7 +145,7 @@ state. Read more about the states in the chapters below.
 ##### Boot
 The boot state loads all image, sprites and audio assets in the preload function and
 sets the basic [game settings](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/settings.js#L4)
-in the create method. Define new media elements to get loaded within the [loader variable](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/states/boot.js#L8).
+in the create method. Define new media elements to get loaded within the [world settings](https://github.com/janbiasi/pixelrun/blob/master/app/provider/settings.js#L51).
 
 ##### Preload
 Used for pregame settings such as the game mode of phaser (Arcade in this case) and background settings ect. Visit
