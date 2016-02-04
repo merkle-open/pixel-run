@@ -16,6 +16,15 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e570e7', endColorstr='#e58b24', GradientType=1);
 }
 
+.bgimage {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
 .preload-wrapper .content {
     max-width: 500px;
     margin: 100px auto 0 auto;

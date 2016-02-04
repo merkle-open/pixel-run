@@ -1,0 +1,8 @@
+.score-wrapper {
+    max-width: 1000px;
+    width: 80%;
+    margin: 40px auto;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 20px;
+}
