@@ -5,36 +5,47 @@
 (function(window, undefined) {
     'use strict';
 
-    var $ = window.$;
-    var config = Container.settings.render;
-    var startButton = document.getElementById('js-start-game');
+    var settings = Container.settings;
+    var config = settings.render;
+    var game = null;
 
-    if(!startButton) {
-        return false;
-    }
-
-    startButton.addEventListener('click', function() {
-
-        // Hide the overlay resp. fade it out
-        $.fadeOut(document.getElementById('js-hide-start'));
+    var pregame = new HUD.Factory.Stepper($('.pregame.steps'));
+    pregame.start(function($lastStep) {
 
         // Get the current selected world and players
-        Container.settings.worldType = document.getElementById('js-world').value;
-        Container.settings.currentPlayers = document.getElementById('js-player-list').value.split(',');
-        Container.settings.game.players.amount = Container.settings.currentPlayers.length;
+        settings.worldType = HUD.$store.world;
+        settings.currentPlayers = Util.getValues(HUD.$store.players);
+        settings.game.players.amount = settings.currentPlayers.length;
 
         // Create a new phaser game
-        var game = new Phaser.Game(config.width, config.height, config.mode, config.node);
+        game = new Phaser.Game(config.width, config.height, config.mode, config.node);
 
-        //adding all the required states
+        // Adding all required phaser-game-states
         game.state.add('Boot', Container.Boot);
         game.state.add('Preload', Container.Preload);
         game.state.add('Game', Container.Game);
         game.state.add('Procedures', Container.Procedures);
-        game.state.start('Boot'); //starting the boot state
+
+
+                // Show the last info container on end
+                game.finishedCallback = function() {
+                    var content = $('.js-finished').html();
+                    var playerScores = Util.getPlayerScoreData();
+
+                    $('.js-finished').html(Util.replace(content, playerScores));
+                    $('#' + config.node).fadeOut(function() {
+                        $('.js-finished').fadeIn();
+                    });
+                };
 
         // Make game accessable
         Container.game = game;
+
+        // Fade out the last step and start the game
+        $lastStep.fadeOut(1500, function() {
+            $('.steps').remove(); // remove the stepper container and HTML nodes
+            game.state.start('Boot'); // starting the boot state
+        });
     });
 
 })(window);
