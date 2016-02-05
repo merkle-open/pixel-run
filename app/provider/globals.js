@@ -17,6 +17,7 @@
     };
     window.Factory = {};
     window.Session = {};
+    window.Emergency = {};
     window.HUD = {
         $store: {},
         Factory: {}

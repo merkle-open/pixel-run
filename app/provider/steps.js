@@ -5,10 +5,16 @@
 (function(window, undefined) {
     'use strict';
 
+    /**
+     * Generates steps in a steps container and initialize them,
+     * and also stores results under HUD.$store
+     * @param {Node} container          HTML .steps container
+     */
     function Stepper(container) {
         this.$parent = container;
         this.$steps = container.find('> .step');
         this.$instance = [];
+        this.done = false;
     }
 
     Stepper.prototype = {
@@ -20,6 +26,7 @@
                 var step = new HUD.Factory.Step($(this));
 
                 step.on('finished', function() {
+                    self.done = true;
                     (self.$callback || Util.noop)($(self.$steps[self.$steps.length - 1]));
                 });
 
@@ -28,7 +35,14 @@
         }
     };
 
+    /**
+     * Single step for pregame HUD
+     * @param {Node} node           HTML .step node
+     */
     function Step(node) {
+        this.done = false;
+        this.loaded = false;
+        this.error = null;
         this.$step = node;
         this.$input = $('.' + node.data('input'));
         this.$next = $('.' + node.data('next'));
@@ -48,10 +62,7 @@
             this.$handlers[ev] = handler;
         },
         emit: function(ev) {
-            var self = this;
-            for(var handler in this.$handlers) {
-                self.$handlers[handler].apply(arguments);
-            }
+            this.$handlers[ev].apply(arguments);
         },
         $addEventListeners: function() {
             var self = this;
@@ -64,6 +75,7 @@
                 }
 
                 self.$step.fadeOut(function() {
+                    self.done = true;
                     self.$next.fadeIn(function() {
                         if(self.$next.data('end') === true) {
                             self.emit('finished');
@@ -73,8 +85,16 @@
             });
 
             if(self.$processType === 'select') {
-                self.$step.find('.js-selectable').on('click', function(ev) {
-                    $(this).toggleClass('selected');
+                var $selectable = self.$step.find('.js-selectable');
+                var alreadySelected = false;
+                $selectable.on('click', function(ev) {
+                    alreadySelected = $(this).hasClass('selected');
+                    $selectable.removeClass('selected');
+                    if(alreadySelected) {
+                        $(this).removeClass('selected');
+                    } else {
+                        $(this).addClass('selected');
+                    }
                 });
             }
         },

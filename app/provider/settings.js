@@ -16,8 +16,9 @@
         render: {
             width: '100%',
             height: 1000,
-            mode: Phaser.AUTO,
-            node: 'js-launch-phaser-game'
+            mode: Phaser.CANVAS,
+            node: 'js-launch-phaser-game',
+            fontSize: 26
         },
         physics: {
             mode: Phaser.Physics.ARCADE
@@ -42,8 +43,8 @@
                     y: 900
                 },
                 velocity: {
-                    y: -700,
-                    x: 350
+                    y: -720,
+                    x: 450
                 }
             }
         },
