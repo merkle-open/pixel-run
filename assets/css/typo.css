@@ -1,32 +1,32 @@
 @font-face {
     font-family: 'Roboto';
-    src: url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.eot');
-    src: url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.woff') format('woff'),
-         url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/roboto_black_macroman/Roboto-Black-webfont.svg#robotoblack') format('svg');
+    src: url('../../dist/assets/fonts/roboto_black_macroman/Roboto-Black-webfont.eot');
+    src: url('../../dist/assets/fonts/roboto_black_macroman/Roboto-Black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../dist/assets/fonts/roboto_black_macroman/Roboto-Black-webfont.woff') format('woff'),
+         url('../../dist/assets/fonts/roboto_black_macroman/Roboto-Black-webfont.ttf') format('truetype'),
+         url('../../dist/assets/fonts/roboto_black_macroman/Roboto-Black-webfont.svg#robotoblack') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Roboto Light';
-    src: url('../../assets/fonts/roboto_light_macroman/Roboto-Light-webfont.eot');
-    src: url('../../assets/fonts/roboto_light_macroman/Roboto-Light-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/roboto_light_macroman/Roboto-Light-webfont.woff') format('woff'),
-         url('../../assets/fonts/roboto_light_macroman/Roboto-Light-webfont.ttf') format('truetype'),
-         url('../../assets/fonts/roboto_light_macroman/Roboto-Light-webfont.svg#robotoblack') format('svg');
+    src: url('../../dist/assets/fonts/roboto_light_macroman/Roboto-Light-webfont.eot');
+    src: url('../../dist/assets/fonts/roboto_light_macroman/Roboto-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../dist/assets/fonts/roboto_light_macroman/Roboto-Light-webfont.woff') format('woff'),
+         url('../../dist/assets/fonts/roboto_light_macroman/Roboto-Light-webfont.ttf') format('truetype'),
+         url('../../dist/assets/fonts/roboto_light_macroman/Roboto-Light-webfont.svg#robotoblack') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'icomoon';
-    src: url('../../assets/fonts/icomoon/icomoon.eot?rl9af0');
-    src: url('../../assets/fonts/icomoon/icomoon.eot?rl9af0#iefix') format('embedded-opentype'),
-         url('../../assets/fonts/icomoon/icomoon.ttf?rl9af0') format('truetype'),
-         url('../../assets/fonts/icomoon/icomoon.woff?rl9af0') format('woff'),
-         url('../../assets/fonts/icomoon/icomoon.svg?rl9af0#icomoon') format('svg');
+    src: url('../../dist/assets/fonts/icomoon/icomoon.eot?rl9af0');
+    src: url('../../dist/assets/fonts/icomoon/icomoon.eot?rl9af0#iefix') format('embedded-opentype'),
+         url('../../dist/assets/fonts/icomoon/icomoon.ttf?rl9af0') format('truetype'),
+         url('../../dist/assets/fonts/icomoon/icomoon.woff?rl9af0') format('woff'),
+         url('../../dist/assets/fonts/icomoon/icomoon.svg?rl9af0#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
