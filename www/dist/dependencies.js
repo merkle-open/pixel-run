@@ -105725,7 +105725,7 @@ return jQuery;
                     y: 900
                 },
                 velocity: {
-                    y: -720,
+                    y: -750,
                     x: 450
                 }
             }
