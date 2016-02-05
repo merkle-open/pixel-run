@@ -52,7 +52,7 @@ run the task <code>lint</code> to validate all the files and generating an outpu
 
 > If there's a warning/info *"ES5 option is now set per default"* you can ignore this message
 and just keep on reading. This message will be removed in a newer version of JSHint and is generated
-due the <code>esversion</code> in the [.jshintrc](https://github.com/janbiasi/pixelrun/blob/master/.jshintrc) is set
+due the <code>esversion</code> in the [.jshintrc](https://github.com/janbiasi/pixelrun/blob/master/.jshintrc#L7) is set
 to 5 (using ECMAScript 5).
 
 #### Dependencies
