@@ -5,7 +5,7 @@
 (function(window, undefined) {
     'use strict';
 
-    var PLAYER_OFFSET_X = 150;
+    var PLAYER_OFFSET_X = 200;
     var PLAYER_OFFSET_Y = 500;
 
     var debug = new Util.Debugger('states.game');
@@ -238,7 +238,7 @@
 
             // Create players for the amount defined in settings.players
             for(var i = 0; i < gameSettings.players.amount; i++) {
-                var instance = new Factory.Player(self, i, PLAYER_OFFSET_X + (pwidth + 20) * i, PLAYER_OFFSET_Y + pheight);
+                var instance = new Factory.Player(self, i, PLAYER_OFFSET_X + (pwidth + 70) * i, PLAYER_OFFSET_Y + pheight);
                 instance.init();
                 Container.World.players.push(instance);
             }
