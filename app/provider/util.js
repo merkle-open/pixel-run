@@ -91,6 +91,7 @@
 
     /**
      * Creates a new replacer instance
+     * @constructor
      * @param {String} input        Template string
      * @param {Object} data         Dataset
      */
@@ -134,6 +135,11 @@
 
     Util.Replacer = Replacer;
 
+    /**
+     * Used for debugging the application and its states
+     * @constructor
+     * @param {String} namespace        Debugger namespace
+     */
     function Debugger(namespace) {
         this.enabled = window.Container.settings.debug === true;
         this.namespace = namespace || 'undefined';

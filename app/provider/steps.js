@@ -8,6 +8,7 @@
     /**
      * Generates steps in a steps container and initialize them,
      * and also stores results under HUD.$store
+     * @constructor
      * @param {Node} container          HTML .steps container
      */
     function Stepper(container) {
@@ -37,6 +38,7 @@
 
     /**
      * Single step for pregame HUD
+     * @constructor
      * @param {Node} node           HTML .step node
      */
     function Step(node) {
