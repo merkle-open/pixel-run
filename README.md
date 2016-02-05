@@ -1,3 +1,20 @@
+## TOC
+
+* [About](#about)
+    * [Launch](#launch)
+    * [Build](#build)
+    * [Dependencies](#dependencies)
+* [License](#license)
+* [API](#api)
+    * [Classes](#classes)
+        * [Player](#player)
+        * [Tilemap](#tilemap)
+        * [Sprite](#sprite)
+        * ScoreText
+    * [Phaser States](#phaser-states)
+    * [Emergency](#Emergency)
+
+
 ## About
 
 #### Launch
@@ -136,7 +153,7 @@ Adds the spritesheet to a certain position in the game.
 Sprite.add(x: Number, y: Number)
 ```
 
-### Game
+### Phaser States
 
 #### States
 There are four general states avaible which are used for the game process. The Preload, Boot, Game and Update
@@ -163,4 +180,27 @@ Container.Store.score('Max Mustermann', 891, 'Map 1');
 Container.Store.score('Hans Ruedi', 12, 'Map 1');
 Container.Store.getHighscore(); // 891
 Container.Store.getHighscore(true); // { score: 891, holder: 'Max Mustermann', map: 'Map 1' }
+```
+
+### Emergency
+Sometimes you want to kill all players in the world or even quit the game itself due some
+unexpected bugs or lags. But you will loose the player scores if you just reload the browser window (press F5), so it
+is **not recommended to reload the page to exit**! There are two methods provided as soon as the game starts,
+they are located under the global <code>Emergency</code> object. Each method has to be confirmed with the yes button before
+it will affect your current game.
+
+#### $killAll
+This method will kill all alive players in your game, e.g. if one player lasts in the game and he hang up in an obstacle on the map
+and can't move further, this method will be great to kill him (or just use the one below).
+
+```js
+Emergency.$killAll()
+```
+
+#### $quit
+This method will use the <code>$killAll</code> method and additionally exits the game, saves the scores and display
+the overview like every player would die.
+
+```js
+Emergency.$quit()
 ```
