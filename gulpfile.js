@@ -1,7 +1,9 @@
 'use strict';
 
+var fs = require('fs');
 var gulp = require('gulp');
 var remove = require('del');
+var archive = require('gulp-zip');
 var jshint = require('gulp-jshint');
 var gulpif = require('gulp-if');
 var header = require('gulp-header');
@@ -9,16 +11,19 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
+var uuid = require('shortid');
 var commentify = require('gulp-header');
-var config = require('./build.json');
+var config = require('./config.json');
 var pkg = require('./package.json');
 
+var currentBuildID;
+
 var banner = ['/**',
-  ' * <%= pkg.header %> ',
+  ' * <%= pkg.header %> (Build <%= uuid %>)',
   ' * @author <%= pkg.author %>',
-  ' * @version v<%= pkg.version %>',
-  ' * @link <%= pkg.homepage %>',
+  ' * @version v<%= cfg.version %>',
   ' * @license <%= pkg.license %> Licensed by <%= pkg.company %>',
+  ' * @see <%= pkg.homepage %>',
   ' */',
   '', ''].join('\n');
 
@@ -48,6 +53,29 @@ gulp.task('clean:dist:dependencies', function() {
     return remove(config.dependencies.target + '/' + config.dependencies.name + '.*');
 });
 
+gulp.task('copy', function() {
+    for(var key in config.copy) {
+        return gulp.src(key)
+            .pipe(gulp.dest(config.copy[key]));
+    }
+});
+
+gulp.task('archive', ['build:start', 'build:default'], function() {
+    return gulp.src(config.release)
+        .pipe(archive(currentBuildID + '-' + config.version + '.zip'))
+        .pipe(gulp.dest('./release/'));
+});
+
+gulp.task('build:start', function(done) {
+    currentBuildID = uuid.generate();
+    fs.writeFile(config.buildFile, currentBuildID, function(err) {
+        if(err) {
+            throw new Error('Build failed: ' + err.message);
+        }
+        done();
+    });
+});
+
 gulp.task('build:dependencies', ['clean:dist:dependencies'], function() {
     return gulp.src(config.dependencies.files)
         .pipe(concat(config.dependencies.name + '.js'))
@@ -58,7 +86,11 @@ gulp.task('build:app', ['clean:dist:app'], function() {
     return gulp.src(config.app.files)
         .pipe(gulpif(config.app.minify === true, uglify()))
         .pipe(concat(config.app.name + '.js'))
-        .pipe(commentify(banner, { pkg: pkg }))
+        .pipe(commentify(banner, {
+            cfg: config,
+            pkg: pkg,
+            uuid: currentBuildID
+        }))
         .pipe(gulp.dest(config.app.target));
 });
 
@@ -69,7 +101,11 @@ gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies
         ])
         .pipe(uglify())
         .pipe(concat(config.bundle.name + '.min.js'))
-        .pipe(commentify(banner, { pkg: pkg }))
+        .pipe(commentify(banner, {
+            cfg: config,
+            pkg: pkg,
+            uuid: currentBuildID
+        }))
         .pipe(gulp.dest(config.bundle.target));
 });
 
@@ -77,7 +113,11 @@ gulp.task('build:styles', ['clean:dist:styles'], function() {
     return gulp.src(config.styles.files)
         .pipe(cssmin())
         .pipe(concat(config.styles.name + '.min.css'))
-        .pipe(commentify(banner, { pkg: pkg }))
+        .pipe(commentify(banner, {
+            cfg: config,
+            pkg: pkg,
+            uuid: currentBuildID
+        }))
         .pipe(gulp.dest(config.styles.target));
 });
 
@@ -102,13 +142,29 @@ gulp.task('watch:styles', function() {
     });
 });
 
-gulp.task('bundle', ['build:bundle']);
-
-gulp.task('default', [
-    'build:styles',
-    'build:dependencies',
-    'build:app',
+gulp.task('watch:default', [
     'watch:styles',
     'watch:dependencies',
     'watch:app'
 ]);
+
+gulp.task('build:default', [
+    'build:styles',
+    'build:dependencies',
+    'build:app'
+]);
+
+gulp.task('develop', [
+    'build:default',
+    'watch:default'
+]);
+
+gulp.task('build:init', [
+    'build:start',
+    'build:default',
+    'watch:default'
+]);
+
+gulp.task('bundle', ['build:bundle']);
+
+gulp.task('default', ['build:init'])
