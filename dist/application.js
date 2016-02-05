@@ -646,6 +646,7 @@
         this.injector = game;
         this.image = image;
         this.path = path;
+        this.setScaleMinMax(1, 1);
 
         return this;
     };
@@ -669,14 +670,13 @@
      * Adds the sprite to a specific x and y position in the game
      * @param  {Number} x           Coordinates on X
      * @param  {Number} y           Coordinates on Y
-     * @return {Sprite} this
+     * @return {Spritesheet} $internal
      */
     Sprite.prototype.add = function(x, y) {
         debug.info('Sprite mounted ->', this.image, x, y);
         x = util.default(x, 0);
         y = util.default(y, 0);
-        this.injector.add.sprite(x, y, this.image);
-        return this;
+        return this.$internal = this.injector.add.sprite(x, y, this.image);
     };
 
     window.Factory.Sprite = Sprite;
@@ -837,8 +837,12 @@
 (function(window, undefined) {
     'use strict';
 
+    var PLAYER_OFFSET_X = 150;
+    var PLAYER_OFFSET_Y = 500;
+
     var debug = new Util.Debugger('states.game');
-    var config = Container.settings.game;
+    var settings = Container.settings;
+    var gameSettings = settings.game;
     var isQuitting = false;
 
     Container.Game = function(game) {
@@ -846,7 +850,7 @@
     };
 
     Container.Game.prototype = {
-        create: function() {
+        create: function create() {
             var self = this;
 
             // Loading all audio effects
@@ -870,8 +874,11 @@
                 // Follow the first player with the camera
                 self.camera.follow(self.$furthestPlayer().player);
             });
+
+            // Add emergency handlers in window
+            this.$applyEmergency();
         },
-        update: function() {
+        update: function update() {
             var self = this;
             var alivePlayers = self.$getAlivePlayers();
 
@@ -905,11 +912,16 @@
                     player.$updateText();
                 }
             }
+
+            if(settings.debug) {
+                // Add FPS settings to the game if in debug mode
+                Container.game.debug.text(Container.game.time.fps + ' FPS' || '-- FPS', 2, 14, "#FF00CC");
+            }
         },
         /**
          * Finishes the game
          */
-        exit: function() {
+        exit: function exit() {
             if(!this.finished) {
                 this.finished = true;
                 this.$savePlayerScores();
@@ -924,7 +936,7 @@
          * Gets all players which are still alive
          * @return {Array}          Alive players
          */
-        $getAlivePlayers: function() {
+        $getAlivePlayers: function $getAlivePlayers() {
             var alive = [];
             Container.World.players.forEach(function(player) {
                 if(player.alive === true) {
@@ -938,7 +950,7 @@
          * following procedure.
          * @return {Object}         Player and position
          */
-        $furthestPlayer: function() {
+        $furthestPlayer: function $furthestPlayer() {
             var firstPlayer = Container.World.players[0];
             var posFirst = Container.World.players[0].x;
 
@@ -959,9 +971,9 @@
          */
         $createAudioFX: function() {
             var self = this;
-            var fxSounds = Container.settings.audio.fx;
+            var fxSounds = settings.audio.fx;
 
-            fxSounds.forEach(function(fxSound) {
+            fxSounds.forEach(function createAudioFXInternal(fxSound) {
                 Container.Audio[fxSound] = {
                     node: self.add.audio('fx-' + fxSound),
                     play: function() {
@@ -978,9 +990,9 @@
          * @param  {Number} pid         Player ID
          * @return {Object}             Session Player
          */
-        $createPlayerSession: function(username, realname, pid) {
-            var worlds = Container.settings.worlds;
-            var wtype = Container.settings.worldType;
+        $createPlayerSession: function $createPlayerSession(username, realname, pid) {
+            var worlds = settings.worlds;
+            var wtype = settings.worldType;
             $index.session[pid] = username;
 
             return Session[username] = {
@@ -997,10 +1009,10 @@
          * Creates the score texts for each player. Before that,
          * it will create a session for every player.
          */
-        $createScoreTexts: function() {
+        $createScoreTexts: function $createScoreTexts() {
             var self = this;
             var pid = 0;
-            var players = Container.settings.currentPlayers;
+            var players = settings.currentPlayers;
 
             players.forEach(function(name) {
                 name = name.trim();
@@ -1008,8 +1020,9 @@
                 self.$createPlayerSession(username, name, pid);
 
                 var text = new Factory.ScoreText(self, username.toUpperCase(), 0);
+                text.option('fontSize', settings.render.fontSize + 'px');
                 text.option('fill', Session[username].color);
-                text.add(20, 22 * (pid + 1), true);
+                text.add(20, (settings.render.fontSize + 5) * (pid + 1), true);
 
                 Session[username].text = text;
 
@@ -1019,16 +1032,16 @@
         /**
          * Creates the background layer for current world type
          */
-        $createBackground: function() {
-            var background = new Factory.Sprite(this, 'background-' + Container.settings.worldType);
+        $createBackground: function $createBackground() {
+            var background = new Factory.Sprite(this, 'background-' + settings.worldType);
             background.add(0, 0);
         },
         /**
          * Creates the tilemap and layers for the current world type
          */
-        $createTilemap: function() {
+        $createTilemap: function $createTilemap() {
             var self = this;
-            var worldType = Container.settings.worldType;
+            var worldType = settings.worldType;
 
             // Create a new tilemap with the worldType
             var map = new Factory.Tilemap(self, 'tilemap-' + worldType);
@@ -1049,14 +1062,14 @@
          * @param  {Function} callback      Callback handler
          * @return {*}                      Callback return value
          */
-        $createPlayers: function(callback) {
+        $createPlayers: function $createPlayers(callback) {
             var self = this;
-            var pheight = Container.settings.game.players.height;
-            var pwidth = Container.settings.game.players.width;
+            var pheight = settings.game.players.height;
+            var pwidth = settings.game.players.width;
 
             // Create players for the amount defined in settings.players
-            for(var i = 0; i < config.players.amount; i++) {
-                var instance = new Factory.Player(self, i, (pwidth + 20) * i, pheight);
+            for(var i = 0; i < gameSettings.players.amount; i++) {
+                var instance = new Factory.Player(self, i, PLAYER_OFFSET_X + (pwidth + 20) * i, PLAYER_OFFSET_Y + pheight);
                 instance.init();
                 Container.World.players.push(instance);
             }
@@ -1066,14 +1079,59 @@
         /**
          * Save the score of all session players in localstorage
          */
-        $savePlayerScores: function() {
+        $savePlayerScores: function $savePlayerScores() {
             if(!this.saved) {
                 this.saved = true;
                 for(var name in Session) {
                     var user = Session[name];
-                    Container.Store.score(user.name, user.score, Container.settings.worldType);
+                    Container.Store.score(user.name, user.score, settings.worldType);
                 }
             }
+        },
+        $applyEmergency: function $applyEmergency() {
+            var res = false;
+            var self = this;
+
+            /**
+             * Wrapper for the window.confirm method
+             * @param  {String} text        Confirm message
+             * @param  {Function} handler   Callback on confirmed
+             * @return {*}                  Handler return value
+             */
+            var confirm = function(text, handler) {
+                res = window.confirm(text);
+                if(res === true) {
+                    return handler();
+                } else {
+                    debug.info('User canceled emergency action');
+                }
+            };
+
+            /**
+             * Exits the game manually, if somethings lags around
+             * or is buggy that you have to quit.
+             */
+            Emergency.$quit = function $$exitGame() {
+                confirm('Are you sure to emergency quit the game?', function() {
+                    Emergency.$killAll();
+                    self.exit();
+                });
+            };
+
+            /**
+             * Kills all players which are in the game
+             */
+            Emergency.$killAll = function $$killAll() {
+                confirm('Are you sure you want to kill every player?', function() {
+                    for(var player in Session) {
+                        // Let each player die if not dead
+                        var instance = Session[player];
+                        if(!instance.player().dead) {
+                            instance.player().die();
+                        }
+                    }
+                });
+            };
         }
     };
 
@@ -1086,8 +1144,6 @@
 (function(window, undefined) {
     'use strict';
 
-    var game = Container.game;
-
     Container.Preload = function(game) {
         this.ready = false;
         this.error = null;
@@ -1096,8 +1152,18 @@
 
     Container.Preload.prototype = {
         preload: function() {
+            if(Container.settings.debug) {
+                Container.game.time.advancedTiming = true;
+            }
+
+            this.scale.setScreenSize = true;
+            this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.scale.minHeight = Container.settings.render.height / 2;
+            this.scale.pageAlignHorizontally = true;
+
             try {
                 this.physics.startSystem(Phaser.Physics.ARCADE);
+                this.physics.arcade.gravity.y = 200;
                 this.ready = true;
             } catch(notReady) {
                 this.error = notReady;
@@ -1127,9 +1193,8 @@
 
     var settings = Container.settings;
     var config = settings.render;
-    var game = null;
 
-    var pregame = new HUD.Factory.Stepper($('.pregame.steps'));
+    var pregame = Container.stepper = new HUD.Factory.Stepper($('.pregame.steps'));
     pregame.start(function($lastStep) {
 
         // Get the current selected world and players
@@ -1138,7 +1203,7 @@
         settings.game.players.amount = settings.currentPlayers.length;
 
         // Create a new phaser game
-        game = new Phaser.Game(config.width, config.height, config.mode, config.node);
+        var game = new Phaser.Game(config.width, config.height, config.mode, config.node);
 
         // Adding all required phaser-game-states
         game.state.add('Boot', Container.Boot);
@@ -1146,24 +1211,24 @@
         game.state.add('Game', Container.Game);
         game.state.add('Procedures', Container.Procedures);
 
+        // Show the last info container on end
+        game.finishedCallback = function() {
+            var content = $('.js-finished').html();
+            var playerScores = Util.getPlayerScoreData();
 
-                // Show the last info container on end
-                game.finishedCallback = function() {
-                    var content = $('.js-finished').html();
-                    var playerScores = Util.getPlayerScoreData();
-
-                    $('.js-finished').html(Util.replace(content, playerScores));
-                    $('#' + config.node).fadeOut(function() {
-                        $('.js-finished').fadeIn();
-                    });
-                };
+            $('.js-finished').html(Util.replace(content, playerScores));
+            $('#' + config.node).fadeOut(function() {
+                $('.js-finished').fadeIn();
+            });
+        };
 
         // Make game accessable
         Container.game = game;
 
         // Fade out the last step and start the game
-        $lastStep.fadeOut(1500, function() {
-            $('.steps').remove(); // remove the stepper container and HTML nodes
+        $lastStep.slideUp(1500, function() {
+            $('.steps').remove();
+            // remove the stepper container and HTML nodes
             game.state.start('Boot'); // starting the boot state
         });
     });

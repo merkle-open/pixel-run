@@ -105669,6 +105669,7 @@ return jQuery;
     };
     window.Factory = {};
     window.Session = {};
+    window.Emergency = {};
     window.HUD = {
         $store: {},
         Factory: {}
@@ -105697,8 +105698,9 @@ return jQuery;
         render: {
             width: '100%',
             height: 1000,
-            mode: Phaser.AUTO,
-            node: 'js-launch-phaser-game'
+            mode: Phaser.CANVAS,
+            node: 'js-launch-phaser-game',
+            fontSize: 26
         },
         physics: {
             mode: Phaser.Physics.ARCADE
@@ -105723,8 +105725,8 @@ return jQuery;
                     y: 900
                 },
                 velocity: {
-                    y: -700,
-                    x: 350
+                    y: -720,
+                    x: 550
                 }
             }
         },
@@ -105745,10 +105747,16 @@ return jQuery;
 (function(window, undefined) {
     'use strict';
 
+    /**
+     * Generates steps in a steps container and initialize them,
+     * and also stores results under HUD.$store
+     * @param {Node} container          HTML .steps container
+     */
     function Stepper(container) {
         this.$parent = container;
         this.$steps = container.find('> .step');
         this.$instance = [];
+        this.done = false;
     }
 
     Stepper.prototype = {
@@ -105760,6 +105768,7 @@ return jQuery;
                 var step = new HUD.Factory.Step($(this));
 
                 step.on('finished', function() {
+                    self.done = true;
                     (self.$callback || Util.noop)($(self.$steps[self.$steps.length - 1]));
                 });
 
@@ -105768,7 +105777,14 @@ return jQuery;
         }
     };
 
+    /**
+     * Single step for pregame HUD
+     * @param {Node} node           HTML .step node
+     */
     function Step(node) {
+        this.done = false;
+        this.loaded = false;
+        this.error = null;
         this.$step = node;
         this.$input = $('.' + node.data('input'));
         this.$next = $('.' + node.data('next'));
@@ -105788,10 +105804,7 @@ return jQuery;
             this.$handlers[ev] = handler;
         },
         emit: function(ev) {
-            var self = this;
-            for(var handler in this.$handlers) {
-                self.$handlers[handler].apply(arguments);
-            }
+            this.$handlers[ev].apply(arguments);
         },
         $addEventListeners: function() {
             var self = this;
@@ -105804,6 +105817,7 @@ return jQuery;
                 }
 
                 self.$step.fadeOut(function() {
+                    self.done = true;
                     self.$next.fadeIn(function() {
                         if(self.$next.data('end') === true) {
                             self.emit('finished');
@@ -105813,8 +105827,16 @@ return jQuery;
             });
 
             if(self.$processType === 'select') {
-                self.$step.find('.js-selectable').on('click', function(ev) {
-                    $(this).toggleClass('selected');
+                var $selectable = self.$step.find('.js-selectable');
+                var alreadySelected = false;
+                $selectable.on('click', function(ev) {
+                    alreadySelected = $(this).hasClass('selected');
+                    $selectable.removeClass('selected');
+                    if(alreadySelected) {
+                        $(this).removeClass('selected');
+                    } else {
+                        $(this).addClass('selected');
+                    }
                 });
             }
         },
