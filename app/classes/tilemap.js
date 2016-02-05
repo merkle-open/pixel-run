@@ -1,5 +1,6 @@
 /**
  * /app/classes/tilemap.js
+ * @namespace Factory
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
@@ -9,6 +10,7 @@
 
     /**
      * Constructor of the Tilemap Class
+     * @constructor
      * @param {Game} game           Game injector point
      * @param {String} name         Name of the tilemap
      */

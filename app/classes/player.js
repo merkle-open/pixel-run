@@ -1,5 +1,6 @@
 /**
  * /app/classes/player.js
+ * @namespace Factory
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
@@ -12,6 +13,7 @@
 
     /**
      * Creates a new player instance
+     * @constructor
      * @param {Game} game           Reference to the game
      * @param {Number} index        Index of the player (count)
      * @param {Number} posX         Position on x-axis

@@ -1,5 +1,6 @@
 /**
  * /app/classes/sprite.js
+ * @namespace Factory
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
@@ -12,7 +13,7 @@
     /**
      * Sprite constructor for creating Spritesheets for background
      * images or player sprites.
-     * @namespace Factory
+     * @constructor
      * @param {Game} game           Game injector point
      * @param {String} image        Name of the (loaded) asset
      * @param {String} path         Path to the asset image (optional)

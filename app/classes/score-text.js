@@ -1,5 +1,6 @@
 /**
  * /app/classes/score-text.js
+ * @namespace Factory
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
@@ -11,6 +12,7 @@
     /**
      * Score text base class which generates the
      * text with the Util.Replacer class.
+     * @constructor
      * @param {Game} game           Game reference
      * @param {String} player       Name of the player
      * @param {Number} score        Current game score
