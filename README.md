@@ -3,6 +3,7 @@
 * [About](#about)
     * [Launch](#launch)
     * [Build](#build)
+    * [Validation](#jshint)
     * [Dependencies](#dependencies)
 * [License](#license)
 * [API](#api)
@@ -44,6 +45,15 @@ gulp build:dependencies
 gulp watch:app
 gulp watch:dependencies
 ```
+
+#### JSHint
+There's a gulp task integrated which helps you to lint the application files under <code>/app</code>. Simply
+run the task <code>lint</code> to validate all the files and generating an output.
+
+> If there's a warning/info *"ES5 option is now set per default"* you can ignore this message
+and just keep on reading. This message will be removed in a newer version of JSHint and is generated
+due the <code>esversion</code> in the [.jshintrc](https://github.com/janbiasi/pixelrun/blob/master/.jshintrc) is set
+to 5 (using ECMAScript 5).
 
 #### Dependencies
 * Gulp *(NPM)*
