@@ -22,3 +22,19 @@
     margin-top: 50px;
     font-size: 37px;
 }
+
+.resume .grid button {
+    width: 70%;
+    margin: 0 15%;
+}
+
+.resume .actions {
+    margin-top: 150px;
+}
+
+.resume button a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: #000;
+}

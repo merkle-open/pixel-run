@@ -5,6 +5,8 @@
   Site - http://ninenineteen.co
 */
 
+/** Extended by Jan Biasi */
+
 *, *:after, *:before {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -27,6 +29,30 @@ body {
 	min-width: 0; /* when using padded grid on ipad in portrait mode, width should be viewport-width - padding = (768 - 20) = 748. actually, it should be even smaller to allow for padding of grid containing element */
 	margin: 0 auto;
 	overflow: hidden;
+}
+
+.grid-full {
+	max-width: 100%;
+}
+
+.grid-xlg {
+	max-width: 1600px;
+}
+
+.grid-lg {
+	max-width: 1400px;
+}
+
+.grid-sm {
+	max-width: 940px;
+}
+
+.grid-xsm {
+	max-width: 800px;
+}
+
+.grid-lg-img [class*=col-] img {
+	max-width: 400px;
 }
 
 .grid > [class*='col-']:last-of-type {

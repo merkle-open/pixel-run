@@ -30,11 +30,11 @@
 }
 
 .step .grid {
-    max-width: 100%;
+    /*max-width: 100%; */
 }
 
 .step .wordmark {
-    font-size: 40px;
+    font-size: 45px;
     font-weight: bold;
 }
 
@@ -80,7 +80,6 @@
 
 .step .grid [class*='col-'] img {
     display: block;
-    max-width: 220px;
     margin: 0 auto 30px auto;
     transition: all .2s linear;
     -o-transition: all .2s linear;
@@ -89,18 +88,18 @@
     -webkit-transition: all .2s linear;
 }
 
+.step .grid [class*='col-'] img.img-sm {
+    max-width: 220px;
+}
+
 .step i.icon.next {
     float: right;
     font-size: 80px;
     color: #fff;
 }
 
-.step .js-selectable.selected {
-    font-weight: bold;
-}
-
 .step .js-selectable.selected img {
-    max-width: 260px;
+    max-width: 450px;
 }
 
 .step .fullscreen-text {
