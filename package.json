@@ -1,11 +1,12 @@
 {
   "name": "tun-game",
-  "header": "Pixel. Run. Namics. (Tun Ostschweiz)",
-  "version": "0.0.2-beta",
+  "header": "Pixel. Run. Namics.",
+  "version": "0.0.0",
   "description": "",
   "main": "",
   "scripts": {
-    "serve": "node node_modules/http-server/bin/http-server -o"
+    "serve": "node node_modules/http-server/bin/http-server -o",
+    "build": "gulp build:default"
   },
   "repository": {
     "type": "git",
@@ -20,13 +21,16 @@
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-cssmin": "^0.1.7",
+    "gulp-gzip": "^1.2.0",
     "gulp-header": "^1.7.1",
     "gulp-if": "^2.0.0",
     "gulp-jshint": "^2.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.1",
+    "gulp-zip": "^3.1.0",
     "jshint": "^2.9.1",
-    "jshint-stylish": "^2.1.0"
+    "jshint-stylish": "^2.1.0",
+    "shortid": "^2.2.4"
   },
   "dependencies": {
     "http-server": "^0.8.5"
