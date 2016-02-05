@@ -105726,7 +105726,7 @@ return jQuery;
                 },
                 velocity: {
                     y: -720,
-                    x: 550
+                    x: 450
                 }
             }
         },
@@ -105750,6 +105750,7 @@ return jQuery;
     /**
      * Generates steps in a steps container and initialize them,
      * and also stores results under HUD.$store
+     * @constructor
      * @param {Node} container          HTML .steps container
      */
     function Stepper(container) {
@@ -105779,6 +105780,7 @@ return jQuery;
 
     /**
      * Single step for pregame HUD
+     * @constructor
      * @param {Node} node           HTML .step node
      */
     function Step(node) {
@@ -105829,7 +105831,7 @@ return jQuery;
             if(self.$processType === 'select') {
                 var $selectable = self.$step.find('.js-selectable');
                 var alreadySelected = false;
-                $selectable.on('click', function(ev) {
+                $selectable.on('click', function() {
                     alreadySelected = $(this).hasClass('selected');
                     $selectable.removeClass('selected');
                     if(alreadySelected) {
@@ -105841,14 +105843,14 @@ return jQuery;
             }
         },
         $createProcessor: function() {
+            var self = this;
+
             if(this.$dataKey === undefined) {
                 return function() {};
             }
 
             switch(this.$processType.toLowerCase()) {
                 case 'input':
-                    var self = this;
-
                     return function() {
                         var data = {};
                         var $targets = self.$step.find('.' + self.$input.data('read'));
@@ -105861,22 +105863,15 @@ return jQuery;
 
                         return data;
                     };
-
-                    break;
                 case 'select':
-                    var self = this;
-
                     return function() {
                         var selected = self.$step.find('.js-selectable.selected');
                         var result = this.result = selected.data(self.$useDatakey);
 
                         return result;
                     };
-
-                    break;
                 default:
                     throw new Error('Undefined process type!');
-                    break;
             }
         }
     };

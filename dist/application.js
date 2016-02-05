@@ -1,9 +1,9 @@
 /**
- * Pixel. Run. Namics. (Tun Ostschweiz) 
+ * Pixel. Run. Namics. (Build Nk-gL9pKg)
  * @author Jan Biasi <jan.biasi@namics.com>
- * @version v0.0.2-beta
- * @link http://namics.com/
+ * @version v0.0.21-beta
  * @license MIT Licensed by Namics AG
+ * @see http://namics.com/
  */
 
 /**
@@ -99,6 +99,7 @@
 
     /**
      * Creates a new replacer instance
+     * @constructor
      * @param {String} input        Template string
      * @param {Object} data         Dataset
      */
@@ -142,6 +143,11 @@
 
     Util.Replacer = Replacer;
 
+    /**
+     * Used for debugging the application and its states
+     * @constructor
+     * @param {String} namespace        Debugger namespace
+     */
     function Debugger(namespace) {
         this.enabled = window.Container.settings.debug === true;
         this.namespace = namespace || 'undefined';
@@ -266,7 +272,7 @@
         Container.Store.$getScore().forEach(function(score) {
             generated.push('<tr><td>');
             if(opts.index) {
-                generated.push('<strong>')
+                generated.push('<strong>');
                 generated.push('# ' + index);
                 generated.push('</strong></td><td>');
             }
@@ -303,10 +309,9 @@
 (function(window, undefined) {
     'use strict';
 
-    var game = Container.game;
     var Local = window.Store;
 
-    var Store = function(game) {
+    var Store = function() {
         // Class wrapper
     };
 
@@ -359,6 +364,7 @@
 
 /**
  * /app/classes/player.js
+ * @namespace Factory
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
@@ -371,6 +377,7 @@
 
     /**
      * Creates a new player instance
+     * @constructor
      * @param {Game} game           Reference to the game
      * @param {Number} index        Index of the player (count)
      * @param {Number} posX         Position on x-axis
@@ -394,7 +401,7 @@
         game.add.existing(this);
 
         return this;
-    };
+    }
 
     Player.prototype = Object.create(Phaser.Sprite.prototype);
     Player.prototype.constructor = Player;
@@ -471,7 +478,8 @@
      */
     Player.prototype.$addActionKey = function() {
         debug.info('Player created actionKey ->', this.jumpKey);
-        return this.$actionKey = Container.cursors[this.jumpKey];
+        this.$actionKey = Container.cursors[this.jumpKey];
+        return this.$actionKey;
     };
 
     /**
@@ -509,6 +517,7 @@
 
 /**
  * /app/classes/score-text.js
+ * @namespace Factory
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
@@ -520,6 +529,7 @@
     /**
      * Score text base class which generates the
      * text with the Util.Replacer class.
+     * @constructor
      * @param {Game} game           Game reference
      * @param {String} player       Name of the player
      * @param {Number} score        Current game score
@@ -585,8 +595,6 @@
          * @return {Text}
          */
         add: function(x, y, fixedToCamera) {
-            var wtype = Container.settings.worldType;
-
             x = x || 0;
             y = y || 0;
 
@@ -609,10 +617,8 @@
         /**
          * Updates the internal text. This method is private and should
          * not be called from outside.
-         * @param  {[type]} score [description]
-         * @return {[type]}       [description]
          */
-        $update: function(score) {
+        $update: function() {
             this.$text.setText(this.get());
         }
     };
@@ -623,20 +629,20 @@
 
 /**
  * /app/classes/sprite.js
+ * @namespace Factory
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
     'use strict';
 
     var debug = new Util.Debugger('Sprite.class');
-    var root = window.Container;
     var util = window.Util;
     var id = 0;
 
     /**
      * Sprite constructor for creating Spritesheets for background
      * images or player sprites.
-     * @namespace Factory
+     * @constructor
      * @param {Game} game           Game injector point
      * @param {String} image        Name of the (loaded) asset
      * @param {String} path         Path to the asset image (optional)
@@ -649,7 +655,7 @@
         this.setScaleMinMax(1, 1);
 
         return this;
-    };
+    }
 
     Sprite.prototype = Object.create(Phaser.Sprite.prototype);
     Sprite.prototype.constructor = Sprite;
@@ -676,7 +682,8 @@
         debug.info('Sprite mounted ->', this.image, x, y);
         x = util.default(x, 0);
         y = util.default(y, 0);
-        return this.$internal = this.injector.add.sprite(x, y, this.image);
+        this.$internal = this.injector.add.sprite(x, y, this.image);
+        return this.$internal;
     };
 
     window.Factory.Sprite = Sprite;
@@ -685,16 +692,17 @@
 
 /**
  * /app/classes/tilemap.js
+ * @namespace Factory
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {
     'use strict';
 
     var debug = new Util.Debugger('Tilemap.class');
-    var root = window.Container;
 
     /**
      * Constructor of the Tilemap Class
+     * @constructor
      * @param {Game} game           Game injector point
      * @param {String} name         Name of the tilemap
      */
@@ -704,7 +712,7 @@
         this.map = null;
         this.layers = {};
         return this;
-    };
+    }
 
     Tilemap.prototype = Object.create(Phaser.Tilemap.prototype);
     Tilemap.prototype.constructor = Tilemap;
@@ -729,7 +737,8 @@
      */
     Tilemap.prototype.addToGame = function(game) {
         game = game || this.game || null;
-        return this.map = game.add.tilemap(this.name);
+        this.map = game.add.tilemap(this.name);
+        return this.map;
     };
 
     /**
@@ -740,7 +749,8 @@
     Tilemap.prototype.createLayer = function(name) {
         debug.info('Layer created ->', name);
         var layer = this.map.createLayer(name);
-        return this.layers[name] = layer;
+        this.layers[name] = layer;
+        return this.layers[name];
     };
 
     /**
@@ -785,7 +795,7 @@
 (function(window, undefined) {
     'use strict';
 
-    Container.Boot = function(game) {
+    Container.Boot = function() {
         // Empty class wrapper
     };
 
@@ -843,9 +853,8 @@
     var debug = new Util.Debugger('states.game');
     var settings = Container.settings;
     var gameSettings = settings.game;
-    var isQuitting = false;
 
-    Container.Game = function(game) {
+    Container.Game = function() {
         // Wrapper
     };
 
@@ -995,7 +1004,7 @@
             var wtype = settings.worldType;
             $index.session[pid] = username;
 
-            return Session[username] = {
+            Session[username] = {
                 id: pid,
                 name: realname,
                 username: username,
@@ -1004,6 +1013,8 @@
                     return Container.World.players[pid];
                 }
             };
+
+            return Session[username];
         },
         /**
          * Creates the score texts for each player. Before that,
@@ -1016,7 +1027,7 @@
 
             players.forEach(function(name) {
                 name = name.trim();
-                var username = name.replace(' ', '')
+                var username = name.replace(' ', '');
                 self.$createPlayerSession(username, name, pid);
 
                 var text = new Factory.ScoreText(self, username.toUpperCase(), 0);
@@ -1144,7 +1155,7 @@
 (function(window, undefined) {
     'use strict';
 
-    Container.Preload = function(game) {
+    Container.Preload = function() {
         this.ready = false;
         this.error = null;
         this.background = null;
@@ -1176,7 +1187,7 @@
                 throw this.error;
             }
         },
-        quit: function(pointer) {
+        quit: function() {
             alert('Goodbye');
             this.ready = false;
         }
