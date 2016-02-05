@@ -5,8 +5,6 @@
 (function(window, undefined) {
     'use strict';
 
-    var game = Container.game;
-
     Container.Preload = function(game) {
         this.ready = false;
         this.error = null;
@@ -15,8 +13,18 @@
 
     Container.Preload.prototype = {
         preload: function() {
+            if(Container.settings.debug) {
+                Container.game.time.advancedTiming = true;
+            }
+
+            this.scale.setScreenSize = true;
+            this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.scale.minHeight = Container.settings.render.height / 2;
+            this.scale.pageAlignHorizontally = true;
+
             try {
                 this.physics.startSystem(Phaser.Physics.ARCADE);
+                this.physics.arcade.gravity.y = 200;
                 this.ready = true;
             } catch(notReady) {
                 this.error = notReady;
