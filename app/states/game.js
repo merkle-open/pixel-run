@@ -11,9 +11,8 @@
     var debug = new Util.Debugger('states.game');
     var settings = Container.settings;
     var gameSettings = settings.game;
-    var isQuitting = false;
 
-    Container.Game = function(game) {
+    Container.Game = function() {
         // Wrapper
     };
 
@@ -163,7 +162,7 @@
             var wtype = settings.worldType;
             $index.session[pid] = username;
 
-            return Session[username] = {
+            Session[username] = {
                 id: pid,
                 name: realname,
                 username: username,
@@ -172,6 +171,8 @@
                     return Container.World.players[pid];
                 }
             };
+
+            return Session[username];
         },
         /**
          * Creates the score texts for each player. Before that,
@@ -184,7 +185,7 @@
 
             players.forEach(function(name) {
                 name = name.trim();
-                var username = name.replace(' ', '')
+                var username = name.replace(' ', '');
                 self.$createPlayerSession(username, name, pid);
 
                 var text = new Factory.ScoreText(self, username.toUpperCase(), 0);

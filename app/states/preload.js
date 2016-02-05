@@ -5,7 +5,7 @@
 (function(window, undefined) {
     'use strict';
 
-    Container.Preload = function(game) {
+    Container.Preload = function() {
         this.ready = false;
         this.error = null;
         this.background = null;
@@ -37,7 +37,7 @@
                 throw this.error;
             }
         },
-        quit: function(pointer) {
+        quit: function() {
             alert('Goodbye');
             this.ready = false;
         }

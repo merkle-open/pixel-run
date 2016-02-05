@@ -5,7 +5,7 @@
 (function(window, undefined) {
     'use strict';
 
-    Container.Boot = function(game) {
+    Container.Boot = function() {
         // Empty class wrapper
     };
 

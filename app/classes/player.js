@@ -35,7 +35,7 @@
         game.add.existing(this);
 
         return this;
-    };
+    }
 
     Player.prototype = Object.create(Phaser.Sprite.prototype);
     Player.prototype.constructor = Player;
@@ -112,7 +112,8 @@
      */
     Player.prototype.$addActionKey = function() {
         debug.info('Player created actionKey ->', this.jumpKey);
-        return this.$actionKey = Container.cursors[this.jumpKey];
+        this.$actionKey = Container.cursors[this.jumpKey];
+        return this.$actionKey;
     };
 
     /**

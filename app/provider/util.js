@@ -258,7 +258,7 @@
         Container.Store.$getScore().forEach(function(score) {
             generated.push('<tr><td>');
             if(opts.index) {
-                generated.push('<strong>')
+                generated.push('<strong>');
                 generated.push('# ' + index);
                 generated.push('</strong></td><td>');
             }

@@ -6,7 +6,6 @@
     'use strict';
 
     var debug = new Util.Debugger('Sprite.class');
-    var root = window.Container;
     var util = window.Util;
     var id = 0;
 
@@ -26,7 +25,7 @@
         this.setScaleMinMax(1, 1);
 
         return this;
-    };
+    }
 
     Sprite.prototype = Object.create(Phaser.Sprite.prototype);
     Sprite.prototype.constructor = Sprite;
@@ -53,7 +52,8 @@
         debug.info('Sprite mounted ->', this.image, x, y);
         x = util.default(x, 0);
         y = util.default(y, 0);
-        return this.$internal = this.injector.add.sprite(x, y, this.image);
+        this.$internal = this.injector.add.sprite(x, y, this.image);
+        return this.$internal;
     };
 
     window.Factory.Sprite = Sprite;

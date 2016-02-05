@@ -76,8 +76,6 @@
          * @return {Text}
          */
         add: function(x, y, fixedToCamera) {
-            var wtype = Container.settings.worldType;
-
             x = x || 0;
             y = y || 0;
 
@@ -100,10 +98,8 @@
         /**
          * Updates the internal text. This method is private and should
          * not be called from outside.
-         * @param  {[type]} score [description]
-         * @return {[type]}       [description]
          */
-        $update: function(score) {
+        $update: function() {
             this.$text.setText(this.get());
         }
     };

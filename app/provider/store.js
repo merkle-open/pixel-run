@@ -5,10 +5,9 @@
 (function(window, undefined) {
     'use strict';
 
-    var game = Container.game;
     var Local = window.Store;
 
-    var Store = function(game) {
+    var Store = function() {
         // Class wrapper
     };
 

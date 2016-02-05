@@ -6,7 +6,6 @@
     'use strict';
 
     var debug = new Util.Debugger('Tilemap.class');
-    var root = window.Container;
 
     /**
      * Constructor of the Tilemap Class
@@ -19,7 +18,7 @@
         this.map = null;
         this.layers = {};
         return this;
-    };
+    }
 
     Tilemap.prototype = Object.create(Phaser.Tilemap.prototype);
     Tilemap.prototype.constructor = Tilemap;
@@ -44,7 +43,8 @@
      */
     Tilemap.prototype.addToGame = function(game) {
         game = game || this.game || null;
-        return this.map = game.add.tilemap(this.name);
+        this.map = game.add.tilemap(this.name);
+        return this.map;
     };
 
     /**
@@ -55,7 +55,8 @@
     Tilemap.prototype.createLayer = function(name) {
         debug.info('Layer created ->', name);
         var layer = this.map.createLayer(name);
-        return this.layers[name] = layer;
+        this.layers[name] = layer;
+        return this.layers[name];
     };
 
     /**
