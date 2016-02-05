@@ -12,7 +12,7 @@
         * [Sprite](#sprite)
         * ScoreText
     * [Phaser States](#phaser-states)
-    * [Emergency](#Emergency)
+    * [Emergency](#emergency)
 
 
 ## About
