@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var remove = require('del');
+var jshint = require('gulp-jshint');
 var gulpif = require('gulp-if');
 var header = require('gulp-header');
 var concat = require('gulp-concat');
@@ -20,6 +21,12 @@ var banner = ['/**',
   ' * @license <%= pkg.license %> Licensed by <%= pkg.company %>',
   ' */',
   '', ''].join('\n');
+
+gulp.task('lint', function() {
+    return gulp.src(config.lint.path)
+        .pipe(jshint({ lookup: true }))
+        .pipe(jshint.reporter('jshint-stylish'))
+});
 
 gulp.task('clean:dist', function() {
     return remove(config.clean.dist);

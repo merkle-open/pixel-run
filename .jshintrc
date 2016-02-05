@@ -1,0 +1,22 @@
+{
+  "browser": true,
+  "devel": true,
+  "undef": true,
+  "unused": true,
+  "curly": true,
+  "esversion": 5,
+  "maxdepth": 3,
+  "maxerr": 20,
+  "jquery": true,
+  "predef": [
+      "Phaser",
+      "Util",
+      "Game",
+      "Container",
+      "Factory",
+      "Session",
+      "HUD",
+      "Emergency",
+      "$index"
+  ]
+}
