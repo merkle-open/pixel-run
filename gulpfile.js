@@ -151,7 +151,8 @@ gulp.task('watch:default', [
 gulp.task('build:default', [
     'build:styles',
     'build:dependencies',
-    'build:app'
+    'build:app',
+    'copy'
 ]);
 
 gulp.task('develop', [

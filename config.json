@@ -1,12 +1,8 @@
 {
-    "version": "0.0.21-beta",
+    "version": "1.0.0-alpha",
     "buildFile": ".build",
     "release": [
-        "./dist/**",
-        "LICENSE",
-        ".build",
-        "index.html",
-        "scores.html"
+        "www"
     ],
     "lint": {
         "path": "./app/**/*.js"
@@ -15,14 +11,14 @@
         "dist": "./dist/**/*.*"
     },
     "copy": {
-        "./assets/**/*": "./dist/assets/"
+        "./assets/**/*": "./www/dist/assets/"
     },
     "bundle": {
         "name": "app",
-        "target": "./dist/bin"
+        "target": "./www/dist/bin"
     },
     "dependencies": {
-        "target": "./dist",
+        "target": "./www/dist",
         "name": "dependencies",
         "files": [
             "./bower_components/phaser/build/phaser.js",
@@ -35,7 +31,7 @@
     },
     "app": {
         "minify": false,
-        "target": "./dist",
+        "target": "./www/dist",
         "name": "application",
         "files": [
             "./app/provider/util.js",
@@ -46,7 +42,7 @@
         ]
     },
     "styles": {
-        "target": "./dist/bin",
+        "target": "./www/dist/bin",
         "name": "app",
         "files": [
             "./assets/css/reset.css",
