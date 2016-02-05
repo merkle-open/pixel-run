@@ -23,6 +23,7 @@
         this.injector = game;
         this.image = image;
         this.path = path;
+        this.setScaleMinMax(1, 1);
 
         return this;
     };
@@ -46,14 +47,13 @@
      * Adds the sprite to a specific x and y position in the game
      * @param  {Number} x           Coordinates on X
      * @param  {Number} y           Coordinates on Y
-     * @return {Sprite} this
+     * @return {Spritesheet} $internal
      */
     Sprite.prototype.add = function(x, y) {
         debug.info('Sprite mounted ->', this.image, x, y);
         x = util.default(x, 0);
         y = util.default(y, 0);
-        this.injector.add.sprite(x, y, this.image);
-        return this;
+        return this.$internal = this.injector.add.sprite(x, y, this.image);
     };
 
     window.Factory.Sprite = Sprite;
