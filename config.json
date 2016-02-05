@@ -1,9 +1,21 @@
 {
+    "version": "0.0.21-beta",
+    "buildFile": ".build",
+    "release": [
+        "./dist/**",
+        "LICENSE",
+        ".build",
+        "index.html",
+        "scores.html"
+    ],
     "lint": {
         "path": "./app/**/*.js"
     },
     "clean": {
         "dist": "./dist/**/*.*"
+    },
+    "copy": {
+        "./assets/**/*": "./dist/assets/"
     },
     "bundle": {
         "name": "app",
