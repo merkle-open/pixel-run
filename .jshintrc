@@ -17,6 +17,7 @@
       "Session",
       "HUD",
       "Emergency",
-      "$index"
+      "$index",
+      "GameError"
   ]
 }
