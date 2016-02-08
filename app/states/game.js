@@ -253,7 +253,22 @@
                 this.saved = true;
                 for(var name in Session) {
                     var user = Session[name];
-                    Container.Store.score(user.name, user.score, settings.worldType);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/save/score',
+                        data: {
+                            name: user.name,
+                            score: user.score,
+                            world: settings.worldType,
+                            username: user.username
+                        },
+                        success: function(res) {
+                            console.log(res);
+                        },
+                        error: function(err) {
+                            throw new GameError('Failed to save player score: ' + err.message);
+                        }
+                    });
                 }
             }
         },

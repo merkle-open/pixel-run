@@ -1,15 +1,19 @@
-var express = require('express');
+var hbs = require('hbs');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
+var express = require('express');
+var favicon = require('serve-favicon');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var app = express();
 
+// Apply different helper methods
+require('./provider/helpers')(hbs);
+
 app.set('views', path.join(path.join(__dirname, '..') , 'www'));
 app.set('view engine', 'html');
-app.engine('html', require('hbs').__express);
+app.engine('html', hbs.__express);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
