@@ -22,14 +22,20 @@
     font-size: 32px;
 }
 
+.resume table thead td {
+    border: 0px transparent;
+}
+
 .resume .grid button {
     width: 70%;
     margin: 0 15%;
 }
 
+/*
 .resume .actions {
     margin-top: 150px;
 }
+*/
 
 .resume button a {
     display: block;
