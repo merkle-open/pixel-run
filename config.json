@@ -36,7 +36,10 @@
         "files": [
             "./app/provider/util.js",
             "./app/provider/store.js",
-            "./app/classes/*.js",
+            "./app/classes/player.js",
+            "./app/classes/score-text.js",
+            "./app/classes/sprite.js",
+            "./app/classes/tilemap.js",
             "./app/states/*.js",
             "./app/main.js"
         ]
