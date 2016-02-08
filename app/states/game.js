@@ -255,7 +255,7 @@
                     var user = Session[name];
                     $.ajax({
                         type: 'POST',
-                        url: '/save/score',
+                        url: '/api/save/score',
                         data: {
                             name: user.name,
                             score: user.score,
@@ -263,7 +263,7 @@
                             username: user.username
                         },
                         success: function(res) {
-                            console.log(res);
+                            debug.info('Saved score on server over AJAX ->', res);
                         },
                         error: function(err) {
                             throw new GameError('Failed to save player score: ' + err.message);

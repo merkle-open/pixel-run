@@ -1,1 +1,43 @@
-[{"name":"123","score":"117","world":"space","username":"123"},{"name":"Jan Biasi","score":"136","world":"space","username":"JanBiasi","$id":"4kXzaHZ9x"}]
+[
+  {
+    "name": "123",
+    "score": "117",
+    "world": "space",
+    "username": "123"
+  },
+  {
+    "name": "Jan Biasi",
+    "score": "136",
+    "world": "space",
+    "username": "JanBiasi",
+    "$id": "4kXzaHZ9x"
+  },
+  {
+    "name": "asdf",
+    "score": "117",
+    "world": "space",
+    "username": "asdf",
+    "$id": "VkgYMXDWcx"
+  },
+  {
+    "name": "Fabio R",
+    "score": "116",
+    "world": "space",
+    "username": "FabioR",
+    "$id": "VyTAT_b5x"
+  },
+  {
+    "name": "asdfasdf",
+    "score": "136",
+    "world": "space",
+    "username": "asdfasdf",
+    "$id": "VJx-1t-9g"
+  },
+  {
+    "name": "Jan B",
+    "score": "999999",
+    "world": "space",
+    "username": "JanB",
+    "$id": "VJ_VkKWql"
+  }
+]

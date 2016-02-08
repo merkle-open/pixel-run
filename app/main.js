@@ -17,7 +17,7 @@
         settings.game.players.amount = settings.currentPlayers.length;
 
         // Create a new phaser game
-        var game = new Phaser.Game(config.width, config.height, config.mode, config.node);
+        var game = new Phaser.Game(config.width, config.height, Phaser.CANVAS, config.node);
 
         // Adding all required phaser-game-states
         game.state.add('Boot', Container.Boot);

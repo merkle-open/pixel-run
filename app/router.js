@@ -2,7 +2,6 @@ var fs = require('fs');
 var path = require('path');
 var uuid = require('shortid');
 var express = require('express');
-var database = require('./classes/database');
 var router = express.Router();
 
 var BASE = path.join(__dirname, 'data');
@@ -12,25 +11,74 @@ var FILE = {
 };
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('index');
+router.get('/', (req, res, next) => {
+    res.render('index', {
+        title: 'Play Now',
+        layout: 'default'
+    });
 });
 
 /* GET highscores page. */
-router.get('/scores', function(req, res, next) {
+router.get('/scores', (req, res, next) => {
     fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
         if(err) {
             next(err);
         }
 
+        var i = 1;
+        data = JSON.parse(data);
+
+        data.sort((a, b) => {
+            if(a.score > b.score) {
+                return -1;
+            } else if (a.score < b.score) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        data.forEach((dataset) => {
+            dataset.index = i++;
+        });
+
         res.render('scores', {
-            scores: JSON.parse(data)
+            scores: data,
+            title: 'Highscores'
         });
     });
 });
 
+/* GET send scores as JSON. */
+router.get('/api/get/scores', (req, res, next) => {
+    fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
+        if(err) {
+            next(err);
+        }
+
+        var i = 1;
+        data = JSON.parse(data);
+
+        data.sort((a, b) => {
+            if(a.score > b.score) {
+                return -1;
+            } else if (a.score < b.score) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        data.forEach((dataset) => {
+            dataset.index = i++;
+        });
+
+        res.json(data);
+    });
+});
+
 /* POST save new score. */
-router.post('/save/score', function(req, res, next) {
+router.post('/api/save/score', (req, res, next) => {
     fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
         if(err) {
             next(err);
