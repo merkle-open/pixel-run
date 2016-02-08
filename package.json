@@ -1,5 +1,5 @@
 {
-  "name": "tun-game",
+  "name": "pixel-run-namics",
   "header": "Pixel. Run. Namics.",
   "version": "0.0.0",
   "description": "",
@@ -13,7 +13,10 @@
     "type": "git",
     "url": "https://github.com/janbiasi/tun-ostschweiz.git"
   },
-  "author": "Jan Biasi <jan.biasi@namics.com>",
+  "authors": [
+      "Jan Biasi <jan.biasi@namics.com>",
+      "Fabio Russo <fabio.russo@namics.com>"
+  ],
   "homepage": "http://namics.com/",
   "company": "Namics AG",
   "license": "MIT",

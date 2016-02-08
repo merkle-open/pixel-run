@@ -68,6 +68,7 @@ gulp.task('archive', ['build:start', 'build:default'], function() {
 
 gulp.task('build:start', function(done) {
     currentBuildID = uuid.generate();
+    console.log('=> Initializing new Build with Number ' + currentBuildID + '...');
     fs.writeFile(config.buildFile, currentBuildID, function(err) {
         if(err) {
             throw new Error('Build failed: ' + err.message);

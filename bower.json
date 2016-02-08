@@ -1,20 +1,22 @@
 {
-  "name": "to-game",
+  "name": "pixel-run-namics",
   "authors": [
-    "Jan Biasi <jan.biasi@namics.com>"
+    "Jan Biasi <jan.biasi@namics.com>",
+    "Fabio Russo <fabio.russo@namics.com>"
   ],
   "description": "",
-  "main": "",
+  "main": "./www/dist/bin/app.min.js",
   "moduleType": [],
-  "license": "",
-  "homepage": "",
+  "license": "MIT License",
+  "homepage": "http://namics.com/",
   "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "release"
   ],
   "dependencies": {
     "jquery": "~2.1.4",
