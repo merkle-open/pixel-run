@@ -21,21 +21,20 @@
                                     <td>Welt</td>
                                 </tr>
                             </thead>
-                            <tbody id="js-insert"></tbody>
+                            <tbody>
+                                {{#each scores}}
+                                    <tr>
+                                        <td>{{@index}}</td>
+                                        <td>{{this.score}}</td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.world}}</td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
                         </table>
                     </div>
                 </div>
         </div>
     </div>
-    <script src="dist/dependencies.js"></script>
-    <script src="dist/application.js"></script>
-    <script type="text/javascript">
-        var fetchScores = function() {
-            $('#js-insert').html(Util.getScoreTable({ index: true }));
-        };
-
-        fetchScores();
-        window.setInterval(fetchScores, 5000);
-    </script>
 </body>
 </html>
