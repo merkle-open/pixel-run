@@ -167,6 +167,9 @@
                 name: realname,
                 username: username,
                 color: worlds[wtype].colors[pid],
+                image: function() {
+                    return Container.World.players[pid].key + '.png';
+                },
                 player: function() {
                     return Container.World.players[pid];
                 }

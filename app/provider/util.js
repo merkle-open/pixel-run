@@ -258,25 +258,28 @@
      * it into a table body
      * @return {String}                 HTML markup
      */
-    Util.getScoreTable = function(opts) {
+    Util.getScoreTable = function(opts, handler) {
         var generated = [];
         var index = 1;
-        Container.Store.$getScore().forEach(function(score) {
-            generated.push('<tr><td>');
-            if(opts.index) {
-                generated.push('<strong>');
-                generated.push('# ' + index);
-                generated.push('</strong></td><td>');
-            }
-            generated.push(score.score);
-            generated.push('</td><td>');
-            generated.push(score.holder);
-            generated.push('</td><td>');
-            generated.push(score.map);
-            generated.push('</td><tr>');
-            index++;
+        $.get('/api/get/scores', function(scores) {
+            scores.forEach(function(score) {
+                generated.push('<tr><td>');
+                if(opts.index) {
+                    generated.push('<strong>');
+                    generated.push('# ' + index);
+                    generated.push('</strong></td><td>');
+                }
+                generated.push(score.score);
+                generated.push('</td><td>');
+                generated.push(score.name);
+                generated.push('</td><td>');
+                generated.push(score.world);
+                generated.push('</td><tr>');
+                index++;
+            });
+
+            handler(generated.join('\n'));
         });
-        return generated.join('\n');
     };
 
     Util.calculate = {
