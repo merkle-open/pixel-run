@@ -12,11 +12,11 @@
                                 <td>Welt</td>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="js-insert">
                             {{#each scores}}
                                 <tr data-pid="{{this.$id}}">
                                     <td>
-                                        <strong>#{{index}}</strong>
+                                        <strong># {{index}}</strong>
                                     </td>
                                     <td>{{this.score}}</td>
                                     <td>{{this.name}}</td>
@@ -30,3 +30,14 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var fetchScores = function() {
+            var markup = Util.getScoreTable({ index: true }, function done(markup) {
+                $('#js-insert').html(markup);
+            });
+        };
+
+        window.setInterval(fetchScores, 10 * 1000);
+    }, false);
+</script>
