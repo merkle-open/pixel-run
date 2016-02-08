@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build 4Jjh0V-9l)
+ * Pixel. Run. Namics. (Build NyocAubqg)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.0.0-alpha
  * @license MIT Licensed by Namics AG
@@ -818,12 +818,12 @@
             var self = this;
             var worldKeys = Object.keys(Container.settings.worlds);
             worldKeys.forEach(function(w) {
-                self.load.tilemap('tilemap-' + w, 'dist/assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
-                self.load.image('background-' + w, 'dist/assets/img/backgrounds/background-' + w + '.png');
-                self.load.image('tile-' + w, 'dist/assets/img/world/' + w + '/tiles/tile-' + w + '.png');
-                self.load.image('avatar-' + w + '-consultant', 'dist/assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
-                self.load.image('avatar-' + w + '-techie', 'dist/assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
-                self.load.image('avatar-' + w + '-designer', 'dist/assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
+                self.load.tilemap('tilemap-' + w, '/dist/assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
+                self.load.image('background-' + w, '/dist/assets/img/backgrounds/background-' + w + '.png');
+                self.load.image('tile-' + w, '/dist/assets/img/world/' + w + '/tiles/tile-' + w + '.png');
+                self.load.image('avatar-' + w + '-consultant', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
+                self.load.image('avatar-' + w + '-techie', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
+                self.load.image('avatar-' + w + '-designer', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
             });
         },
         /**
@@ -833,7 +833,7 @@
             var self = this;
             var fxSounds = Container.settings.audio.fx;
             fxSounds.forEach(function(fxSound) {
-                self.load.audio('fx-' + fxSound, 'dist/assets/audio/fx/' + fxSound + '.mp3');
+                self.load.audio('fx-' + fxSound, '/dist/assets/audio/fx/' + fxSound + '.mp3');
             });
         }
     };
@@ -1097,7 +1097,7 @@
                     var user = Session[name];
                     $.ajax({
                         type: 'POST',
-                        url: '/save/score',
+                        url: '/api/save/score',
                         data: {
                             name: user.name,
                             score: user.score,
@@ -1105,7 +1105,7 @@
                             username: user.username
                         },
                         success: function(res) {
-                            console.log(res);
+                            debug.info('Saved score on server over AJAX ->', res);
                         },
                         error: function(err) {
                             throw new GameError('Failed to save player score: ' + err.message);
@@ -1229,7 +1229,7 @@
         settings.game.players.amount = settings.currentPlayers.length;
 
         // Create a new phaser game
-        var game = new Phaser.Game(config.width, config.height, config.mode, config.node);
+        var game = new Phaser.Game(config.width, config.height, Phaser.CANVAS, config.node);
 
         // Adding all required phaser-game-states
         game.state.add('Boot', Container.Boot);
