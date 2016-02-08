@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build NyocAubqg)
+ * Pixel. Run. Namics. (Build 4kzPi9Zqx)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.0.0-alpha
  * @license MIT Licensed by Namics AG
@@ -1093,6 +1093,16 @@
         $savePlayerScores: function $savePlayerScores() {
             if(!this.saved) {
                 this.saved = true;
+
+                var handlers = {
+                    success: function(res) {
+                        debug.info('Saved score on server over AJAX ->', res);
+                    },
+                    error: function(err) {
+                        throw new GameError('Failed to save player score: ' + err.message);
+                    }
+                };
+
                 for(var name in Session) {
                     var user = Session[name];
                     $.ajax({
@@ -1104,12 +1114,8 @@
                             world: settings.worldType,
                             username: user.username
                         },
-                        success: function(res) {
-                            debug.info('Saved score on server over AJAX ->', res);
-                        },
-                        error: function(err) {
-                            throw new GameError('Failed to save player score: ' + err.message);
-                        }
+                        success: handlers.success,
+                        error: handlers.error
                     });
                 }
             }
