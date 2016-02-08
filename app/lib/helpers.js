@@ -1,5 +1,5 @@
 exports = module.exports = function(handlebars) {
-    handlebars.registerHelper('each', function(context, options) {
+    handlebars.registerHelper('each', (context, options) => {
         var ret = '';
 
         for(var i = 0, j = context.length; i < j; i++) {
@@ -9,7 +9,7 @@ exports = module.exports = function(handlebars) {
         return ret;
     });
 
-    handlebars.registerHelper('debug', function(optionalValue) {
+    handlebars.registerHelper('debug', (optionalValue) => {
         console.log('Current Context');
         console.log('====================');
         console.log(this);
@@ -21,7 +21,7 @@ exports = module.exports = function(handlebars) {
         }
     });
 
-    handlebars.registerHelper('json', function(context) {
+    handlebars.registerHelper('json', (context) => {
         return JSON.stringify(context);
     });
 }
