@@ -26,7 +26,7 @@ table {
 }
 
 table td {
-    padding: 8px 2px 8px 2px;
+    padding: 10px 2px 15px 2px;
 }
 
 table tbody td {
@@ -37,6 +37,14 @@ table tbody td {
 table thead td,
 table tbody td strong  {
     font-family: 'Roboto', Arial, sans-serif;;
+}
+
+table thead td {
+    border-bottom: 1px solid #ddd;
+}
+
+table tbody > tr:first-child td {
+    padding-top: 15px;
 }
 
 .paper-layer {
