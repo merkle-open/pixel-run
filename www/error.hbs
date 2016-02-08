@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GameError - {{error.status}}</title>
+    <link rel="stylesheet" href="dist/bin/app.min.css" type="text/css">
+</head>
+<body class="error-page">
+    <div class="wrapper">
+        <h1>{{message}}</h1>
+        <h2>{{error.status}}</h2>
+        <pre>{{{error.stack}}}</pre>
+    </div>
+</body>
+</html>
