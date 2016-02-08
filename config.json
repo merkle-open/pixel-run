@@ -5,7 +5,15 @@
         "www"
     ],
     "lint": {
-        "path": "./app/**/*.js"
+        "path": [
+             "./app/classes/**/*.js",
+             "./app/provider/globals.js",
+             "./app/provider/steps.js",
+             "./app/provider/store.js",
+             "./app/provider/util.js",
+             "./app/states/**/*.js",
+             "./app/main.js"
+        ]
     },
     "clean": {
         "dist": "./dist/**/*.*"
