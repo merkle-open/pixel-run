@@ -29,8 +29,7 @@
     "gulp-uglify": "^1.5.1",
     "gulp-zip": "^3.1.0",
     "jshint": "^2.9.1",
-    "jshint-stylish": "^2.1.0",
-    "shortid": "^2.2.4"
+    "jshint-stylish": "^2.1.0"
   },
   "dependencies": {
     "body-parser": "^1.14.2",
@@ -41,6 +40,7 @@
     "hbs": "^4.0.0",
     "http-server": "^0.8.5",
     "morgan": "^1.6.1",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "shortid": "^2.2.4"
   }
 }
