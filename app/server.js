@@ -11,15 +11,15 @@ var app = express();
 // Apply different helper methods
 require('./lib/helpers')(hbs);
 
-hbs.localsAsTemplateData(require(path.join(__dirname, 'provider', 'settings')));
-
 app.set('views', [
     path.join(__dirname, '..', 'www'),
     path.join(__dirname, '..', 'www/templates')
 ]);
 
 app.set('view engine', 'hbs');
-app.set('view options', {});
+app.set('view options', {
+    layout: 'default'
+});
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

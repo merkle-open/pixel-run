@@ -13,8 +13,7 @@ var FILE = {
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.render('index', {
-        title: 'Play Now',
-        layout: 'default'
+        title: 'Play Now'
     });
 });
 
@@ -50,7 +49,7 @@ router.get('/scores', (req, res, next) => {
 });
 
 /* GET send scores as JSON. */
-router.get('/api/get/scores', (req, res, next) => {
+router.get('/api/get/scores', function(req, res, next) {
     fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
         if(err) {
             next(err);
@@ -78,7 +77,7 @@ router.get('/api/get/scores', (req, res, next) => {
 });
 
 /* POST save new score. */
-router.post('/api/save/score', (req, res, next) => {
+router.post('/api/save/score', function(req, res, next) {
     fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
         if(err) {
             next(err);
@@ -86,6 +85,7 @@ router.post('/api/save/score', (req, res, next) => {
 
         var data = JSON.parse(data);
         var insert = req.body;
+        
         insert.$id = uuid.generate();
         data.push(req.body);
 
