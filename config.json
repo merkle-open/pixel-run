@@ -2,7 +2,8 @@
     "version": "1.0.0-alpha",
     "buildFile": ".build",
     "release": [
-        "www"
+        "./www/**",
+        "./app/**"
     ],
     "lint": {
         "path": [
