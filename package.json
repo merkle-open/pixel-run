@@ -6,6 +6,7 @@
   "main": "",
   "scripts": {
     "serve": "node ./app/bin/www",
+    "debug": "set DEBUG=express:* & node ./app/bin/www",
     "build": "gulp build:default"
   },
   "repository": {
