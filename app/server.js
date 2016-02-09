@@ -5,6 +5,7 @@ var express = require('express');
 var chalk = require('chalk');
 
 if(cluster.isMaster) {
+    
     // Count the machine's CPUs
     var cpuCount = require('os').cpus().length;
 
@@ -18,15 +19,17 @@ if(cluster.isMaster) {
         // we're not sentimental
         console.log('Worker %d died, restarting ...', worker.id);
         cluster.fork();
-
     });
 
 } else {
+
+    // Create a new express instance
     var app = express();
 
     // Apply different helper methods
     require('./lib/helpers')(hbs);
 
+    // Adding general setup stuff for views, router etc.
     require('./lib/setup')(app);
 
     // Apply some new middleware for preloading
