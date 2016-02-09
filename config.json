@@ -43,6 +43,7 @@
         "target": "./www/dist",
         "name": "application",
         "files": [
+            "./app/lib/intro.js",
             "./app/provider/util.js",
             "./app/provider/store.js",
             "./app/classes/player.js",
