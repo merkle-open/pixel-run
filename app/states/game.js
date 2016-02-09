@@ -206,6 +206,8 @@
          */
         $createBackground: function $createBackground() {
             var background = new Factory.Sprite(this, 'background-' + settings.worldType);
+            Container.World.background = background;
+            background.setScaleMinMax(1, 1, 1, 1);
             background.add(0, 0);
         },
         /**

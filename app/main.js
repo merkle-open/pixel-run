@@ -8,6 +8,9 @@
     var settings = Container.settings;
     var config = settings.render;
 
+    console.log(window.$introduction);
+    console.log('Welcome to the Pixel. Run. game by Namics AG!')
+
     var pregame = Container.stepper = new HUD.Factory.Stepper($('.pregame.steps'));
     pregame.start(function($lastStep) {
 
@@ -40,9 +43,8 @@
         Container.game = game;
 
         // Fade out the last step and start the game
-        $lastStep.slideUp(1500, function() {
-            $('.steps').remove();
-            // remove the stepper container and HTML nodes
+        $lastStep.fadeOut(1800, function() {
+            $('.steps').remove(); // Remove the stepper element
             game.state.start('Boot'); // starting the boot state
         });
     });
