@@ -1,66 +1,50 @@
 var hbs = require('hbs');
-var path = require('path');
-var logger = require('morgan');
+var http = require('http');
+var cluster = require('cluster');
 var express = require('express');
-var favicon = require('serve-favicon');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var chalk = require('chalk');
 
-var app = express();
+if(cluster.isMaster) {
+    // Count the machine's CPUs
+    var cpuCount = require('os').cpus().length;
 
-// Apply different helper methods
-require('./lib/helpers')(hbs);
+    // Create a worker for each CPU
+    for (var i = 0; i < cpuCount; i += 1) {
+        cluster.fork();
+    }
 
-app.set('views', [
-    path.join(__dirname, '..', 'www'),
-    path.join(__dirname, '..', 'www/templates')
-]);
+    cluster.on('exit', function (worker) {
+        // Replace the dead worker,
+        // we're not sentimental
+        console.log('Worker %d died, restarting ...', worker.id);
+        cluster.fork();
 
-app.set('view engine', 'hbs');
-app.set('view options', {
-    layout: 'default'
-});
-
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '..', 'www')));
-
-// Apply some new middleware for preloading
-require('./lib/middleware')(app);
-
-// Attach all routes and routing stuff
-app.use('/', require('./router'));
-
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use((err, req, res, next) => {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
     });
+
+} else {
+    var app = express();
+
+    // Apply different helper methods
+    require('./lib/helpers')(hbs);
+
+    require('./lib/setup')(app);
+
+    // Apply some new middleware for preloading
+    require('./lib/middleware')(app);
+
+    // Attach all routes and routing stuff
+    app.use('/', require('./router'));
+
+    // Loading the error handlers
+    require('./lib/error')(app);
+
+    // Setting the port to environement port or 3000
+    var port = process.env.PORT || '3000';
+    app.set('port', port);
+
+    // Starts a http server with the express app
+    var server = http.createServer(app);
+    server.listen(port);
+
+    console.log(chalk.cyan('Express server running in Worker %d ...'), cluster.worker.id);
 }
-
-// production error handler
-// no stacktraces leaked to user
-app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
-
-
-module.exports = app;
