@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build Ey9HiV49g)
+ * Pixel. Run. Namics. (Build E1fSA4E9l)
  * @author 
  * @version v1.4.0-alpha
  * @license MIT Licensed by Namics AG
@@ -1219,15 +1219,15 @@
                 Container.game.time.advancedTiming = true;
             }
 
-            this.scale.setScreenSize = true;
-            this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-            this.scale.minHeight = Container.settings.render.height / 2;
-            this.scale.pageAlignHorizontally = true;
+            //this.scale.setScreenSize = true;
+            //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            //this.scale.minHeight = Container.settings.render.height / 2;
+            //this.scale.pageAlignHorizontally = true;
+            this.physics.arcade.gravity.y = 200;
+            this.ready = true;
 
             try {
                 this.physics.startSystem(Phaser.Physics.ARCADE);
-                this.physics.arcade.gravity.y = 200;
-                this.ready = true;
             } catch(notReady) {
                 this.error = notReady;
             }
