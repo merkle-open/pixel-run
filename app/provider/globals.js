@@ -10,6 +10,7 @@
         roundWinner: null
     };
     window.Container = {
+        $indicate: {},
         World: {
             players: []
         },

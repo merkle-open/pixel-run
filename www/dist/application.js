@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build 4J85NTMce)
+ * Pixel. Run. Namics. (Build Ey9HiV49g)
  * @author 
  * @version v1.4.0-alpha
  * @license MIT Licensed by Namics AG
@@ -827,7 +827,11 @@
          * Start the preloader state
          */
         create: function() {
-            this.state.start('Preload');
+            var self = this;
+            
+            Container.$indicate.preload = function() {
+                self.state.start('Preload');
+            }
         },
         /**
          * Load all dependencies for all worlds saved under settings
@@ -901,6 +905,10 @@
                 // Follow the first player with the camera
                 self.camera.follow(self.$furthestPlayer().player);
             });
+
+            // TODO: Fix camera FOV
+            this.camera.bounds.height = 2048;
+            this.camera.view.height = 2048;
 
             // Add emergency handlers in window
             this.$applyEmergency();
@@ -1284,9 +1292,10 @@
         Container.game = game;
 
         // Fade out the last step and start the game
+        game.state.start('Boot'); // starting the boot state
         $lastStep.fadeOut(1800, function() {
             $('.steps').remove(); // Remove the stepper element
-            game.state.start('Boot'); // starting the boot state
+            Container.$indicate.preload(); // Loading indicator for preload
         });
     });
 

@@ -105662,6 +105662,7 @@ return jQuery;
         roundWinner: null
     };
     window.Container = {
+        $indicate: {},
         World: {
             players: []
         },

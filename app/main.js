@@ -43,9 +43,10 @@
         Container.game = game;
 
         // Fade out the last step and start the game
+        game.state.start('Boot'); // starting the boot state
         $lastStep.fadeOut(1800, function() {
             $('.steps').remove(); // Remove the stepper element
-            game.state.start('Boot'); // starting the boot state
+            Container.$indicate.preload(); // Loading indicator for preload
         });
     });
 

@@ -19,7 +19,11 @@
          * Start the preloader state
          */
         create: function() {
-            this.state.start('Preload');
+            var self = this;
+            
+            Container.$indicate.preload = function() {
+                self.state.start('Preload');
+            }
         },
         /**
          * Load all dependencies for all worlds saved under settings
