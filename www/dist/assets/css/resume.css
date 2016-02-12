@@ -18,7 +18,7 @@
 .resume > table {
     max-width: 50%;
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 120px;
     font-size: 32px;
 }
 
@@ -27,19 +27,23 @@
 }
 
 .resume .grid button {
-    width: 70%;
-    margin: 0 15%;
+    background-color: transparent;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 60px;
+    border: 0px solid transparent;
 }
 
-/*
+
 .resume .actions {
     margin-top: 150px;
 }
-*/
+
 
 .resume button a {
     display: block;
     width: 100%;
     text-decoration: none;
-    color: #000;
+    color: #fff;
 }

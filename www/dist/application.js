@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build E1fSA4E9l)
+ * Pixel. Run. Namics. (Build )
  * @author 
  * @version v1.4.0-alpha
  * @license MIT Licensed by Namics AG
@@ -261,7 +261,11 @@
             p3: res[2] ? res[2].name : '-',
             p1s: res[0] ? res[0].score : '-',
             p2s: res[1] ? res[1].score : '-',
-            p3s: res[2] ? res[2].score : '-'
+            p3s: res[2] ? res[2].score : '-',
+            p1img: res[0] ? res[0].image() : '',
+            p2img: res[1] ? res[1].image() : '',
+            p3img: res[2] ? res[2].image() : '',
+            wtype: Container.settings.worldType
         };
     };
 
@@ -417,6 +421,7 @@
         Phaser.Sprite.call(this, game, posX, posY, this.$getSpritesheet());
         this.$addActionKey();
         game.add.existing(this);
+        debug.log('New player initiaded on x/y with type ->', posX, posY, variation);
 
         return this;
     }
@@ -869,8 +874,8 @@
 (function(window, undefined) {
     'use strict';
 
-    var PLAYER_OFFSET_X = 200;
-    var PLAYER_OFFSET_Y = 500;
+    var PLAYER_OFFSET_X = 500;
+    var PLAYER_OFFSET_Y = 300;
 
     var debug = new Util.Debugger('states.game');
     var settings = Container.settings;
@@ -1111,7 +1116,7 @@
 
             // Create players for the amount defined in settings.players
             for(var i = 0; i < gameSettings.players.amount; i++) {
-                var instance = new Factory.Player(self, i, PLAYER_OFFSET_X + (pwidth + 70) * i, PLAYER_OFFSET_Y + pheight);
+                var instance = new Factory.Player(self, i, PLAYER_OFFSET_X + ((pwidth + 70) * i), PLAYER_OFFSET_Y + pheight);
                 instance.init();
                 Container.World.players.push(instance);
             }
@@ -1282,6 +1287,7 @@
             var content = $('.js-finished').html();
             var playerScores = Util.getPlayerScoreData();
 
+            // Transform playeholders
             $('.js-finished').html(Util.replace(content, playerScores));
             $('#' + config.node).fadeOut(function() {
                 $('.js-finished').fadeIn();
