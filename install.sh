@@ -1,5 +1,5 @@
 #!/bin/sh
-# automatied installer for pixelrun
+# automated installer for pixelrun
 
 # install homebrew package manager
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
