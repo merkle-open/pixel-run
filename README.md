@@ -14,6 +14,7 @@
         * ScoreText
     * [Phaser States](#phaser-states)
     * [Emergency](#emergency)
+* [Future](#future)
 
 
 ## About
@@ -214,3 +215,43 @@ the overview like every player would die.
 ```js
 Emergency.$quit()
 ```
+
+## Future
+
+### Embedding custom maps
+
+#### Structure
+
+```
+/pixelrun
+  |
+  + app/
+  + assets/
+  |    |
+  |    + audio/
+  |    + img/
+  |    |  |
+  |    |  + world1
+  |    |  |   |
+  |    |  |   + data.json
+  |    |  |   + background.png
+  |    |  |   + tilemap.json
+  |    |  |   + tile.png
+  + www/
+  + ...
+```
+
+The <code>data.json</code> file is used for saving the following field information about a world:
+* Name (World Name, will be displayed)
+* ID (Unique identifier)
+* Avatars (Array with paths to the avatars from world root)
+* Background (Path from world root)
+* Tilemap (Path from world root)
+* Tile (Path from world root)
+* Contrast (HEX Code, also tile color, mostly white or black)
+* Keymap (If undefined, default will be used)
+
+##### To Do's
+* [ ] Implement a loader for all worlds
+* [ ] Save the world data to the container settings
+* [ ] Update boot process with new worlds (dynamic)
