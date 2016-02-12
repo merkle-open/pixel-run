@@ -33,6 +33,7 @@
             var content = $('.js-finished').html();
             var playerScores = Util.getPlayerScoreData();
 
+            // Transform playeholders
             $('.js-finished').html(Util.replace(content, playerScores));
             $('#' + config.node).fadeOut(function() {
                 $('.js-finished').fadeIn();

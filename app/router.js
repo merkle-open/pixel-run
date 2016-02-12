@@ -10,6 +10,16 @@ var FILE = {
     SCORE: path.join(BASE, 'scores.json')
 };
 
+var sortScore = (a, b) => {
+    if(a.score > b.score) {
+        return -1;
+    } else if (a.score < b.score) {
+        return 1;
+    } else {
+        return 0;
+    }
+};
+
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.render('index', {
@@ -27,15 +37,7 @@ router.get('/scores', (req, res, next) => {
         var i = 1;
         data = JSON.parse(data);
 
-        data.sort((a, b) => {
-            if(a.score > b.score) {
-                return -1;
-            } else if (a.score < b.score) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+        data.sort(sortScore);
 
         data.forEach((dataset) => {
             dataset.index = i++;
@@ -58,15 +60,7 @@ router.get('/api/get/scores', function(req, res, next) {
         var i = 1;
         data = JSON.parse(data);
 
-        data.sort((a, b) => {
-            if(a.score > b.score) {
-                return -1;
-            } else if (a.score < b.score) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
+        data.sort(sortScore);
 
         data.forEach((dataset) => {
             dataset.index = i++;
@@ -85,7 +79,7 @@ router.post('/api/save/score', function(req, res, next) {
 
         var data = JSON.parse(data);
         var insert = req.body;
-        
+
         insert.$id = uuid.generate();
         data.push(req.body);
 

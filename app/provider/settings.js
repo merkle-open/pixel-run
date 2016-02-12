@@ -31,14 +31,14 @@
                 baseName: 'avatar-',
                 basePath: 'assets/img/avatars/',
                 mimeType: 'png',
-                amount: 0,
+                amount: undefined,
                 variations: ['techie', 'designer', 'consultant'],
                 keymap: ['up', 'down', 'left'],
                 bounce: {
                     y: 0.3
                 },
                 gravity: {
-                    y: 900
+                    y: 1400
                 },
                 velocity: {
                     y: -750,
@@ -49,6 +49,10 @@
         worlds: {
             space: {
                 contrast: '#ffffff',
+                colors: ['#50bcff', '#a8c614', '#ff5050'],
+            },
+            candy: {
+                contrast: '#000000',
                 colors: ['#50bcff', '#a8c614', '#ff5050'],
             }
         }

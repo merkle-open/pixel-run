@@ -238,7 +238,11 @@
             p3: res[2] ? res[2].name : '-',
             p1s: res[0] ? res[0].score : '-',
             p2s: res[1] ? res[1].score : '-',
-            p3s: res[2] ? res[2].score : '-'
+            p3s: res[2] ? res[2].score : '-',
+            p1img: res[0] ? res[0].image() : '',
+            p2img: res[1] ? res[1].image() : '',
+            p3img: res[2] ? res[2].image() : '',
+            wtype: Container.settings.worldType
         };
     };
 

@@ -5,7 +5,7 @@ var express = require('express');
 var chalk = require('chalk');
 
 if(cluster.isMaster) {
-    
+
     // Count the machine's CPUs
     var cpuCount = require('os').cpus().length;
 
@@ -49,5 +49,5 @@ if(cluster.isMaster) {
     var server = http.createServer(app);
     server.listen(port);
 
-    console.log(chalk.cyan('Express server running in Worker %d ...'), cluster.worker.id);
+    console.log(chalk.cyan('Express server running on port %d in Worker %d ...\n'), port, cluster.worker.id);
 }
