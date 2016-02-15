@@ -88,6 +88,14 @@
     -webkit-transition: all .2s linear;
 }
 
+.step .grid.grid-border [class*='col-'] img {
+    border: 5px solid #fff;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 20px;
+}
+
 .step .grid [class*='col-'] img.img-sm {
     max-width: 220px;
 }

@@ -3,7 +3,7 @@ body, html, .autosize, .wrapper {
 }
 
 body {
-    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    font-family: Arial, sans-serif;
     color: #000;
     background-color: #000;
 }
@@ -30,13 +30,14 @@ table td {
 }
 
 table tbody td {
-    font-family: 'Roboto Light', Arial, sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: 200;
 }
 
 table thead td,
 table tbody td strong  {
-    font-family: 'Roboto', Arial, sans-serif;;
+    font-family:  Arial, sans-serif;
+    font-weight: 700;
 }
 
 table thead td {
