@@ -566,6 +566,7 @@
         this.opts = {
             extension: '',
             fontSize: '20px',
+            fontFamily: 'Arial',
             fill: Container.settings.worlds[wtype].contrast || '#ffffff'
         };
 
@@ -623,7 +624,7 @@
 
             // Create basic text node and inject it to the game
             this.$text = this.injector.add.text(x, y, this.get(), {
-                font: this.opts.fontSize + ' Roboto',
+                font: this.opts.fontSize + ' ' + this.opts.fontFamily,
                 fill: this.opts.fill
             });
 
