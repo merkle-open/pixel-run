@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build EyRCa_q5l)
+ * Pixel. Run. Namics. (Build 4y4V_K5qe)
  * @author 
  * @version v1.4.0-alpha
  * @license MIT Licensed by Namics AG
@@ -300,7 +300,7 @@
                 generated.push('</td><td>');
                 generated.push(score.name);
                 generated.push('</td><td>');
-                generated.push(score.world);
+                generated.push(Util.firstToUpper(score.world));
                 generated.push('</td><tr>');
                 index++;
             });
@@ -320,6 +320,15 @@
             var calc = pixels / 100;
             return Math.round(calc);
         }
+    };
+
+    /**
+     * Transform first char to upper (capitalize)
+     * @param  {String} value       Input value
+     * @return {String}             Capitalized string
+     */
+    Util.firstToUpper = function(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
     };
 
 })(window);

@@ -20,6 +20,31 @@ var sortScore = (a, b) => {
     }
 };
 
+var capitalize = function(value) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+};
+
+var processScores = (data) => {
+    var i = 1;
+    data = JSON.parse(data);
+
+    // Parsing values
+    data.forEach((dataset) => {
+        dataset.world = capitalize(dataset.world);
+        dataset.score = Number.parseInt(dataset.score);
+    });
+
+    // Order the score
+    data.sort(sortScore);
+
+    // Apply the users rank
+    data.forEach((dataset) => {
+        dataset.index = i++;
+    });
+
+    return data;
+};
+
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.render('index', {
@@ -34,14 +59,7 @@ router.get('/scores', (req, res, next) => {
             next(err);
         }
 
-        var i = 1;
-        data = JSON.parse(data);
-
-        data.sort(sortScore);
-
-        data.forEach((dataset) => {
-            dataset.index = i++;
-        });
+        data = processScores(data);
 
         res.render('scores', {
             scores: data,
@@ -57,15 +75,7 @@ router.get('/api/get/scores', function(req, res, next) {
             next(err);
         }
 
-        var i = 1;
-        data = JSON.parse(data);
-
-        data.sort(sortScore);
-
-        data.forEach((dataset) => {
-            dataset.index = i++;
-        });
-
+        data = processScores(data);
         res.json(data);
     });
 });
