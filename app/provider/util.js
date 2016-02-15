@@ -264,13 +264,12 @@
      */
     Util.getScoreTable = function(opts, handler) {
         var generated = [];
-        var index = 1;
         $.get('/api/get/scores', function(scores) {
             scores.forEach(function(score) {
                 generated.push('<tr><td>');
                 if(opts.index) {
                     generated.push('<strong>');
-                    generated.push('# ' + index);
+                    generated.push('# ' + score.index);
                     generated.push('</strong></td><td>');
                 }
                 generated.push(score.score);
@@ -279,7 +278,6 @@
                 generated.push('</td><td>');
                 generated.push(Util.firstToUpper(score.world));
                 generated.push('</td><tr>');
-                index++;
             });
 
             handler(generated.join('\n'));

@@ -30,6 +30,8 @@ npm run serve
 #### Build
 A build can be triggered over your systems CLI like the launch command above. There are several tasks avaible (listed below), but if you want to re-build the whole application, simpy run the <code>gulp</code> command, and everything is done.
 
+> To apply settings changed, you have to **rebuild the application**, simply rund the default <code>gulp</code> command to do this.
+
 ```bash
 gulp # run whole build
 
@@ -182,16 +184,6 @@ the default settings [here](https://github.com/janbiasi/tun-ostschweiz/blob/mast
 ##### Game
 Main game process, uses the [game settings](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/settings.js#L4) and
 the utility stuff. If you want to change something in the Jump N Run game itself, you'll have to change it [here](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/states/game.js).
-
-##### Store
-Used for saving and persisting the highscores of the players. There are two main methods with a short example below.
-
-```js
-Container.Store.score('Max Mustermann', 891, 'Map 1');
-Container.Store.score('Hans Ruedi', 12, 'Map 1');
-Container.Store.getHighscore(); // 891
-Container.Store.getHighscore(true); // { score: 891, holder: 'Max Mustermann', map: 'Map 1' }
-```
 
 ### Emergency
 Sometimes you want to kill all players in the world or even quit the game itself due some

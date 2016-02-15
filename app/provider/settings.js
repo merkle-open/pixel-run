@@ -46,6 +46,9 @@
                 }
             }
         },
+        scores: {
+            limit: -1
+        },
         worlds: {
             space: {
                 contrast: '#ffffff',

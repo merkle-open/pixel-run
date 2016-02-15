@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var uuid = require('shortid');
 var express = require('express');
+var settings = require('./provider/settings');
 var router = express.Router();
 
 var BASE = path.join(__dirname, 'data');
@@ -25,7 +26,8 @@ var capitalize = function(value) {
 };
 
 var processScores = (data) => {
-    var i = 1;
+    var previous = 0;
+    var i = 0;
     data = JSON.parse(data);
 
     // Parsing values
@@ -39,8 +41,17 @@ var processScores = (data) => {
 
     // Apply the users rank
     data.forEach((dataset) => {
-        dataset.index = i++;
+        if(previous !== dataset.score) {
+            i++;
+        }
+        dataset.index = i;
+        previous = dataset.score;
     });
+
+    // Cut off the array
+    if(settings.scores.limit > 0) {
+        data = data.slice(0, settings.scores.limit);
+    }
 
     return data;
 };
