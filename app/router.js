@@ -83,7 +83,9 @@ router.post('/api/save/score', function(req, res, next) {
         insert.$id = uuid.generate();
         data.push(req.body);
 
-        fs.writeFile(FILE.SCORE, JSON.stringify(data, null, 2), 'utf8', (err) => {
+        var serialized = JSON.stringify(data, null, 2);
+
+        fs.writeFile(FILE.SCORE, serialized, 'utf8', (err) => {
             if(err) {
                 next(err);
             }
