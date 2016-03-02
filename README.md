@@ -24,7 +24,7 @@
 The game can be started over your systems CLI, the only requirement is, that Node.js 4.+ is installed on your machine. Run the command below and see the magic.
 
 ```bash
-npm run serve
+npm start
 ```
 
 #### Build
@@ -61,7 +61,7 @@ to 5 (using ECMAScript 5).
 #### Dependencies
 * Gulp *(NPM)*
 * Phaser *(Bower)*
-* ~~jQuery *(Bower)*~~
+* jQuery *(Bower)*
 * BrowserStorage *(NPM)*
 
 ## License
@@ -207,6 +207,20 @@ the overview like every player would die.
 ```js
 Emergency.$quit()
 ```
+
+## FAQ
+
+##### I want to change the gravity, where can I adjust those settings?
+
+tbd.
+
+##### I want to replace the avatars, where can I replace the old ones of a specific world with the name <code>example</code>?
+
+tbd.
+
+##### There was an error in the Game and I want to save the players score and not force-reload nor quit the application. How can I do this? 
+
+You can do this within the browsers console, take a look at the [Emergency.$quit](#$quit) function.
 
 ## Future
 
