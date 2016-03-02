@@ -14,6 +14,7 @@
         * ScoreText
     * [Phaser States](#phaser-states)
     * [Emergency](#emergency)
+* [FAQ](#faq)
 * [Future](#future)
 
 
@@ -220,7 +221,7 @@ tbd.
 
 ##### There was an error in the Game and I want to save the players score and not force-reload nor quit the application. How can I do this? 
 
-You can do this within the browsers console, take a look at the [Emergency.$quit](#$quit) function.
+You can do this within the browsers console, take a look at the [Emergency.$quit](#quit) function.
 
 ## Future
 
