@@ -2,8 +2,8 @@
     "version": "1.4.0-alpha",
     "buildFile": ".build",
     "release": [
-        "./www/**",
-        "./app/**"
+        "./app/**",
+        "./www/**"
     ],
     "lint": {
         "path": [
@@ -30,9 +30,8 @@
         "target": "./www/dist",
         "name": "dependencies",
         "files": [
-            "./bower_components/phaser/build/phaser.js",
-            "./bower_components/jquery/dist/jquery.js",
-            "./bower_components/browser-storage/browser-storage.js",
+            "./assets/vendor/phaser/build/phaser.js",
+            "./assets/vendor/jquery/dist/jquery.js",
             "./app/provider/globals.js",
             "./app/provider/settings.js",
             "./app/provider/steps.js"
