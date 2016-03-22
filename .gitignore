@@ -1,4 +1,7 @@
-bower_components
-node_modules
+# build releases
 release
 dist/assets
+
+# dependencies
+node_modules
+assets/vendor
