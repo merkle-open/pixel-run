@@ -1,4 +1,5 @@
 # build releases
+./.build
 release
 dist/assets
 
