@@ -63,7 +63,7 @@ gulp.task('copy', function() {
 gulp.task('archive', ['build:start', 'build:default'], function() {
     return gulp.src(config.release)
         .pipe(archive(currentBuildID + '-' + config.version + '.zip'))
-        .pipe(gulp.dest('./release/'));
+        .pipe(gulp.dest('release'));
 });
 
 gulp.task('build:start', function(done) {
