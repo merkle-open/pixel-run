@@ -4,4 +4,4 @@ dist/assets
 
 # dependencies
 node_modules
-assets/vendor
+vendor
