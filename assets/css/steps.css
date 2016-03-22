@@ -7,28 +7,6 @@
     font-weight: 400;
 }
 
-.step ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-    color: #fff;
-}
-
-.step :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-   color: #fff;
-   opacity:  1;
-}
-
-.step ::-moz-placeholder { /* Mozilla Firefox 19+ */
-   color: #fff;
-   opacity:  1;
-}
-
-.step :-ms-input-placeholder { /* Internet Explorer 10-11 */
-   color: #fff;
-}
-
-.step :placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
-  color: #fff;
-}
-
 .step .grid {
     /*max-width: 100%; */
 }
@@ -114,4 +92,37 @@
     font-size: 120px;
     text-align: center;
     margin-top: 350px;
+}
+
+@media print {
+    .step {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .step input {
+        color: #000;
+    }
+
+    .step ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+        color: #bbb;
+    }
+
+    .step :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: #bbb;
+        opacity:  1;
+    }
+
+    .step ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: #bbb;
+        opacity:  1;
+    }
+
+    .step :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: #bbb;
+    }
+
+    .step :placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
+        color: #bbb;
+    }
 }

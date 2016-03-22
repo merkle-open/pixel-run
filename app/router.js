@@ -44,6 +44,7 @@ var processScores = (data) => {
         if(previous !== dataset.score) {
             i++;
         }
+
         dataset.index = i;
         previous = dataset.score;
     });
