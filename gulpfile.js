@@ -20,7 +20,7 @@ var currentBuildID;
 
 var banner = ['/**',
   ' * <%= pkg.header %> (Build <%= uuid %>)',
-  ' * @author <%= pkg.author %>',
+  ' * @author <%= pkg.developer %>',
   ' * @version v<%= cfg.version %>',
   ' * @license <%= pkg.license %> Licensed by <%= pkg.company %>',
   ' * @see <%= pkg.homepage %>',
