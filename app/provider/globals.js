@@ -5,26 +5,26 @@
 (function(window, undefined) {
     'use strict';
 
-    window.Util = {};
-    window.Game = {
-        roundWinner: null
-    };
-    window.Container = {
-        $indicate: {},
-        World: {
-            players: []
+    Object.assign(window, {
+        Util: {},
+        Game: {},
+        Container: {
+            $indicate: {},
+            World: {
+                players: []
+            },
+            Audio: {}
         },
-        Audio: {}
-    };
-    window.Factory = {};
-    window.Session = {};
-    window.Emergency = {};
-    window.HUD = {
-        $store: {},
-        Factory: {}
-    };
-    window.$index = {
-        session: {}
-    };
+        Factory: {},
+        Session: {},
+        Emergency: {},
+        HUD: {
+            $store: {},
+            Factory: {}
+        },
+        $index: {
+            session: {}
+        }
+    });
 
 })(window);

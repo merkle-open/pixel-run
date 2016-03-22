@@ -24,7 +24,7 @@
             mode: 'arcade', // Phaser.Physics[ARCADE]
         },
         game: {
-            jumpOn: 'push', // release
+            jumpOn: 'release', // release
             players: {
                 height: 160,
                 width: 153,
@@ -38,16 +38,17 @@
                     y: 0.3
                 },
                 gravity: {
-                    y: 1400
+                    y: 900
                 },
                 velocity: {
-                    y: -950,
+                    y: -750,
                     x: 450
                 }
             }
         },
         scores: {
-            limit: -1
+            limit: -1, // How many entries (-1 equals unlimited)
+            refetch: 10 * 1000 // How often the scores should be reloaded
         },
         worlds: {
             space: {

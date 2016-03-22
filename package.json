@@ -5,7 +5,7 @@
   "description": "",
   "main": "",
   "scripts": {
-    "start": "node ./app/server",
+    "serve": "node ./app/server",
     "debug": "set DEBUG=express:* & node ./app/server",
     "build": "gulp build:default"
   },

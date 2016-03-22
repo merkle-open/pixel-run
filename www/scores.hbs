@@ -30,13 +30,17 @@
     </div>
 </div>
 <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function documentIsReady() {
-        var fetchScores = function fetchScores() {
-            Util.getScoreTable({ index: true }, function done(markup) {
+    document.addEventListener('DOMContentLoaded', function() {
+        var fetchScores = function() {
+            if(Container.settings.debug) {
+                console.log('Refetching scores ...');
+            }
+
+            Util.getScoreTable({ index: true }, function(markup) {
                 $('#js-insert').html(markup);
             });
         };
 
-        window.setInterval(fetchScores, 10 * 1000);
-    }, false);
+        window.setInterval(fetchScores, Container.settings.scores.refetch);
+    });
 </script>
