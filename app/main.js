@@ -5,15 +5,16 @@
 (function(window, undefined) {
     'use strict';
 
+    var stepper = new HUD.Factory.Stepper($('.pregame.steps'));
     var settings = Container.settings;
     var config = settings.render;
 
-    console.log(window.$introduction);
-    console.log('Welcome to the Pixel. Run. game by Namics AG!');
+    console.log([
+        window.$introduction,
+        'Welcome to the Pixel. Run. game by Namics AG!'
+    ].join('\n'));
 
-    var pregame = Container.stepper = new HUD.Factory.Stepper($('.pregame.steps'));
-    pregame.start(function($lastStep) {
-
+    stepper.start(function($lastStep) {
         // Get the current selected world and players
         settings.worldType = HUD.$store.world;
         settings.currentPlayers = Util.getValues(HUD.$store.players);
