@@ -1,33 +1,40 @@
-body.error-page {
-    background-color: #fff;
-}
-
-body.error-page {
+.error-pane {
+    height: 100%;
+    background-color: #000;
+    color: #fff;
     font-family: 'Roboto', Arial, sans-serif;
     font-weight: normal;
     padding: 40px;
 }
 
-body.error-page .wrapper {
+.error-pane .wrapper {
     max-width: 1024px;
 }
 
-body.error-page h1 {
+.error-pane h1 {
     font-size: 40px;
 }
 
-body.error-page h2 {
-    font-size: 20px;
-    margin-top: 20px;
+.error-pane small {
+    color: #aaa;
+    font-size: 70%;
 }
 
-body.error-page pre {
-    margin-top: 10px;
+.error-pane .go-back {
+    color: #fff;
+    text-decoration: none;
+    margin-top: 15px;
+    display: inline-block;
+}
+
+.error-pane pre {
+    margin-top: 20px;
     word-wrap: break-word;
     font-family: monospace;
-    font-size: 17px;
-    background-color: #eee;
-    padding: 10px;
+    font-size: 16px;
+    line-height: 18px;
+    background-color: #111;
+    padding: 20px;
     border-radius: 2px;
-    border: 1px solid #ddd;
+    border: 1px solid #222;
 }
