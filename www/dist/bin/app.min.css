@@ -1,7 +1,7 @@
 /**
- * Pixel. Run. Namics. (Build NJGDBXqpx)
- * @author 
- * @version v1.4.0-alpha
+ * Pixel. Run. Namics. (Build )
+ * @author Jan Biasi <jan.biasi@namics.com>
+ * @version v1.5.0-alpha
  * @license MIT Licensed by Namics AG
  * @see http://namics.com/
  */
