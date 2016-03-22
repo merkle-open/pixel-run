@@ -5,13 +5,14 @@
   "description": "",
   "main": "",
   "scripts": {
-    "serve": "node ./app/server",
-    "debug": "set DEBUG=express:* & node ./app/server",
-    "build": "gulp build:default"
+    "start": "node ./app/server",
+    "debug": "set DEBUG=express:* & npm run start",
+    "install": "npm install ./ && bower install ./",
+    "postinstall": "gulp build:default"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/janbiasi/tun-ostschweiz.git"
+    "url": "https://git.namics.com/jan.biasi/pixel-run.git"
   },
   "authors": [
     "Jan Biasi <jan.biasi@namics.com>",
