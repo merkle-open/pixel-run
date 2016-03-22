@@ -2,6 +2,7 @@
 .build
 release
 dist/assets
+www/dist
 
 # dependencies
 node_modules
