@@ -42,10 +42,6 @@
                 self.camera.follow(self.$furthestPlayer().player);
             });
 
-            // TODO: Fix camera FOV
-            this.camera.bounds.height = 2048;
-            this.camera.view.height = 2048;
-
             // Add emergency handlers in window
             this.$applyEmergency();
         },

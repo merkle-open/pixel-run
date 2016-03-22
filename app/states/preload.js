@@ -17,11 +17,7 @@
                 Container.game.time.advancedTiming = true;
             }
 
-            //this.scale.setScreenSize = true;
-            //this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-            //this.scale.minHeight = Container.settings.render.height / 2;
-            //this.scale.pageAlignHorizontally = true;
-            this.physics.arcade.gravity.y = 200;
+            this.physics.arcade.gravity.y = Container.settings.physics.arcadeGravity || 200;
             this.ready = true;
 
             try {
@@ -38,7 +34,6 @@
             }
         },
         quit: function() {
-            alert('Goodbye');
             this.ready = false;
         }
     };

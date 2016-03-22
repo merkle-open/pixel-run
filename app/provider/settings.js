@@ -22,6 +22,7 @@
         },
         physics: {
             mode: 'arcade', // Phaser.Physics[ARCADE]
+            arcadeGravity: 200
         },
         game: {
             jumpOn: 'release', // release
