@@ -1,5 +1,5 @@
 {
-    "version": "1.4.0-alpha",
+    "version": "1.5.0-alpha",
     "buildFile": ".build",
     "release": [
         "./app/**",
@@ -30,8 +30,8 @@
         "target": "./www/dist",
         "name": "dependencies",
         "files": [
-            "./assets/vendor/phaser/build/phaser.js",
-            "./assets/vendor/jquery/dist/jquery.js",
+            "./vendor/phaser/build/phaser.js",
+            "./vendor/jquery/dist/jquery.js",
             "./app/provider/globals.js",
             "./app/provider/settings.js",
             "./app/provider/steps.js"
