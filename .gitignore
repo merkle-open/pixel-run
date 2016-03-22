@@ -4,6 +4,9 @@ release
 dist/assets
 www/dist
 
+# scores
+app/data/scores.json
+
 # dependencies
 node_modules
 vendor
