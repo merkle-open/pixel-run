@@ -4,7 +4,6 @@
   "undef": true,
   "unused": true,
   "curly": true,
-  "esversion": 5,
   "maxdepth": 3,
   "maxerr": 20,
   "jquery": true,

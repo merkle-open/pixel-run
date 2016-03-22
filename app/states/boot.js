@@ -20,10 +20,10 @@
          */
         create: function() {
             var self = this;
-            
+
             Container.$indicate.preload = function() {
                 self.state.start('Preload');
-            }
+            };
         },
         /**
          * Load all dependencies for all worlds saved under settings

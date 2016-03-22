@@ -9,7 +9,7 @@
     var config = settings.render;
 
     console.log(window.$introduction);
-    console.log('Welcome to the Pixel. Run. game by Namics AG!')
+    console.log('Welcome to the Pixel. Run. game by Namics AG!');
 
     var pregame = Container.stepper = new HUD.Factory.Stepper($('.pregame.steps'));
     pregame.start(function($lastStep) {
