@@ -5,7 +5,7 @@ dist/assets
 www/dist
 
 # scores
-app/data/scores.json
+app/data/*
 
 # dependencies
 node_modules

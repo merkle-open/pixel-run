@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "name": "Max",
+    "score": "156",
+    "world": "candy",
+    "username": "Max",
+    "$id": "V1QS1Poae"
+  },
+  {
+    "name": "Laura",
+    "score": "29",
+    "world": "candy",
+    "username": "Laura",
+    "$id": "4Je7SJPo6x"
+  },
+  {
+    "name": "Max",
+    "score": "211",
+    "world": "space",
+    "username": "Max",
+    "$id": "VkS6Jwope"
+  },
+  {
+    "name": "Robin",
+    "score": "86",
+    "world": "space",
+    "username": "Robin",
+    "$id": "NyxHa1Ps6e"
+  },
+  {
+    "name": "Laura",
+    "score": "89",
+    "world": "space",
+    "username": "Laura",
+    "$id": "4JHTJDsTe"
+  }
+]
