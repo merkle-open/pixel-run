@@ -23,31 +23,28 @@
 
 The game can be started over your systems CLI, the only requirement is, that Node.js 4.+ is installed on your machine. Run the command below and see the magic.
 
-```bash
-npm run serve
-```
+    npm start
+
 
 #### Build
 A build can be triggered over your systems CLI like the launch command above. There are several tasks avaible (listed below), but if you want to re-build the whole application, simpy run the <code>gulp</code> command, and everything is done.
 
 > To apply settings changed, you have to **rebuild the application**, simply rund the default <code>gulp</code> command to do this.
 
-```bash
-gulp # run whole build
+    gulp # run whole build
 
-# remove builded files, additionally use :app or
-# :dependencies to just remove the related files
-gulp clean:dist
+    # remove builded files, additionally use :app or
+    # :dependencies to just remove the related files
+    gulp clean:dist
 
-# builds the app or dependencies only
-gulp build:app
-gulp build:dependencies
+    # builds the app or dependencies only
+    gulp build:app
+    gulp build:dependencies
 
-# watches the app or dependencies and auto-trigger
-# the right builds on file changes
-gulp watch:app
-gulp watch:dependencies
-```
+    # watches the app or dependencies and auto-trigger
+    # the right builds on file changes
+    gulp watch:app
+    gulp watch:dependencies
 
 #### JSHint
 There's a gulp task integrated which helps you to lint the application files under <code>/app</code>. Simply
@@ -207,43 +204,3 @@ the overview like every player would die.
 ```js
 Emergency.$quit()
 ```
-
-## Future
-
-### Embedding custom maps
-
-#### Structure
-
-```
-/pixelrun
-  |
-  + app/
-  + assets/
-  |    |
-  |    + audio/
-  |    + img/
-  |    |  |
-  |    |  + world1
-  |    |  |   |
-  |    |  |   + data.json
-  |    |  |   + background.png
-  |    |  |   + tilemap.json
-  |    |  |   + tile.png
-  + www/
-  + ...
-```
-
-The <code>data.json</code> file is used for saving the following field information about a world:
-* Name (World Name, will be displayed)
-* ID (Unique identifier)
-* Avatars (Array with paths to the avatars from world root)
-* Background (Path from world root)
-* Tilemap (Path from world root)
-* Tile (Path from world root)
-* Contrast (HEX Code, also tile color, mostly white or black)
-* Keymap (If undefined, default will be used)
-
-##### To Do's
-* [ ] Implement a loader for all worlds
-* [ ] Save the world data to the container settings
-* [ ] Update boot process with new worlds (dynamic)
