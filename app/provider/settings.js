@@ -25,7 +25,7 @@
             arcadeGravity: 200
         },
         game: {
-            jumpOn: 'release', // release
+            jumpOn: 'release', // push
             players: {
                 height: 160,
                 width: 153,
@@ -57,6 +57,10 @@
                 colors: ['#50bcff', '#a8c614', '#ff5050'],
             },
             candy: {
+                contrast: '#000000',
+                colors: ['#50bcff', '#a8c614', '#ff5050'],
+            },
+            snow: {
                 contrast: '#000000',
                 colors: ['#50bcff', '#a8c614', '#ff5050'],
             }
