@@ -3,18 +3,19 @@
 var fs = require('fs');
 var gulp = require('gulp');
 var remove = require('del');
+var uuid = require('shortid');
+var gulpif = require('gulp-if');
+var sass = require('gulp-sass');
 var archive = require('gulp-zip');
 var jshint = require('gulp-jshint');
-var gulpif = require('gulp-if');
 var header = require('gulp-header');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
-var uuid = require('shortid');
-var commentify = require('gulp-header');
-var config = require('./config.json');
 var pkg = require('./package.json');
+var config = require('./config.json');
+var commentify = require('gulp-header');
 
 var currentBuildID;
 
@@ -112,6 +113,10 @@ gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies
 
 gulp.task('build:styles', ['clean:dist:styles'], function() {
     return gulp.src(config.styles.files)
+        .pipe(sass({
+            outputStyle: 'compressed',
+            sourceComments: true
+        }).on('error', sass.logError))
         .pipe(cssmin())
         .pipe(concat(config.styles.name + '.min.css'))
         .pipe(commentify(banner, {

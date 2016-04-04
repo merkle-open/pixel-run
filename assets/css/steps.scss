@@ -1,0 +1,124 @@
+.step {
+    height: 100%;
+    background-color: #000;
+    color: #fff;
+    padding: 40px;
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+
+    input {
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+    }
+
+    i {
+        &.icon {
+            &.next {
+                float: right;
+                font-size: 80px;
+                color: #fff;
+            }
+        }
+    }
+
+    .grid {
+        /*max-width: 100%; */
+
+        [class*='col-'] {
+            .center {
+                text-align: center;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            img {
+                display: block;
+                margin: 0 auto 30px auto;
+
+                .img-sm {
+                    max-width: 220px;
+                }
+            }
+        }
+
+        &.grid-border {
+            img {
+                padding: 20px;
+            }
+        }
+
+        &.grid-avatars {
+            img {
+                max-width: 170px;
+            }
+        }
+    }
+
+    .wordmark {
+        font-size: 45px;
+        font-weight: bold;
+
+        .last {
+            color: #a9c400;
+        }
+    }
+
+    .question {
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 40px;
+        left: 40px;
+        right: 40px;
+    }
+
+    .body {
+        margin: 150px 0;
+
+        &.space-xl {
+            margin: 250px 0 20px 0;
+        }
+
+        &.fill {
+            margin: 50px 0 0 0;
+
+            img {
+                width: 100%;
+            }
+        }
+    }
+
+    .js-selectable {
+        img {
+            opacity: .6;
+            cursor: pointer;
+            will-change: opacity;
+            transition: all .2s linear;
+            -o-transition: all .2s linear;
+            -ms-transition: all .2s linear;
+            -moz-transition: all .2s linear;
+            -webkit-transition: all .2s linear;
+        }
+
+        &.selected {
+            img {
+                opacity: 1;
+                filter: none;
+            }
+        }
+    }
+
+    .fullscreen-text {
+        font-size: 120px;
+        text-align: center;
+        margin-top: 350px;
+    }
+}
