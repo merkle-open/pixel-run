@@ -3,17 +3,13 @@ var http = require('http');
 var cluster = require('cluster');
 var express = require('express');
 var chalk = require('chalk');
-var config = require('./../config.json');
 
 if(cluster.isMaster) {
     // Count the machine's CPUs
     var cpuCount = require('os').cpus().length;
-
-    // General information
     console.log([
-        'Starting the gameserver in', chalk.cyan('%d cores/threads'), '...\nOpen',
-        chalk.magenta('%s'), 'in your browser to play the game!\n'
-    ].join(' '), cpuCount, 'http://' + config.host + ':' + config.port);
+        'Starting the gameserver in', chalk.cyan('%d cores/threads'), '...'
+    ].join(' '), cpuCount);
 
     // Create a worker for each CPU
     for (var i = 0; i < cpuCount; i += 1) {
@@ -46,12 +42,8 @@ if(cluster.isMaster) {
     require('./lib/error')(app);
 
     // Setting the port to environement port or 3000
-    var port = config.port || process.env.PORT || '3000';
+    var port = process.env.PORT || '3000';
     app.set('port', port);
-
-    // Adding VHost capability, you must add the host to the
-    // hosts file before this setting will work
-    app.use(require('vhost')(config.host, app));
 
     // Starts a http server with the express app
     var server = http.createServer(app);

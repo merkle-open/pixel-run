@@ -1,7 +1,5 @@
 {
-    "host": "pixel-run.namics.dev",
-    "port": "3000",
-    "version": "1.6.0",
+    "version": "1.5.0-alpha",
     "buildFile": ".build",
     "release": [
         "./app/**",
@@ -59,10 +57,10 @@
         "target": "./www/dist/bin",
         "name": "app",
         "files": [
-            "./assets/css/reset.{scss,sass,css}",
-            "./assets/css/grid.{scss,sass,css}",
-            "./assets/css/typo.{scss,sass,css}",
-            "./assets/css/*.{scss,sass,css}"
+            "./assets/css/reset.css",
+            "./assets/css/grid.css",
+            "./assets/css/typo.css",
+            "./assets/css/*.css"
         ]
     }
 }

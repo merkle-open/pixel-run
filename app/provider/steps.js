@@ -71,10 +71,6 @@
 
             self.$continue.on('click', function() {
                 var res = self.result = self.$process();
-                if(res instanceof Error) {
-                    alert(res.message);
-                    return false;
-                }
 
                 if(self.$dataKey !== undefined) {
                     HUD.$store[self.$dataKey] = res;
@@ -93,7 +89,6 @@
             if(self.$processType === 'select') {
                 var $selectable = self.$step.find('.js-selectable');
                 var alreadySelected = false;
-
                 $selectable.on('click', function() {
                     alreadySelected = $(this).hasClass('selected');
                     $selectable.removeClass('selected');
@@ -124,20 +119,12 @@
                             }
                         });
 
-                        if(Object.keys(data).length < 1) {
-                            return new Error('No player names entered! You have to enter at least one name to play.');
-                        }
-
                         return data;
                     };
                 case 'select':
                     return function() {
                         var selected = self.$step.find('.js-selectable.selected');
                         var result = this.result = selected.data(self.$useDatakey);
-
-                        if(selected.length < 1) {
-                            return new Error('No item selected');
-                        }
 
                         return result;
                     };

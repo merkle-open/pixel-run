@@ -1,6 +1,5 @@
 var hbs = require('hbs');
 var path = require('path');
-var vhost = require('vhost');
 var logger = require('morgan');
 var express = require('express');
 var favicon = require('serve-favicon');

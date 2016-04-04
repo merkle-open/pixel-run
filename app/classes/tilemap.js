@@ -86,7 +86,7 @@
     Tilemap.prototype.resize = function(targetLayer) {
         try {
             this.layers[targetLayer].resizeWorld();
-            debug.warn('World resized to the layer ->', targetLayer);
+            debug.info('World resized to the layer ->', targetLayer);
         } catch(resizeErr) {
             debug.throw('Tilemap.resize failed: ' + resizeErr.message, 0);
         }
