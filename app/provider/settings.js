@@ -36,7 +36,7 @@
                 variations: ['techie', 'designer', 'consultant'],
                 keymap: ['up', 'down', 'left'],
                 bounce: {
-                    y: 0.3
+                    y: 0.2
                 },
                 gravity: {
                     y: 900
