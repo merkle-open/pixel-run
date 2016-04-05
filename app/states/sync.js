@@ -17,7 +17,7 @@
             var amount = Object.keys(Session).length;
             debug.log('Syncing scores over AJAX for ' + amount + ' players ...');
 
-            async.forEachOf(Session, function(value, key, resolve) {
+            async.forEachOfSeries(Session, function(value, key, resolve) {
                 $.ajax({
                     type: 'POST',
                     url: '/api/save/score',
