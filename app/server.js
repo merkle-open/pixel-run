@@ -1,15 +1,18 @@
 var hbs = require('hbs');
+var path = require('path');
 var http = require('http');
 var cluster = require('cluster');
 var express = require('express');
 var chalk = require('chalk');
+var config = require(path.join(__dirname, '..', 'config.json'));
 
 if(cluster.isMaster) {
     // Count the machine's CPUs
     var cpuCount = require('os').cpus().length;
     console.log([
-        'Starting the gameserver in', chalk.cyan('%d cores/threads'), '...'
-    ].join(' '), cpuCount);
+        'Starting the gameserver in ' + chalk.cyan('%d cores/threads') + ' ...',
+        'Open up ' + chalk.green('http://%s:%d/') + ' in your browser', ''
+    ].join('\n'), cpuCount, config.hostname, config.port);
 
     // Create a worker for each CPU
     for (var i = 0; i < cpuCount; i += 1) {
@@ -42,7 +45,7 @@ if(cluster.isMaster) {
     require('./lib/error')(app);
 
     // Setting the port to environement port or 3000
-    var port = process.env.PORT || '3000';
+    var port = config.port || process.env.PORT || '3000';
     app.set('port', port);
 
     // Starts a http server with the express app
@@ -50,7 +53,7 @@ if(cluster.isMaster) {
     server.listen(port);
 
     console.log([
-        'Server running on', chalk.cyan('port %d'), 'in',
-        chalk.magenta('worker %d'), 'with', chalk.green('pid %d')
-    ].join(' '), port, cluster.worker.id, cluster.worker.process.pid);
+        'Server running in', chalk.magenta('Worker #%d'),
+        'with', chalk.green('PID %d')
+    ].join(' '), cluster.worker.id, cluster.worker.process.pid);
 }
