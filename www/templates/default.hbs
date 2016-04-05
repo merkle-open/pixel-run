@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Pixel. Run. Namics. - {{title}}</title>
-    <link rel="stylesheet" href="dist/bin/app.min.css">
+    <link rel="stylesheet" href="dist/bin/app.min.css{{#if $debug}}?v={{uuid}}{{/if}}">
     <link rel="icon" href="dist/assets/img/favicon.png" type="image/png">
 </head>
 <body>
@@ -11,8 +11,8 @@
         {{{body}}}
     </div>
     {{#if $debug}}
-        <script src="dist/dependencies.js"></script>
-        <script src="dist/application.js"></script>
+        <script src="dist/dependencies.js?v={{uuid}}"></script>
+        <script src="dist/application.js?v={{uuid}}"></script>
     {{else}}
         <script src="dist/bin/app.min.js"></script>
     {{/if}}
