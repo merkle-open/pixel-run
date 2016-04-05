@@ -70,9 +70,6 @@
     if (typeof module !== 'undefined' && module.exports) {
         exports = module.exports = settings;
     } else {
-        if(!window) {
-            throw new Error('Couldn\'t inject settings into Container');
-        }
         window.Container.settings = settings;
     }
 
