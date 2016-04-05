@@ -50,7 +50,7 @@
      * @return {Spritesheet} $internal
      */
     Sprite.prototype.add = function(x, y) {
-        debug.info('Sprite mounted ->', this.image, x, y);
+        debug.log('Sprite mounted ->', this.image, x, y);
         x = util.default(x, 0);
         y = util.default(y, 0);
         this.$internal = this.injector.add.sprite(x, y, this.image);

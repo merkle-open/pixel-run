@@ -94,7 +94,7 @@
                 this.$text.cameraOffset.setTo(x, y);
             }
 
-            debug.info('Text added with props x, y, fixed ->', x, y, fixedToCamera);
+            debug.log('Text added with props x, y, fixed ->', x, y, fixedToCamera);
 
             return this;
         },

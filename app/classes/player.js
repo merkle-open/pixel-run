@@ -84,9 +84,9 @@
      * Let a player die
      */
     Player.prototype.die = function() {
-        debug.info('Player died with id ->', this.id);
+        debug.log('Player died with id ->', this.id);
         var session = Session[$index.session[this.id]];
-        debug.info('Updating player session ->', session);
+        debug.log('Updating player session ->', this.id);
 
         Container.Audio.die.play();
         this.$updateText('dead');
@@ -101,7 +101,7 @@
      */
     Player.prototype.$updateText = function(val) {
         if(val !== undefined) {
-            console.log('Updating text');
+            debug.log('Updating player text ->', this.id);
             var session = Session[$index.session[this.id]];
             session.text.option('extension', '(' + val + ')');
             session.text.$update();
@@ -114,7 +114,7 @@
      * @return {Key}            Phaser key stack
      */
     Player.prototype.$addActionKey = function() {
-        debug.info('Player created actionKey ->', this.jumpKey);
+        debug.log('Player created actionKey ->', this.jumpKey);
         this.$actionKey = Container.cursors[this.jumpKey];
         return this.$actionKey;
     };
