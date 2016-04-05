@@ -37,5 +37,8 @@ exports = module.exports = function(app) {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
+
     app.use('/public', express.static(path.join(base, 'dist')));
+    app.use('/public/avatars', express.static(path.join(base, '..', 'avatars')));
+    app.use('/public/worlds', express.static(path.join(base, '..', 'worlds')));
 };
