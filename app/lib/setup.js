@@ -21,5 +21,5 @@ exports = module.exports = function(app) {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
-    app.use(express.static(path.join(__dirname, '..', '..', 'www')));
+    app.use('/public', express.static(path.join(__dirname, '..', '..', 'www/dist')));
 };

@@ -32,12 +32,12 @@
             var self = this;
             var worldKeys = Object.keys(Container.settings.worlds);
             worldKeys.forEach(function(w) {
-                self.load.tilemap('tilemap-' + w, '/dist/assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
-                self.load.image('background-' + w, '/dist/assets/img/backgrounds/background-' + w + '.png');
-                self.load.image('tile-' + w, '/dist/assets/img/world/' + w + '/tiles/tile-' + w + '.png');
-                self.load.image('avatar-' + w + '-consultant', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
-                self.load.image('avatar-' + w + '-techie', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
-                self.load.image('avatar-' + w + '-designer', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
+                self.load.tilemap('tilemap-' + w, '/public/assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
+                self.load.image('background-' + w, '/public/assets/img/backgrounds/background-' + w + '.png');
+                self.load.image('tile-' + w, '/public/assets/img/world/' + w + '/tiles/tile-' + w + '.png');
+                self.load.image('avatar-' + w + '-consultant', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
+                self.load.image('avatar-' + w + '-techie', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
+                self.load.image('avatar-' + w + '-designer', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
             });
         },
         /**
@@ -47,7 +47,7 @@
             var self = this;
             var fxSounds = Container.settings.audio.fx;
             fxSounds.forEach(function(fxSound) {
-                self.load.audio('fx-' + fxSound, '/dist/assets/audio/fx/' + fxSound + '.mp3');
+                self.load.audio('fx-' + fxSound, '/public/assets/audio/fx/' + fxSound + '.mp3');
             });
         }
     };
