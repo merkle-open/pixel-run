@@ -47,6 +47,7 @@
     "express": "^4.13.4",
     "express-hbs": "^0.8.4",
     "hbs": "^4.0.0",
+    "hbs-utils": "0.0.3",
     "http-server": "^0.8.5",
     "morgan": "^1.6.1",
     "serve-favicon": "^2.3.0",

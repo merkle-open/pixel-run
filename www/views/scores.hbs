@@ -31,12 +31,9 @@
 </div>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
-        var interval = Container.settings.scores.refetch;
         var fetchScores = function() {
             if(Container.settings.debug) {
-                var date = new Date();
-                var timestamp = date.toTimeString().split(' ')[0];
-                console.log('Refetching scores at %s', timestamp);
+                console.log('Refetching scores ...');
             }
 
             Util.getScoreTable({ index: true }, function(markup) {
@@ -44,7 +41,6 @@
             });
         };
 
-        console.log('Refetching scores with an interval of %ds ...', interval / 1000);
-        window.setInterval(fetchScores, interval);
+        window.setInterval(fetchScores, Container.settings.scores.refetch);
     });
 </script>

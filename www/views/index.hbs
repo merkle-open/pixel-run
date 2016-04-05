@@ -1,0 +1,16 @@
+<div class="autosize pregame steps">
+    <div class="step js-step-1 js-step-start" data-next="js-step-2" data-noprocess="true">
+        {{> step_intro}}
+    </div>
+    <div class="step hidden js-step-2" data-input="js-s2-in" data-next="js-step-3">
+        {{> step_avatar}}
+    </div>
+    <div class="step hidden js-step-3" data-next="js-step-4" data-input="js-s3-in">
+        {{> step_world}}
+    </div>
+    <div class="step hidden js-step-4" data-end="true">
+        {{> step_start}}
+    </div>
+</div>
+{{> phaser}}
+{{> resume}}
