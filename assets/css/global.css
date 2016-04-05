@@ -8,6 +8,11 @@ body {
     background-color: #000;
 }
 
+img {
+    max-width: 100%;
+    display: block;
+}
+
 *:focus {
     outline: 0;
 }
