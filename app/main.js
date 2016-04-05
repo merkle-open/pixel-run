@@ -9,10 +9,7 @@
     var settings = Container.settings;
     var config = settings.render;
 
-    console.log([
-        window.$introduction,
-        'Welcome to the Pixel. Run. game by Namics AG!'
-    ].join('\n'));
+    console.log('Welcome to the Pixel. Run. game by Namics AG!\n');
 
     stepper.start(function($lastStep) {
         // Get the current selected world and players
@@ -27,19 +24,8 @@
         game.state.add('Boot', Container.Boot);
         game.state.add('Preload', Container.Preload);
         game.state.add('Game', Container.Game);
-        game.state.add('Procedures', Container.Procedures);
-
-        // Show the last info container on end
-        game.finishedCallback = function() {
-            var content = $('.js-finished').html();
-            var playerScores = Util.getPlayerScoreData();
-
-            // Transform playeholders
-            $('.js-finished').html(Util.replace(content, playerScores));
-            $('#' + config.node).fadeOut(function() {
-                $('.js-finished').fadeIn();
-            });
-        };
+        game.state.add('Over', Container.Over);
+        game.state.add('Sync', Container.Sync);
 
         // Make game accessable
         Container.game = game;

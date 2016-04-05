@@ -1,13 +1,16 @@
-var fs = require('fs');
-var path = require('path');
-var uuid = require('shortid');
-var express = require('express');
-var settings = require('./provider/settings');
-var router = express.Router();
+'use strict';
 
-var BASE = path.join(__dirname, 'data');
+const fs = require('fs');
+const path = require('path');
+const async = require('async');
+const uuid = require('shortid');
+const express = require('express');
+const settings = require('./provider/settings');
+const router = express.Router();
 
-var FILE = {
+const BASE = path.join(__dirname, 'data');
+
+const FILE = {
     SCORE: path.join(BASE, 'scores.json')
 };
 
@@ -22,12 +25,13 @@ var sortScore = (a, b) => {
 };
 
 var capitalize = function(value) {
-    return value.charAt(0).toUpperCase() + value.slice(1);
+    return typeof value === 'string' ?
+        value.charAt(0).toUpperCase() + value.slice(1) : '';
 };
 
 var processScores = (data) => {
-    var previous = 0;
-    var i = 0;
+    let previous = 0;
+    let i = 0;
     data = JSON.parse(data);
 
     // Parsing values
@@ -60,7 +64,8 @@ var processScores = (data) => {
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.render('index', {
-        title: 'Play Now'
+        title: 'Play Now',
+        uuid: uuid.generate()
     });
 });
 
@@ -75,13 +80,14 @@ router.get('/scores', (req, res, next) => {
 
         res.render('scores', {
             scores: data,
-            title: 'Highscores'
+            title: 'Highscores',
+            uuid: uuid.generate()
         });
     });
 });
 
 /* GET send scores as JSON. */
-router.get('/api/get/scores', function(req, res, next) {
+router.get('/api/get/scores', (req, res, next) => {
     fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
         if(err) {
             next(err);
@@ -93,30 +99,41 @@ router.get('/api/get/scores', function(req, res, next) {
 });
 
 /* POST save new score. */
-router.post('/api/save/score', function(req, res, next) {
-    fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
-        if(err) {
-            next(err);
+router.post('/api/save/score', (req, res, next) => {
+    async.waterfall([
+        resolve => {
+            fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
+                if(err) {
+                    return resolve(err);
+                }
+
+                try {
+                    var data = JSON.parse(data);
+                } catch(ex) {
+                    data = [];
+                }
+
+                resolve(null, data);
+            });
+        },
+        (data, resolve) => {
+            var insert = req.body;
+            insert.$id = uuid.generate();
+            data.push(req.body);
+
+            resolve(null, data, JSON.stringify(data, null, 2));
+        },
+        (data, inject, resolve) => {
+            fs.writeFile(FILE.SCORE, inject, 'utf8', err => {
+                if(err) {
+                    return resolve(err);
+                }
+
+                resolve(null);
+            });
         }
-
-        try {
-            var data = JSON.parse(data);
-        } catch(ex) {
-            data = [];
-        }
-
-        var insert = req.body;
-        insert.$id = uuid.generate();
-        data.push(req.body);
-
-        var serialized = JSON.stringify(data, null, 2);
-        fs.writeFile(FILE.SCORE, serialized, 'utf8', (err) => {
-            if(err) {
-                next(err);
-            }
-
-            res.send(true);
-        });
+    ], err => {
+        res.send(err ? false : true);
     });
 });
 
