@@ -8,7 +8,7 @@
     var PLAYER_OFFSET_X = 500;
     var PLAYER_OFFSET_Y = 300;
 
-    var debug = new Util.Debugger('states.game');
+    var debug = new Util.Debugger('States.Game');
     var settings = Container.settings;
     var gameSettings = settings.game;
 
@@ -46,6 +46,10 @@
             this.$applyEmergency();
         },
         update: function update() {
+            if(this.skipUpdateLoop) {
+                return false;
+            }
+
             var self = this;
             var alivePlayers = self.$getAlivePlayers();
 
@@ -54,7 +58,7 @@
 
             if(alivePlayers.length === 0 && !self.finished) {
                 // Quit the game if no players are alive
-                self.exit();
+                return self.exit();
             } else if(alivePlayers.length === 1) {
                 // TODO: If just one player is alive and he/she is blocked
                 // by an obstacle by more than 5 seconds, the game should end!
@@ -79,25 +83,15 @@
                     player.$updateText();
                 }
             }
-
-            if(settings.debug) {
-                // Add FPS settings to the game if in debug mode
-                Container.game.debug.text(Container.game.time.fps + ' FPS' || '-- FPS', 2, 14, "#FF00CC");
-            }
         },
         /**
          * Finishes the game
          */
         exit: function exit() {
-            if(!this.finished) {
-                this.finished = true;
-                this.$savePlayerScores();
-                debug.info('Game is finished! Player scores are saved in Storage');
-                Container.game.lockRender = true;
-                Container.game.finishedCallback(this);
-            } else {
-                debug.warn('Game already finished, exit handler skipped.');
-            }
+            this.skipUpdateLoop = true;
+            Container.game.lockRender = true;
+            // clearStage and clearCache params
+            Container.game.state.start('Over', true, true, this);
         },
         /**
          * Gets all players which are still alive
@@ -250,39 +244,6 @@
 
             return callback(Container.World.players);
         },
-        /**
-         * Save the score of all session players in localstorage
-         */
-        $savePlayerScores: function $savePlayerScores() {
-            if(!this.saved) {
-                this.saved = true;
-
-                var handlers = {
-                    success: function(res) {
-                        debug.info('Saved score on server over AJAX ->', res);
-                    },
-                    error: function(err) {
-                        throw new GameError('Failed to save player score: ' + err.message);
-                    }
-                };
-
-                for(var name in Session) {
-                    var user = Session[name];
-                    $.ajax({
-                        type: 'POST',
-                        url: '/api/save/score',
-                        data: {
-                            name: user.name,
-                            score: user.score,
-                            world: settings.worldType,
-                            username: user.username
-                        },
-                        success: handlers.success,
-                        error: handlers.error
-                    });
-                }
-            }
-        },
         $applyEmergency: function $applyEmergency() {
             var res = false;
             var self = this;
@@ -298,7 +259,7 @@
                 if(res === true) {
                     return handler();
                 } else {
-                    debug.info('User canceled emergency action');
+                    debug.log('User canceled emergency action');
                 }
             };
 
