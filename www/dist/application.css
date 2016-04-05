@@ -281,7 +281,7 @@ body {
     border: 1px solid #222;
 }
 
-body, html, .autosize, .wrapper {
+body, html, main, .autosize {
     height: 100%;
 }
 

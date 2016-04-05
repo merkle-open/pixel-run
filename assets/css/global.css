@@ -1,4 +1,4 @@
-body, html, .autosize, .wrapper {
+body, html, main, .autosize {
     height: 100%;
 }
 
