@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build ByXcbZZ)
+ * Pixel. Run. Namics. (Build BJyZeXW)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.5.0-alpha
  * @license MIT Licensed by Namics AG
@@ -413,7 +413,7 @@
         Phaser.Sprite.call(this, game, posX, posY, this.$getSpritesheet());
         this.$addActionKey();
         game.add.existing(this);
-        debug.log('New player initiaded on x/y with type ->', posX, posY, variation);
+        debug.log('New player initiaded on x/y ->', posX, posY);
 
         return this;
     }
@@ -838,12 +838,12 @@
             var self = this;
             var worldKeys = Object.keys(Container.settings.worlds);
             worldKeys.forEach(function(w) {
-                self.load.tilemap('tilemap-' + w, '/dist/assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
-                self.load.image('background-' + w, '/dist/assets/img/backgrounds/background-' + w + '.png');
-                self.load.image('tile-' + w, '/dist/assets/img/world/' + w + '/tiles/tile-' + w + '.png');
-                self.load.image('avatar-' + w + '-consultant', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
-                self.load.image('avatar-' + w + '-techie', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
-                self.load.image('avatar-' + w + '-designer', '/dist/assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
+                self.load.tilemap('tilemap-' + w, '/public/assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
+                self.load.image('background-' + w, '/public/assets/img/backgrounds/background-' + w + '.png');
+                self.load.image('tile-' + w, '/public/assets/img/world/' + w + '/tiles/tile-' + w + '.png');
+                self.load.image('avatar-' + w + '-consultant', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
+                self.load.image('avatar-' + w + '-techie', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
+                self.load.image('avatar-' + w + '-designer', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
             });
         },
         /**
@@ -853,8 +853,46 @@
             var self = this;
             var fxSounds = Container.settings.audio.fx;
             fxSounds.forEach(function(fxSound) {
-                self.load.audio('fx-' + fxSound, '/dist/assets/audio/fx/' + fxSound + '.mp3');
+                self.load.audio('fx-' + fxSound, '/public/assets/audio/fx/' + fxSound + '.mp3');
             });
+        }
+    };
+
+})(window);
+
+/**
+ * /app/states/preload.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
+(function(window, undefined) {
+    'use strict';
+
+    Container.Configure = function() {
+        this.ready = false;
+        this.error = null;
+        this.background = null;
+    };
+
+    Container.Configure.prototype = {
+        preload: function() {
+            this.physics.arcade.gravity.y = Container.settings.physics.arcadeGravity || 200;
+            this.ready = true;
+
+            try {
+                this.physics.startSystem(Phaser.Physics.ARCADE);
+            } catch(notReady) {
+                this.error = notReady;
+            }
+        },
+        create: function() {
+            if(this.ready) {
+                this.state.start('Game');
+            } else {
+                throw this.error;
+            }
+        },
+        quit: function() {
+            this.ready = false;
         }
     };
 
@@ -1248,7 +1286,7 @@
             var amount = Object.keys(Session).length;
             debug.log('Syncing scores over AJAX for ' + amount + ' players ...');
 
-            async.forEachOf(Session, function(value, key, resolve) {
+            async.forEachOfSeries(Session, function(value, key, resolve) {
                 $.ajax({
                     type: 'POST',
                     url: '/api/save/score',
