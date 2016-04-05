@@ -35,7 +35,7 @@
         Phaser.Sprite.call(this, game, posX, posY, this.$getSpritesheet());
         this.$addActionKey();
         game.add.existing(this);
-        debug.log('New player initiaded on x/y with type ->', posX, posY, variation);
+        debug.log('New player initiaded on x/y ->', posX, posY);
 
         return this;
     }
