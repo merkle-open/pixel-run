@@ -1,0 +1,15 @@
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var fetchScores = function() {
+            if(Container.settings.debug) {
+                console.log('Refetching scores ...');
+            }
+
+            Util.getScoreTable({ index: true }, function(markup) {
+                $('#js-insert').html(markup);
+            });
+        };
+
+        window.setInterval(fetchScores, Container.settings.scores.refetch);
+    });
+</script>

@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build H1LSxS-)
+ * Pixel. Run. Namics. (Build SyCBESW)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.5.0-alpha
  * @license MIT Licensed by Namics AG
@@ -835,15 +835,21 @@
          * Load all dependencies for all worlds saved under settings
          */
         $loadWorldDependencies: function() {
+            var current;
             var self = this;
-            var worldKeys = Object.keys(Container.settings.worlds);
+            var game = Container.game;
+            var worldKeys = $('#js-worlds').val().split(',');
+            var characters = Container.settings.game.players.variations;
+
             worldKeys.forEach(function(w) {
-                self.load.tilemap('tilemap-' + w, '/public/assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
-                self.load.image('background-' + w, '/public/assets/img/backgrounds/background-' + w + '.png');
-                self.load.image('tile-' + w, '/public/assets/img/world/' + w + '/tiles/tile-' + w + '.png');
-                self.load.image('avatar-' + w + '-consultant', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
-                self.load.image('avatar-' + w + '-techie', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
-                self.load.image('avatar-' + w + '-designer', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
+                self.load.tilemap('tilemap-' + w, '/public/worlds/' + w + '/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+                self.load.image('background-' + w, '/public/worlds/' + w + '/background.png');
+                self.load.image('tile-' + w, '/public/worlds/' + w + '/tile.png');
+
+                characters.forEach(function(vr) {
+                    // Load default character for each world
+                    self.load.image('avatar-' + w + '-' + vr, '/public/avatars/' + vr + '.png');
+                });
             });
         },
         /**
@@ -1262,6 +1268,59 @@
         },
         quit: function() {
             this.ready = false;
+        }
+    };
+
+})(window);
+
+/**
+ * /app/states/over.js
+ * @author Jan Biasi <jan.biasi@namics.com>
+ */
+(function(window, undefined) {
+    'use strict';
+
+    var debug = new Util.Debugger('States.Sync');
+
+    Container.Sync = function() {
+        // Empty class wrapper
+    };
+
+    Container.Sync.prototype = {
+        create: function() {
+            var debugResults = [];
+            var amount = Object.keys(Session).length;
+            debug.log('Syncing scores over AJAX for ' + amount + ' players ...');
+
+            async.forEachOfSeries(Session, function(value, key, resolve) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/save/score',
+                    data: {
+                        name: value.name,
+                        score: value.score,
+                        world: Container.settings.worldType,
+                        username: value.username
+                    },
+                    success: function(res) {
+                        debugResults.push(res);
+                        resolve(null);
+                    },
+                    error: function(err) {
+                        resolve('Request failed');
+                    }
+                });
+            }, function(err) {
+                if(err) {
+                    return debug.throw(err);
+                }
+
+                var percentage = 100 / amount * debugResults.length;
+                debug.log([
+                    'Scores saved for', debugResults.length, 'of', amount,
+                    'players', '(' + percentage + '%)'
+                ].join(' '));
+            });
         }
     };
 

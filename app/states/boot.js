@@ -29,15 +29,21 @@
          * Load all dependencies for all worlds saved under settings
          */
         $loadWorldDependencies: function() {
+            var current;
             var self = this;
-            var worldKeys = Object.keys(Container.settings.worlds);
+            var game = Container.game;
+            var worldKeys = $('#js-worlds').val().split(',');
+            var characters = Container.settings.game.players.variations;
+
             worldKeys.forEach(function(w) {
-                self.load.tilemap('tilemap-' + w, '/public/assets/img/world/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
-                self.load.image('background-' + w, '/public/assets/img/backgrounds/background-' + w + '.png');
-                self.load.image('tile-' + w, '/public/assets/img/world/' + w + '/tiles/tile-' + w + '.png');
-                self.load.image('avatar-' + w + '-consultant', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-consultant.png');
-                self.load.image('avatar-' + w + '-techie', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-techie.png');
-                self.load.image('avatar-' + w + '-designer', '/public/assets/img/avatars/' + w + '/avatar-' + w + '-designer.png');
+                self.load.tilemap('tilemap-' + w, '/public/worlds/' + w + '/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+                self.load.image('background-' + w, '/public/worlds/' + w + '/background.png');
+                self.load.image('tile-' + w, '/public/worlds/' + w + '/tile.png');
+
+                characters.forEach(function(vr) {
+                    // Load default character for each world
+                    self.load.image('avatar-' + w + '-' + vr, '/public/avatars/' + vr + '.png');
+                });
             });
         },
         /**

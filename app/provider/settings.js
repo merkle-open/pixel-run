@@ -25,7 +25,7 @@
             arcadeGravity: 200
         },
         game: {
-            jumpOn: 'release', // release
+            jumpOn: 'push', // release
             players: {
                 height: 160,
                 width: 153,
