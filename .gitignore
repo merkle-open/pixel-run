@@ -2,7 +2,9 @@
 .build
 release
 dist/assets
-www/dist
+www/dist/assets
+www/dist/dependencies.js
+
 
 # scores
 app/data/*
