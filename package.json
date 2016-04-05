@@ -39,6 +39,7 @@
     "jshint-stylish": "^2.1.0"
   },
   "dependencies": {
+    "async": "^1.5.2",
     "body-parser": "^1.14.2",
     "chalk": "^1.1.1",
     "cookie-parser": "^1.4.1",
