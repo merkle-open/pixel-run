@@ -7,13 +7,13 @@
     ],
     "lint": {
         "path": [
-             "./app/classes/**/*.js",
-             "./app/provider/globals.js",
-             "./app/provider/steps.js",
-             "./app/provider/store.js",
-             "./app/provider/util.js",
-             "./app/states/**/*.js",
-             "./app/main.js"
+            "./app/classes/**/*.js",
+            "./app/provider/globals.js",
+            "./app/provider/steps.js",
+            "./app/provider/store.js",
+            "./app/provider/util.js",
+            "./app/states/**/*.js",
+            "./app/main.js"
         ]
     },
     "clean": {
@@ -34,7 +34,8 @@
             "./vendor/jquery/dist/jquery.js",
             "./app/provider/globals.js",
             "./app/provider/settings.js",
-            "./app/provider/steps.js"
+            "./app/provider/steps.js",
+            "./node_modules/async/dist/async.js"
         ]
     },
     "app": {
@@ -54,8 +55,9 @@
         ]
     },
     "styles": {
-        "target": "./www/dist/bin",
-        "name": "app",
+        "minify": false,
+        "target": "./www/dist",
+        "name": "application",
         "files": [
             "./assets/css/reset.css",
             "./assets/css/grid.css",

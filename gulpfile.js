@@ -112,8 +112,8 @@ gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies
 
 gulp.task('build:styles', ['clean:dist:styles'], function() {
     return gulp.src(config.styles.files)
-        .pipe(cssmin())
-        .pipe(concat(config.styles.name + '.min.css'))
+        .pipe(gulpif(config.styles.minify === true, cssmin()))
+        .pipe(concat(config.styles.name + '.css'))
         .pipe(commentify(banner, {
             cfg: config,
             pkg: pkg,
