@@ -9,10 +9,7 @@ const settings = require('./provider/settings');
 const router = express.Router();
 
 const BASE = path.join(__dirname, 'data');
-
-const FILE = {
-    SCORE: path.join(BASE, 'scores.json')
-};
+const SCOREFILE = path.join(BASE, 'scores.json');
 
 var sortScore = (a, b) => {
     if(a.score > b.score) {
@@ -29,13 +26,13 @@ var capitalize = function(value) {
         value.charAt(0).toUpperCase() + value.slice(1) : '';
 };
 
-var processScores = (data) => {
+var processScores = data => {
     let previous = 0;
     let i = 0;
     data = JSON.parse(data);
 
     // Parsing values
-    data.forEach((dataset) => {
+    data.forEach(dataset => {
         dataset.world = capitalize(dataset.world);
         dataset.score = Number.parseInt(dataset.score);
     });
@@ -44,7 +41,7 @@ var processScores = (data) => {
     data.sort(sortScore);
 
     // Apply the users rank
-    data.forEach((dataset) => {
+    data.forEach(dataset => {
         if(previous !== dataset.score) {
             i++;
         }
@@ -71,7 +68,7 @@ router.get('/', (req, res, next) => {
 
 /* GET highscores page. */
 router.get('/scores', (req, res, next) => {
-    fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
+    fs.readFile(SCOREFILE, 'utf8', (err, data) => {
         if(err) {
             next(err);
         }
@@ -88,7 +85,7 @@ router.get('/scores', (req, res, next) => {
 
 /* GET send scores as JSON. */
 router.get('/api/get/scores', (req, res, next) => {
-    fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
+    fs.readFile(SCOREFILE, 'utf8', (err, data) => {
         if(err) {
             next(err);
         }
@@ -102,7 +99,7 @@ router.get('/api/get/scores', (req, res, next) => {
 router.post('/api/save/score', (req, res, next) => {
     async.waterfall([
         resolve => {
-            fs.readFile(FILE.SCORE, 'utf8', (err, data) => {
+            fs.readFile(SCOREFILE, 'utf8', (err, data) => {
                 if(err) {
                     return resolve(err);
                 }
@@ -124,7 +121,7 @@ router.post('/api/save/score', (req, res, next) => {
             resolve(null, data, JSON.stringify(data, null, 2));
         },
         (data, inject, resolve) => {
-            fs.writeFile(FILE.SCORE, inject, 'utf8', err => {
+            fs.writeFile(SCOREFILE, inject, 'utf8', err => {
                 if(err) {
                     return resolve(err);
                 }
