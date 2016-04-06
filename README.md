@@ -19,6 +19,8 @@
 
 ## About
 
+> The standalone version is located in the branch <code>[creator](https://git.namics.com/jan.biasi/pixel-run/tree/creator)</code>
+
 #### Launch
 
 The game can be started over your systems CLI, the only requirement is, that Node.js 4.+ is installed on your machine. Run the command below and see the magic.
