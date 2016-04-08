@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build B1EVQVB)
+ * Pixel. Run. Namics. (Build rkTbaEr)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.5.0-alpha
  * @license MIT Licensed by Namics AG
@@ -393,17 +393,18 @@
             Container.settings.scores.refetch / 1000
         );
 
-        var fetchScores = function() {
+        window.setInterval(function() {
             if(Container.settings.debug) {
-                console.log('Refetching scores at %s', new Date().toTimeString().split(' ')[0]);
+                console.log(
+                    'Refetching scores at %s',
+                    new Date().toTimeString().split(' ')[0]
+                );
             }
 
             Util.getScoreTable({ index: true }, function(markup) {
                 $('#js-insert').html(markup);
             });
-        };
-
-        window.setInterval(fetchScores, Container.settings.scores.refetch);
+        }, Container.settings.scores.refetch || 5000);
     });
 
 })(window);
