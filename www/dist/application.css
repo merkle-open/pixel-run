@@ -1,635 +1,216 @@
 /**
- * Pixel. Run. Namics. (Build ryicFRV)
+ * Pixel. Run. Namics. (Build B1s0Uer)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.5.0-alpha
  * @license MIT Licensed by Namics AG
  * @see http://namics.com/
  */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-
-body {
-	line-height: 1;
-}
-
-ol, ul {
-	list-style: none;
-}
-
-blockquote, q {
-	quotes: none;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-/*
-  Simple Grid
-  Project Page - http://thisisdallas.github.com/Simple-Grid/
-  Author - Dallas Bass
-  Site - http://ninenineteen.co
-*/
-
-/** Extended by Jan Biasi */
-
-*, *:after, *:before {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-body {
-	margin: 0;
-}
-
-[class*='col-'] {
-	float: left;
-  min-height: 1px;
-	padding-right: 20px; /* column-space */
-}
-
-.grid {
-	width: 100%;
-	max-width: 1140px;
-	min-width: 0; /* when using padded grid on ipad in portrait mode, width should be viewport-width - padding = (768 - 20) = 748. actually, it should be even smaller to allow for padding of grid containing element */
-	margin: 0 auto;
-	overflow: hidden;
-}
-
-.grid-full {
-	max-width: 100%;
-}
-
-.grid-xlg {
-	max-width: 1600px;
-}
-
-.grid-lg {
-	max-width: 1400px;
-}
-
-.grid-sm {
-	max-width: 940px;
-}
-
-.grid-xsm {
-	max-width: 800px;
-}
-
-.grid-lg-img [class*=col-] img {
-	max-width: 400px;
-}
-
-.grid > [class*='col-']:last-of-type {
-	padding-right: 0;
-}
-
-.grid:after {
-	content: "";
-	display: table;
-	clear: both;
-}
-
-.grid-pad {
-	padding-top: 20px;
-	padding-left: 20px; /* grid-space to left */
-	padding-right: 0; /* grid-space to right: (grid-space-left - column-space) e.g. 20px-20px=0 */
-}
-
-.push-right {
-	float: right;
-}
-
-/* Content Columns */
-
-.col-1-1 {
-	width: 100%;
-}
-.col-2-3, .col-8-12 {
-	width: 66.66%;
-}
-
-.col-1-2, .col-6-12 {
-	width: 50%;
-}
-
-.col-1-3, .col-4-12 {
-	width: 33.33%;
-}
-
-.col-1-4, .col-3-12 {
-	width: 25%;
-}
-
-.col-1-5 {
-	width: 20%;
-}
-
-.col-1-6, .col-2-12 {
-	width: 16.667%;
-}
-
-.col-1-7 {
-	width: 14.28%;
-}
-
-.col-1-8 {
-	width: 12.5%;
-}
-
-.col-1-9 {
-	width: 11.1%;
-}
-
-.col-1-10 {
-	width: 10%;
-}
-
-.col-1-11 {
-	width: 9.09%;
-}
-
-.col-1-12 {
-	width: 8.33%
-}
-
-/* Layout Columns */
-
-.col-11-12 {
-	width: 91.66%
-}
-
-.col-10-12 {
-	width: 83.333%;
-}
-
-.col-9-12 {
-	width: 75%;
-}
-
-.col-5-12 {
-	width: 41.66%;
-}
-
-.col-7-12 {
-	width: 58.33%
-}
-
-@font-face {
-    font-family: 'icomoon';
-    src:    url('../../public/assets/fonts/icomoon/icomoon.eot?8c17ez');
-    src:    url('../../public/assets/fonts/icomoon/icomoon.eot?8c17ez#iefix') format('embedded-opentype'),
-        url('../../public/assets/fonts/icomoon/icomoon.ttf?8c17ez') format('truetype'),
-        url('../../public/assets/fonts/icomoon/icomoon.woff?8c17ez') format('woff'),
-        url('../../public/assets/fonts/icomoon/icomoon.svg?8c17ez#icomoon') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-[class^="icon-"], [class*=" icon-"] {
-    font-family: 'icomoon' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-trophy:before {
-    content: "\e900";
-}
-.icon-loop:before {
-    content: "\e901";
-}
-.icon-arrow-right:before {
-    content: "\e902";
-}
-
-.error-pane {
-    height: 100%;
-    background-color: #000;
-    color: #fff;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-weight: normal;
-    padding: 40px;
-}
-
-.error-pane .wrapper {
-    max-width: 1024px;
-}
-
-.error-pane h1 {
-    font-size: 40px;
-}
-
-.error-pane small {
-    color: #aaa;
-    font-size: 70%;
-}
-
-.error-pane .go-back {
-    color: #fff;
-    text-decoration: none;
-    margin-top: 15px;
-    display: inline-block;
-}
-
-.error-pane pre {
-    margin-top: 20px;
-    word-wrap: break-word;
-    font-family: monospace;
-    font-size: 16px;
-    line-height: 18px;
-    background-color: #111;
-    padding: 20px;
-    border-radius: 2px;
-    border: 1px solid #222;
-}
-
-body, html, main, .autosize {
-    height: 100%;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    color: #000;
-    background-color: #000;
-}
-
-img {
-    max-width: 100%;
-    display: block;
-}
-
-*:focus {
-    outline: 0;
-}
-
-input, select, textarea, button{
-    font-size: 18px;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    background-color: #fff;
-    color: #222;
-    padding: 8px;
-}
-
-table {
-    width: 100%;
-}
-
-table td {
-    padding: 10px 2px 15px 2px;
-}
-
-table tbody td {
-    font-family: Arial, sans-serif;
-    font-weight: 200;
-}
-
-table thead td,
-table tbody td strong  {
-    font-family:  Arial, sans-serif;
-    font-weight: 700;
-}
-
-table thead td {
-    border-bottom: 1px solid #ddd;
-}
-
-table tbody > tr:first-child td {
-    padding-top: 15px;
-}
-
-.paper-layer {
-    box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12),0 1px 1px 0 rgba(0,0,0,.24);
-    -moz-box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12),0 1px 1px 0 rgba(0,0,0,.24);
-    -webkit-box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12),0 1px 1px 0 rgba(0,0,0,.24);
-}
-
-button.inverse {
-    background-color: #222;
-    color: #fff;
-    border-color: #444;
-}
-
-.center-helper {
-    position: relative;
-    height: 100%;
-}
-
-.center-target {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.hidden {
-    display: none;
-}
-
-.align-right {
-    text-align: right;
-}
-
-.align-left {
-    text-align: left;
-}
-
-.align-center {
-    text-align: center;
-}
-
-#js-player-list {
-    margin-top: 10px;
-    width: 100%;
-    display: block;
-    margin-top: 10px;
-}
-
-@media print {
-    body {
-        background-color: #fff;
-        color: #000;
-    }
-}
-
-.preload-wrapper {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background: rgb(229,112,231);
-    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZTU3MGU3IiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2U1OGIyNCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
-    background: -moz-linear-gradient(-45deg,  rgba(229,112,231,1) 0%, rgba(229,139,36,1) 100%);
-    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(229,112,231,1)), color-stop(100%,rgba(229,139,36,1)));
-    background: -webkit-linear-gradient(-45deg,  rgba(229,112,231,1) 0%,rgba(229,139,36,1) 100%);
-    background: -o-linear-gradient(-45deg,  rgba(229,112,231,1) 0%,rgba(229,139,36,1) 100%);
-    background: -ms-linear-gradient(-45deg,  rgba(229,112,231,1) 0%,rgba(229,139,36,1) 100%);
-    background: linear-gradient(135deg,  rgba(229,112,231,1) 0%,rgba(229,139,36,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e570e7', endColorstr='#e58b24', GradientType=1);
-}
-
-.bgimage {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-}
-
-.preload-wrapper .content {
-    max-width: 500px;
-    margin: 100px auto 0 auto;
-}
-
-.preload-wrapper .content .col-1-2 > * {
-    font-size: 18px;
-    width: 100%;
-    display: block;
-}
-
-.resume {
-    color: #fff;
-}
-
-.resume h1 {
-    text-align: center;
-    font-size: 86px;
-    margin: 0 0 30px 0;
-    padding-top: 30px;
-}
-
-.resume h2 {
-    font-size: 25px;
-    text-align: center;
-}
-
-.resume > table {
-    max-width: 50%;
-    margin: 0 auto;
-    margin-top: 120px;
-    font-size: 32px;
-}
-
-.resume table thead td {
-    border: 0px transparent;
-}
-
-.resume .grid button {
-    background-color: transparent;
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 60px;
-    border: 0px solid transparent;
-}
-
-
-.resume .actions {
-    margin-top: 150px;
-}
-
-
-.resume button a {
-    display: block;
-    width: 100%;
-    text-decoration: none;
-    color: #fff;
-}
-
-.score-wrapper {
-    max-width: 1000px;
-    width: 80%;
-    margin: 40px auto;
-    color: #fff;
-    border-radius: 3px;
-    padding: 20px;
-    font-size: 25px;
-}
-
-.score-wrapper h1 {
-    text-align: center;
-    font-size: 86px;
-    margin: 0 0 50px 0;
-    font-weight: bold;
-}
-
-.score-wrapper table thead td {
-    border-bottom: 0px solid transparent;
-    font-size: 29px;
-}
-
-@media print {
-    .score-wrapper {
-        max-width: 100%;
-        width: 100%;
-        padding: 0;
-        margin: 20px 0;
-        color: #000;
-    }
-
-    .score-wrapper h1 {
-        border: none;
-        font-size: 40px;
-        margin: 15px 0;
-    }
-
-    .score-wrapper table {
-        border: 0;
-    }
-
-    .score-wrapper table thead td {
-        font-size: 20px;
-    }
-
-    .score-wrapper table tbody td {
-        font-size: 18px;
-    }
-}
-
-.step {
-    height: 100%;
-    background-color: #000;
-    color: #fff;
-    padding: 40px;
-    font-family: Arial, sans-serif;
-    font-weight: 400;
-}
-
-.step .wordmark {
-    font-size: 45px;
-    font-weight: bold;
-}
-
-.step .wordmark .last {
-    color: #a9c400;
-}
-
-.step .question {
-    text-transform: uppercase;
-    font-size: 12px;
-}
-
-.step footer {
-    overflow: hidden;
-    position: absolute;
-    bottom: 40px;
-    left: 40px;
-    right: 40px;
-}
-
-.step .body {
-    margin: 150px 0;
-}
-
-.step .body.fill {
-    margin: 100px 0;
-}
-
-.step .body.space-xl {
-    margin: 250px 0;
-}
-
-.step .body .background-image {
-    max-height: 380px;
-}
-
-.step input {
-    width: 100%;
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    font-size: 24px;
-}
-
-.step .grid [class*='col-'] .center {
-    text-align: center;
-}
-
-.step .grid [class*='col-'] .title {
-    font-size: 24px;
-}
-
-.step .grid [class*='col-'] img {
-    display: block;
-    margin: 0 auto 30px auto;
-    transition: all .2s linear;
-    -o-transition: all .2s linear;
-    -ms-transition: all .2s linear;
-    -moz-transition: all .2s linear;
-    -webkit-transition: all .2s linear;
-}
-
-.step .grid.grid-border [class*='col-'] img {
-    padding: 20px;
-}
-
-.step .grid [class*='col-'] img.img-sm {
-    max-width: 220px;
-}
-
-.step i.icon.next {
-    float: right;
-    font-size: 80px;
-    color: #e8e8e8;
-    margin-right: 30px;
-    transition: all .2s linear;
-    -moz-transition: all .2s linear;
-    -webkit-transition: all .2s linear;
-}
-
-.step i.icon.next:focus {
-    margin-right: 0;
-    color: #fff;
-}
-
-.step .js-selectable.selected img,
-.step .js-selectable:focus img {
-    max-width: 450px;
-}
-
-.step .fullscreen-text {
-    font-size: 120px;
-    text-align: center;
-    margin-top: 350px;
-}
+/* line 1, stdin */ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; }
+
+/* line 22, stdin */ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+
+/* line 27, stdin */ body { line-height: 1; }
+
+/* line 31, stdin */ ol, ul { list-style: none; }
+
+/* line 35, stdin */ blockquote, q { quotes: none; }
+
+/* line 39, stdin */ blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+
+/* line 45, stdin */ table { border-collapse: collapse; border-spacing: 0; }
+
+/** Simple Grid by Dallas Bass (http://ninenineteen.co) extended and refactored by Jan Biasi, Namics AG. */
+/* line 6, stdin */ *, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+/* line 12, stdin */ body { margin: 0; }
+
+/* line 16, stdin */ [class*='col-'] { float: left; min-height: 1px; padding-right: 20px; }
+
+/* line 22, stdin */ .grid { width: 100%; max-width: 1140px; min-width: 0; margin: 0 auto; overflow: hidden; }
+
+/* line 30, stdin */ .grid-full { max-width: 100%; }
+
+/* line 34, stdin */ .grid-xlg { max-width: 1600px; }
+
+/* line 38, stdin */ .grid-lg { max-width: 1400px; }
+
+/* line 42, stdin */ .grid-sm { max-width: 940px; }
+
+/* line 46, stdin */ .grid-xsm { max-width: 800px; }
+
+/* line 50, stdin */ .grid-lg-img [class*=col-] img { max-width: 400px; }
+
+/* line 54, stdin */ .grid > [class*='col-']:last-of-type { padding-right: 0; }
+
+/* line 58, stdin */ .grid:after { content: ""; display: table; clear: both; }
+
+/* line 64, stdin */ .grid-pad { padding-top: 20px; padding-left: 20px; padding-right: 0; }
+
+/* line 70, stdin */ .push-right { float: right; }
+
+/* line 74, stdin */ .col-1-1 { width: 100%; }
+
+/* line 77, stdin */ .col-2-3, .col-8-12 { width: 66.66%; }
+
+/* line 81, stdin */ .col-1-2, .col-6-12 { width: 50%; }
+
+/* line 85, stdin */ .col-1-3, .col-4-12 { width: 33.33%; }
+
+/* line 89, stdin */ .col-1-4, .col-3-12 { width: 25%; }
+
+/* line 93, stdin */ .col-1-5 { width: 20%; }
+
+/* line 97, stdin */ .col-1-6, .col-2-12 { width: 16.667%; }
+
+/* line 101, stdin */ .col-1-7 { width: 14.28%; }
+
+/* line 105, stdin */ .col-1-8 { width: 12.5%; }
+
+/* line 109, stdin */ .col-1-9 { width: 11.1%; }
+
+/* line 113, stdin */ .col-1-10 { width: 10%; }
+
+/* line 117, stdin */ .col-1-11 { width: 9.09%; }
+
+/* line 121, stdin */ .col-1-12 { width: 8.33%; }
+
+/* line 125, stdin */ .col-11-12 { width: 91.66%; }
+
+/* line 129, stdin */ .col-10-12 { width: 83.333%; }
+
+/* line 133, stdin */ .col-9-12 { width: 75%; }
+
+/* line 137, stdin */ .col-5-12 { width: 41.66%; }
+
+/* line 141, stdin */ .col-7-12 { width: 58.33%; }
+
+@font-face { font-family: 'icomoon'; src: url("../../public/assets/fonts/icomoon/icomoon.eot?8c17ez"); src: url("../../public/assets/fonts/icomoon/icomoon.eot?8c17ez#iefix") format("embedded-opentype"), url("../../public/assets/fonts/icomoon/icomoon.ttf?8c17ez") format("truetype"), url("../../public/assets/fonts/icomoon/icomoon.woff?8c17ez") format("woff"), url("../../public/assets/fonts/icomoon/icomoon.svg?8c17ez#icomoon") format("svg"); font-weight: normal; font-style: normal; }
+
+/* line 12, stdin */ [class^="icon-"], [class*=" icon-"] { font-family: 'icomoon' !important; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* line 24, stdin */ .icon-trophy:before { content: "\e900"; }
+
+/* line 27, stdin */ .icon-loop:before { content: "\e901"; }
+
+/* line 30, stdin */ .icon-arrow-right:before { content: "\e902"; }
+
+/* line 1, stdin */ .error-pane { height: 100%; background-color: #000; color: #fff; font-family: 'Helvetica Neue', Arial, sans-serif; font-weight: normal; padding: 40px; }
+
+/* line 9, stdin */ .error-pane .wrapper { max-width: 1024px; }
+
+/* line 13, stdin */ .error-pane h1 { font-size: 40px; }
+
+/* line 17, stdin */ .error-pane small { color: #aaa; font-size: 70%; }
+
+/* line 22, stdin */ .error-pane .go-back { color: #fff; text-decoration: none; margin-top: 15px; display: inline-block; }
+
+/* line 29, stdin */ .error-pane pre { margin-top: 20px; word-wrap: break-word; font-family: monospace; font-size: 16px; line-height: 18px; background-color: #111; padding: 20px; border-radius: 2px; border: 1px solid #222; }
+
+/* line 1, stdin */ body, html, main, .autosize { height: 100%; }
+
+/* line 5, stdin */ body { font-family: Arial, sans-serif; color: #000; background-color: #000; }
+
+/* line 11, stdin */ img { max-width: 100%; display: block; }
+
+/* line 16, stdin */ *:focus { outline: 0; }
+
+/* line 20, stdin */ input, select, textarea, button { font-size: 18px; border: 1px solid #eee; border-radius: 4px; background-color: #fff; color: #222; padding: 8px; }
+
+/* line 29, stdin */ table { width: 100%; }
+
+/* line 32, stdin */ table td { font-family: Arial, sans-serif; padding: 10px 2px 15px 2px; }
+
+/* line 38, stdin */ table tbody td { font-weight: 200; }
+
+/* line 41, stdin */ table tbody td strong { font-weight: 700; }
+
+/* line 48, stdin */ table tbody > tr:first-child td { padding-top: 15px; }
+
+/* line 56, stdin */ table thead td { font-weight: 700; border-bottom: 1px solid #ddd; }
+
+/* line 64, stdin */ button.inverse { background-color: #222; color: #fff; border-color: #444; }
+
+/* line 71, stdin */ .center-helper { position: relative; height: 100%; }
+
+/* line 76, stdin */ .center-target { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+/* line 83, stdin */ .hidden { display: none; }
+
+/* line 87, stdin */ .align-right { text-align: right; }
+
+/* line 91, stdin */ .align-left { text-align: left; }
+
+/* line 95, stdin */ .align-center { text-align: center; }
+
+/* line 99, stdin */ #js-player-list { margin-top: 10px; width: 100%; display: block; margin-top: 10px; }
+
+@media print { /* line 107, stdin */ body { background-color: #fff; color: #000; } }
+
+/* line 1, stdin */ .resume { color: #fff; }
+
+/* line 4, stdin */ .resume h1 { text-align: center; font-size: 86px; margin: 0 0 30px 0; padding-top: 30px; }
+
+/* line 11, stdin */ .resume > table { max-width: 50%; margin: 0 auto; margin-top: 120px; font-size: 32px; }
+
+/* line 18, stdin */ .resume table thead td { border: 0px transparent; }
+
+/* line 23, stdin */ .resume .grid button { background-color: transparent; display: block; width: 100%; text-align: center; font-size: 60px; border: 0px solid transparent; }
+
+/* line 33, stdin */ .resume .actions { margin-top: 150px; }
+
+/* line 38, stdin */ .resume button a { display: block; width: 100%; text-decoration: none; color: #fff; }
+
+/* line 1, stdin */ .score-wrapper { max-width: 1000px; width: 80%; margin: 40px auto; color: #fff; border-radius: 3px; padding: 20px; font-size: 25px; }
+
+/* line 10, stdin */ .score-wrapper h1 { text-align: center; font-size: 86px; margin: 0 0 50px 0; font-weight: bold; }
+
+/* line 17, stdin */ .score-wrapper table thead td { border-bottom: 0px solid transparent; font-size: 29px; }
+
+@media print { /* line 24, stdin */ .score-wrapper { max-width: 100%; width: 100%; padding: 0; margin: 20px 0; color: #000; }
+  /* line 31, stdin */ .score-wrapper h1 { border: none; font-size: 40px; margin: 15px 0; }
+  /* line 37, stdin */ .score-wrapper table { border: 0; }
+  /* line 41, stdin */ .score-wrapper table thead td { font-size: 20px; }
+  /* line 47, stdin */ .score-wrapper table tbody td { font-size: 18px; } }
+
+/* line 1, stdin */ .step { height: 100%; background-color: #000; color: #fff; padding: 40px; font-family: Arial, sans-serif; font-weight: 400; }
+
+/* line 9, stdin */ .step footer { overflow: hidden; position: absolute; bottom: 40px; left: 40px; right: 40px; }
+
+/* line 17, stdin */ .step input { width: 100%; background-color: transparent; border: none; color: #fff; font-size: 24px; }
+
+/* line 25, stdin */ .step .body { margin: 150px 0; }
+
+/* line 28, stdin */ .step .body.fill { margin: 100px 0; }
+
+/* line 32, stdin */ .step .body.space-xl { margin: 250px 0; }
+
+/* line 36, stdin */ .step .body .background-image { max-height: 380px; }
+
+/* line 41, stdin */ .step .wordmark { font-size: 45px; font-weight: bold; }
+
+/* line 45, stdin */ .step .wordmark .last { color: #a9c400; }
+
+/* line 50, stdin */ .step .question { text-transform: uppercase; font-size: 12px; }
+
+/* line 55, stdin */ .step img { display: block; margin: 0 auto 30px auto; }
+
+/* line 59, stdin */ .step img.world-image { opacity: .5; will-change: opacity, max-width; transition: all .2s linear; -o-transition: all .2s linear; -ms-transition: all .2s linear; -moz-transition: all .2s linear; -webkit-transition: all .2s linear; }
+
+/* line 69, stdin */ .step img.img-sm { max-width: 220px; }
+
+/* line 76, stdin */ .step .grid [class*='col-'] .center { text-align: center; }
+
+/* line 80, stdin */ .step .grid [class*='col-'] .title { font-size: 24px; }
+
+/* line 87, stdin */ .step .grid.grid-border [class*='col-'] img { padding: 20px; }
+
+/* line 96, stdin */ .step i.icon.next { float: right; font-size: 80px; color: #e8e8e8; margin-right: 30px; transition: all .2s linear; -moz-transition: all .2s linear; -webkit-transition: all .2s linear; }
+
+/* line 105, stdin */ .step i.icon.next:focus { margin-right: 0; color: #fff; }
+
+/* line 115, stdin */ .step .js-selectable.selected img { opacity: 1; max-width: 450px; }
+
+/* line 122, stdin */ .step .js-selectable:focus img { opacity: 1; }
+
+/* line 128, stdin */ .step .fullscreen-text { font-size: 120px; text-align: center; margin-top: 350px; }
