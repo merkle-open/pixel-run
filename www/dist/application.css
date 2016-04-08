@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build BJyZeXW)
+ * Pixel. Run. Namics. (Build ryicFRV)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.5.0-alpha
  * @license MIT Licensed by Namics AG
@@ -536,10 +536,6 @@ button.inverse {
     font-weight: 400;
 }
 
-.step .grid {
-    /*max-width: 100%; */
-}
-
 .step .wordmark {
     font-size: 45px;
     font-weight: bold;
@@ -554,7 +550,8 @@ button.inverse {
     font-size: 12px;
 }
 
-.step .footer {
+.step footer {
+    overflow: hidden;
     position: absolute;
     bottom: 40px;
     left: 40px;
@@ -565,8 +562,16 @@ button.inverse {
     margin: 150px 0;
 }
 
+.step .body.fill {
+    margin: 100px 0;
+}
+
 .step .body.space-xl {
     margin: 250px 0;
+}
+
+.step .body .background-image {
+    max-height: 380px;
 }
 
 .step input {
@@ -606,10 +611,20 @@ button.inverse {
 .step i.icon.next {
     float: right;
     font-size: 80px;
+    color: #e8e8e8;
+    margin-right: 30px;
+    transition: all .2s linear;
+    -moz-transition: all .2s linear;
+    -webkit-transition: all .2s linear;
+}
+
+.step i.icon.next:focus {
+    margin-right: 0;
     color: #fff;
 }
 
-.step .js-selectable.selected img {
+.step .js-selectable.selected img,
+.step .js-selectable:focus img {
     max-width: 450px;
 }
 
