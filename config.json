@@ -61,10 +61,10 @@
         "target": "./www/dist",
         "name": "application",
         "files": [
-            "./assets/css/reset.css",
-            "./assets/css/grid.css",
-            "./assets/css/typo.css",
-            "./assets/css/*.css"
+            "./assets/css/reset.{scss,css}",
+            "./assets/css/grid.{scss,css}",
+            "./assets/css/typo.{scss,css}",
+            "./assets/css/*.{scss,css}"
         ]
     }
 }
