@@ -108,12 +108,15 @@ gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies
 });
 
 gulp.task('build:styles', ['clean:dist:styles'], function() {
+    let shouldMinify = config.styles.minify === true;
+    
     return gulp.src(config.styles.files)
         .pipe(sass({
-            outputStyle: 'compact',
-            sourceComments: true
+            outputStyle: shouldMinify ? 'compressed' : 'expanded',
+            indentWidth: shouldMinify === true ? 0 : 4,
+            sourceComments: false
         }).on('error', sass.logError))
-        .pipe(gulpif(config.styles.minify === true, cssmin()))
+        .pipe(gulpif(shouldMinify === true, cssmin()))
         .pipe(concat(config.styles.name + '.css'))
         .pipe(commentify(banner, {
             cfg: config,
