@@ -1,0 +1,40 @@
+.error-pane {
+    height: 100%;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: normal;
+    padding: 40px;
+
+    .wrapper {
+        max-width: 1024px;
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+
+    small {
+        color: #aaa;
+        font-size: 70%;
+    }
+
+    .go-back {
+        color: #fff;
+        text-decoration: none;
+        margin-top: 15px;
+        display: inline-block;
+    }
+
+    pre {
+        margin-top: 20px;
+        word-wrap: break-word;
+        font-family: monospace;
+        font-size: 16px;
+        line-height: 18px;
+        background-color: #111;
+        padding: 20px;
+        border-radius: 2px;
+        border: 1px solid #222;
+    }
+}
