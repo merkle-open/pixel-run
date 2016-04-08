@@ -69,6 +69,12 @@
         $addEventListeners: function() {
             var self = this;
 
+            self.$continue.bind('keydown', function(ev) {
+                if(ev.keyCode === 13) { // on press enter
+                    self.$continue.click();
+                }
+            });
+
             self.$continue.on('click', function() {
                 var res = self.result = self.$process();
 
@@ -89,6 +95,7 @@
             if(self.$processType === 'select') {
                 var $selectable = self.$step.find('.js-selectable');
                 var alreadySelected = false;
+
                 $selectable.on('click', function() {
                     alreadySelected = $(this).hasClass('selected');
                     $selectable.removeClass('selected');
