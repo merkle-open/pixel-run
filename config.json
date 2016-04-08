@@ -41,7 +41,7 @@
         ]
     },
     "app": {
-        "minify": false,
+        "minify": true,
         "target": "./www/dist",
         "name": "application",
         "files": [
@@ -58,7 +58,7 @@
         ]
     },
     "styles": {
-        "minify": false,
+        "minify": true,
         "target": "./www/dist",
         "name": "application",
         "files": [
