@@ -96,6 +96,12 @@
                 var $selectable = self.$step.find('.js-selectable');
                 var alreadySelected = false;
 
+                $selectable.bind('keypress', function(ev) {
+                    if(ev.keyCode === 13) { // on press enter
+                        $(this).click();
+                    }
+                });
+
                 $selectable.on('click', function() {
                     alreadySelected = $(this).hasClass('selected');
                     $selectable.removeClass('selected');
