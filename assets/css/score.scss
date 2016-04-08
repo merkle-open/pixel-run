@@ -1,6 +1,6 @@
 .score-wrapper {
-    max-width: 1000px;
-    width: 80%;
+    max-width: 1400px;
+    width: 100%;
     margin: 40px auto;
     color: #fff;
     border-radius: 3px;
@@ -9,14 +9,24 @@
 
     h1 {
         text-align: center;
-        font-size: 86px;
+        font-size: 85px;
         margin: 0 0 50px 0;
         font-weight: bold;
     }
 
-    table thead td {
-        border-bottom: 0px solid transparent;
-        font-size: 29px;
+    table {
+        thead {
+            td {
+                border-bottom: 0px solid transparent;
+                font-size: 30px;
+            }
+        }
+
+        tbody {
+            td {
+                font-size: 45px;
+            }
+        }
     }
 }
 
@@ -45,7 +55,7 @@
 
             tbody {
                 td {
-                    font-size: 18px;
+                    font-size: 45px;
                 }
             }
         }

@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build HyGbulH)
+ * Pixel. Run. Namics. (Build B1EVQVB)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.5.0-alpha
  * @license MIT Licensed by Namics AG
@@ -417,8 +417,8 @@ button.inverse {
 }
 
 .score-wrapper {
-    max-width: 1000px;
-    width: 80%;
+    max-width: 1400px;
+    width: 100%;
     margin: 40px auto;
     color: #fff;
     border-radius: 3px;
@@ -428,14 +428,18 @@ button.inverse {
 
 .score-wrapper h1 {
     text-align: center;
-    font-size: 86px;
+    font-size: 85px;
     margin: 0 0 50px 0;
     font-weight: bold;
 }
 
 .score-wrapper table thead td {
     border-bottom: 0px solid transparent;
-    font-size: 29px;
+    font-size: 30px;
+}
+
+.score-wrapper table tbody td {
+    font-size: 45px;
 }
 
 @media print {
@@ -458,7 +462,7 @@ button.inverse {
         font-size: 20px;
     }
     .score-wrapper table tbody td {
-        font-size: 18px;
+        font-size: 45px;
     }
 }
 

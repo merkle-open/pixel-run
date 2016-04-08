@@ -1,7 +1,7 @@
 <div class="content">
     <div class="grid">
         <div class="col-1-1">
-            <div class="score-wrapper paper-layer">
+            <div class="score-wrapper paper-layer" id="js-fetch-scores">
                 <h1>Highscores.</h1>
                 <table>
                     <thead>
@@ -29,18 +29,3 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        var fetchScores = function() {
-            if(Container.settings.debug) {
-                console.log('Refetching scores ...');
-            }
-
-            Util.getScoreTable({ index: true }, function(markup) {
-                $('#js-insert').html(markup);
-            });
-        };
-
-        window.setInterval(fetchScores, Container.settings.scores.refetch);
-    });
-</script>
