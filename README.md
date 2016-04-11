@@ -1,24 +1,3 @@
-## TOC
-
-* [About](#about)
-    * [Launch](#launch)
-    * [Build](#build)
-    * [Validation](#jshint)
-    * [Dependencies](#dependencies)
-* [License](#license)
-* [API](#api)
-    * [Classes](#classes)
-        * [Player](#player)
-        * [Tilemap](#tilemap)
-        * [Sprite](#sprite)
-        * ScoreText
-    * [Phaser States](#phaser-states)
-    * [Emergency](#emergency)
-* [Future](#future)
-* [Creator](#creator)
-    * [Custom Tilemap](#custom-tilemap)
-
-
 ## About
 
 #### Launch
