@@ -8,16 +8,10 @@ if [[ -z "$branch" ]]; then
     let branch="master"
 fi
 
-read -p "Where do you want to install the game? " location
-if [[ -z "$location" ]]; then
-    echo -e "Using default location ~/Desktop/ ...\n"
-    let location="~/Desktop"
-fi
-
 download_url="https://github.com/janbiasi/pixel-run/archive/$branch.zip"
 
 # change to basic working directory
-cd $location
+cd ~/Desktop
 
 # remove old directories if existing
 rm -rf ./pixel-run
