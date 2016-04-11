@@ -26,7 +26,7 @@ unzip ./installer.zip -d ./repository; rm -rf __MACOSX
 rm -f ./installer.zip
 
 # copy the main repository content to the working directory
-echo -e "\nCopying repository content to $location/pixel-run ...\n"
+echo -e "\nCopying repository content to ~/Desktop/pixel-run ...\n"
 cp -r "./repository/pixel-run-$branch" ./pixel-run
 rm -rf ./repository
 
