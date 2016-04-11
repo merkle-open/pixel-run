@@ -5,7 +5,6 @@ dist/assets
 www/dist/assets
 www/dist/dependencies.js
 
-
 # scores
 app/data/*
 
