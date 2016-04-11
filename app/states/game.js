@@ -160,7 +160,7 @@
                 id: pid,
                 name: realname,
                 username: username,
-                color: worlds[wtype].colors[pid],
+                color: '#fff',
                 image: function() {
                     return Container.World.players[pid].key + '.png';
                 },

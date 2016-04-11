@@ -1,5 +1,5 @@
 /**
- * Pixel. Run. Namics. (Build SyCBESW)
+ * Pixel. Run. Namics. (Build HySMjSF)
  * @author Jan Biasi <jan.biasi@namics.com>
  * @version v1.5.0-alpha
  * @license MIT Licensed by Namics AG
@@ -559,7 +559,7 @@
             extension: '',
             fontSize: '20px',
             fontFamily: 'Arial',
-            fill: Container.settings.worlds[wtype].contrast || '#ffffff'
+            fill: '#ffffff'
         };
 
         return this;
@@ -842,9 +842,9 @@
             var characters = Container.settings.game.players.variations;
 
             worldKeys.forEach(function(w) {
-                self.load.tilemap('tilemap-' + w, '/public/worlds/' + w + '/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
-                self.load.image('background-' + w, '/public/worlds/' + w + '/background.png');
-                self.load.image('tile-' + w, '/public/worlds/' + w + '/tile.png');
+                self.load.tilemap('tilemap-' + w, '/public/worlds/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
+                self.load.image('background-' + w, '/public/worlds/' + w + '/background-' + w + '.png');
+                self.load.image('tile-' + w, '/public/worlds/' + w + '/tile-' + w + '.png');
 
                 characters.forEach(function(vr) {
                     // Load default character for each world
@@ -1066,7 +1066,7 @@
                 id: pid,
                 name: realname,
                 username: username,
-                color: worlds[wtype].colors[pid],
+                color: '#fff',
                 image: function() {
                     return Container.World.players[pid].key + '.png';
                 },

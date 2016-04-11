@@ -27,7 +27,7 @@
             extension: '',
             fontSize: '20px',
             fontFamily: 'Arial',
-            fill: Container.settings.worlds[wtype].contrast || '#ffffff'
+            fill: '#ffffff'
         };
 
         return this;

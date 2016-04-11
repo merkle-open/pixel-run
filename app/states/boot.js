@@ -36,9 +36,9 @@
             var characters = Container.settings.game.players.variations;
 
             worldKeys.forEach(function(w) {
-                self.load.tilemap('tilemap-' + w, '/public/worlds/' + w + '/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
-                self.load.image('background-' + w, '/public/worlds/' + w + '/background.png');
-                self.load.image('tile-' + w, '/public/worlds/' + w + '/tile.png');
+                self.load.tilemap('tilemap-' + w, '/public/worlds/' + w + '/tilemap-' + w + '.json', null, Phaser.Tilemap.TILED_JSON);
+                self.load.image('background-' + w, '/public/worlds/' + w + '/background-' + w + '.png');
+                self.load.image('tile-' + w, '/public/worlds/' + w + '/tile-' + w + '.png');
 
                 characters.forEach(function(vr) {
                     // Load default character for each world
