@@ -5,7 +5,7 @@
     "Fabio Russo <fabio.russo@namics.com>"
   ],
   "description": "",
-  "main": "./www/dist/bin/app.min.js",
+  "main": "./www/dist/application.js",
   "moduleType": [],
   "license": "MIT License",
   "homepage": "http://namics.com/",
