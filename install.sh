@@ -1,19 +1,53 @@
-#!/bin/sh
+#!/bin/bash
+# installer v1.0 by jbiasi (Namics AG)
 
-# make sure base path exists
-mkdir -p ./com/namics/pixel-run
-cd ./com/namics
+# installation information
+read -p "Which branch do you want to install? " branch
+if [[ -z "$branch" ]]; then
+    echo -e "Using default branch master ...\n"
+    let branch="master"
+fi
 
-# download game and unpack it
-curl -s -O ./pixel-run-master.zip https://codeload.github.com/janbiasi/pixel-run/zip/master
-unzip -v ./pixel-run-master.zip -d ./pixel-run
+read -p "Where do you want to install the game? " location
+if [[ -z "$location" ]]; then
+    echo -e "Using default location ~/Desktop/ ...\n"
+    let location="~/Desktop"
+fi
 
-# go to extracted files
-cd pixel-run
+download_url="https://github.com/janbiasi/pixel-run/archive/$branch.zip"
 
-# installing dependencies
-npm install ./
-bower install
+# change to basic working directory
+cd $location
 
-# run the game
-npm start
+# remove old directories if existing
+rm -rf ./pixel-run
+
+# download latest release from GitHub mirror
+echo -e "\nDownloading application archive from $download_url (branch $branch) ...\n"
+curl -L -o ./installer.zip $download_url
+
+# extract zip and remove the old archive
+echo -e "\nExctracting archive to Desktop ...\n"
+unzip ./installer.zip -d ./repository; rm -rf __MACOSX
+rm -f ./installer.zip
+
+# copy the main repository content to the working directory
+echo -e "\nCopying repository content to $location/pixel-run ...\n"
+cp -r "./repository/pixel-run-$branch" ./pixel-run
+rm -rf ./repository
+
+# go into the repository
+cd ./pixel-run
+
+# install dependencies
+echo -e "\nInstalling dependencies ...\n"
+npm install .
+bower install .
+
+# run the build process
+echo -e "\nStarting build-process ...\n"
+gulp build:bundle
+
+# done
+echo -e "\nInstallation done!\n"
+exit 0
