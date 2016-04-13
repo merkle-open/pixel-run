@@ -291,7 +291,8 @@
 
             // Quit game on Ctrl + Y keypress
             $(document).on('keypress', function(ev) {
-                if(ev.ctrlKey && (ev.which === 89)) {
+                console.log('Keypress', ev);
+                if(ev.ctrlKey && (ev.which === 25)) {
                     Emergency.$quit();
                 }
             });
