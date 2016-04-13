@@ -42,4 +42,12 @@
             color: #fff;
         }
     }
+
+    a {
+        color: #bbb;
+        
+        &:focus {
+            color: #ccc;
+        }
+    }
 }

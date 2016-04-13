@@ -288,6 +288,13 @@
                     }
                 });
             };
+
+            // Quit game on Ctrl + Y keypress
+            $(document).on('keypress', function(ev) {
+                if(ev.ctrlKey && (ev.which === 89)) {
+                    Emergency.$quit();
+                }
+            });
         }
     };
 
