@@ -1,5 +1,5 @@
 /**
- * /app/provider/global.js
+ * /app/provider/globals.js
  * @author Jan Biasi <jan.biasi@namics.com>
  */
 (function(window, undefined) {

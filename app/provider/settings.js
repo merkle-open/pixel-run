@@ -15,7 +15,7 @@
         },
         render: {
             width: '100%',
-            height: 1000,
+            height: 1080,
             mode: 'canvas', // Phaser.[VALUE]
             node: 'js-launch-phaser-game',
             fontSize: 26
@@ -25,6 +25,7 @@
             arcadeGravity: 200
         },
         game: {
+            deadline: 1000,
             jumpOn: 'release', // release
             players: {
                 height: 160,
