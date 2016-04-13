@@ -125,7 +125,7 @@
      */
     Player.prototype.$update = function() {
         this.score = Util.calculate.score(this.x);
-        if(this.y >= Container.settings.render.height - Container.settings.game.players.height - KILL_BOUNDS) {
+        if(this.y >= Container.settings.game.deadline - Container.settings.game.players.height - KILL_BOUNDS) {
             this.die();
         }
 
