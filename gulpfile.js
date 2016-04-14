@@ -21,7 +21,7 @@ var currentBuildID;
 
 var banner = ['/**',
   ' * <%= pkg.header %> (Build <%= uuid %>)',
-  ' * @author <%= pkg.developer %>',
+  ' * @author <%= pkg.contributors[0] %>',
   ' * @version v<%= cfg.version %>',
   ' * @license <%= pkg.license %> Licensed by <%= pkg.company %>',
   ' * @see <%= pkg.homepage %>',
@@ -109,7 +109,7 @@ gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies
 
 gulp.task('build:styles', ['clean:dist:styles'], function() {
     let shouldMinify = config.styles.minify === true;
-    
+
     return gulp.src(config.styles.files)
         .pipe(sass({
             outputStyle: shouldMinify ? 'compressed' : 'expanded',

@@ -1,7 +1,7 @@
 {
     "hostname": "pixel-run.namics.dev",
     "port": "3000",
-    "version": "1.5.0-alpha",
+    "version": "2.0.0",
     "buildFile": ".build",
     "release": [
         "./app/**",
