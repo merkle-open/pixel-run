@@ -3,7 +3,7 @@
 release
 
 # build-compressed assets
-dist/assets
+dist/assets/
 
 # main css and js exports
 www/dist/application.css
