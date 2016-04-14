@@ -1,33 +1,35 @@
-var hbs = require('hbs');
-var path = require('path');
-var http = require('http');
-var cluster = require('cluster');
-var express = require('express');
-var chalk = require('chalk');
-var config = require(path.join(__dirname, '..', 'config.json'));
+'use strict';
+
+const hbs = require('hbs');
+const path = require('path');
+const http = require('http');
+const cluster = require('cluster');
+const express = require('express');
+const chalk = require('chalk');
+const config = require(path.join(__dirname, '..', 'config.json'));
 
 if(cluster.isMaster) {
     // Count the machine's CPUs
-    var cpuCount = require('os').cpus().length;
+    let cpuCount = require('os').cpus().length;
+
     console.log([
         'Starting the gameserver in ' + chalk.cyan('%d cores/threads') + ' ...',
         'Open up ' + chalk.green('http://%s:%d/') + ' in your browser', ''
     ].join('\n'), cpuCount, config.hostname, config.port);
 
     // Create a worker for each CPU
-    for (var i = 0; i < cpuCount; i += 1) {
+    for (let i = 0; i < cpuCount; i += 1) {
         cluster.fork();
     }
 
-    cluster.on('exit', function (worker) {
-        // Replace the dead worker,
-        // we're not sentimental
+    cluster.on('exit', worker => {
+        // Replace the dead worker, we're not sentimental
         console.log('Worker %d died, restarting ...', worker.id);
         cluster.fork();
     });
 } else {
     // Create a new express instance
-    var app = express();
+    let app = express();
 
     // Apply different helper methods
     require('./lib/helpers')(hbs);
@@ -45,11 +47,11 @@ if(cluster.isMaster) {
     require('./lib/error')(app);
 
     // Setting the port to environement port or 3000
-    var port = config.port || process.env.PORT || '3000';
+    let port = config.port || process.env.PORT || '3000';
     app.set('port', port);
 
     // Starts a http server with the express app
-    var server = http.createServer(app);
+    let server = http.createServer(app);
     server.listen(port);
 
     console.log([

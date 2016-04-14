@@ -9,6 +9,7 @@ const settings = require('./provider/settings');
 const router = express.Router();
 
 const BASE = path.join(__dirname, 'data');
+const ENCODING = 'utf8';
 const SCOREFILE = path.join(BASE, 'scores.json');
 
 var sortScore = (a, b) => {
@@ -68,7 +69,7 @@ router.get('/', (req, res, next) => {
 
 /* GET highscores page. */
 router.get('/scores', (req, res, next) => {
-    fs.readFile(SCOREFILE, 'utf8', (err, data) => {
+    fs.readFile(SCOREFILE, ENCODING, (err, data) => {
         if(err) {
             next(err);
         }
@@ -85,7 +86,7 @@ router.get('/scores', (req, res, next) => {
 
 /* GET send scores as JSON. */
 router.get('/api/get/scores', (req, res, next) => {
-    fs.readFile(SCOREFILE, 'utf8', (err, data) => {
+    fs.readFile(SCOREFILE, ENCODING, (err, data) => {
         if(err) {
             next(err);
         }
@@ -99,7 +100,7 @@ router.get('/api/get/scores', (req, res, next) => {
 router.post('/api/save/score', (req, res, next) => {
     async.waterfall([
         resolve => {
-            fs.readFile(SCOREFILE, 'utf8', (err, data) => {
+            fs.readFile(SCOREFILE, ENCODING, (err, data) => {
                 if(err) {
                     return resolve(err);
                 }
@@ -121,7 +122,7 @@ router.post('/api/save/score', (req, res, next) => {
             resolve(null, data, JSON.stringify(data, null, 2));
         },
         (data, inject, resolve) => {
-            fs.writeFile(SCOREFILE, inject, 'utf8', err => {
+            fs.writeFile(SCOREFILE, inject, ENCODING, err => {
                 if(err) {
                     return resolve(err);
                 }

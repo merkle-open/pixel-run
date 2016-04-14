@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "name": "asdf",
+    "score": "115",
+    "world": "space",
+    "username": "asdf",
+    "$id": "rypVBRn"
+  },
+  {
+    "name": "asdfasd",
+    "score": "73",
+    "world": "space",
+    "username": "asdfasd",
+    "$id": "SygpVH02"
+  }
+]
