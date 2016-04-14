@@ -11,10 +11,12 @@
         * [Player](#player)
         * [Tilemap](#tilemap)
         * [Sprite](#sprite)
-        * ScoreText
     * [Phaser States](#phaser-states)
     * [Emergency](#emergency)
-* [Future](#future)
+* [Creator](#creator)
+    * [Edit Worlds](#edit-world)
+    * [Custom Tilemap](#custom-tilemap)
+* [FAQ](https://github.com/janbiasi/pixel-run/blob/master/FAQ.md)
 
 
 ## About
@@ -60,8 +62,8 @@ to 5 (using ECMAScript 5).
 #### Dependencies
 * Gulp *(NPM)*
 * Phaser *(Bower)*
-* ~~jQuery *(Bower)*~~
-* BrowserStorage *(NPM)*
+* jQuery *(Bower)*
+* ~~BrowserStorage *(NPM)*~~
 
 ## License
 [MIT Licensed](LICENSE) by [Namics AG](http://namics.com/).
@@ -173,7 +175,7 @@ state. Read more about the states in the chapters below.
 
 ##### Boot
 The boot state loads all image, sprites and audio assets in the preload function and
-sets the basic [game settings](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/settings.js#L4)
+sets the basic [game settings](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/settings.js)
 in the create method. Define new media elements to get loaded within the [world settings](https://github.com/janbiasi/pixelrun/blob/master/app/provider/settings.js#L51).
 
 ##### Preload
@@ -181,8 +183,15 @@ Used for pregame settings such as the game mode of phaser (Arcade in this case) 
 the default settings [here](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/states/preload.js).
 
 ##### Game
-Main game process, uses the [game settings](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/settings.js#L4) and
+Main game process, uses the [game settings](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/settings.js) and
 the utility stuff. If you want to change something in the Jump N Run game itself, you'll have to change it [here](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/states/game.js).
+
+##### Over
+This state will show the resume screen with the highscores. Afterwards it will run the **Sync** state.
+
+##### Sync
+At least the sync state will synchronize all the player scores to the file <code>/app/data/scores.json</code> via an
+AJAX request to <code>HTTP POST /api/save/score</code>.
 
 ### Emergency
 Sometimes you want to kill all players in the world or even quit the game itself due some
@@ -203,6 +212,82 @@ Emergency.$killAll()
 This method will use the <code>$killAll</code> method and additionally exits the game, saves the scores and display
 the overview like every player would die.
 
+> You can also use the shortcut keycombination <code>Ctrl + Y</code> to quit the game!
+
 ```js
 Emergency.$quit()
 ```
+
+## Creator
+
+### Edit World
+
+Players of the game can edit the played world on a second computer. Therefor open up the tilemap <code>project.tmx</code>
+located under <code>/worlds/welt1/</code>. Maybe you have to unzip the <code>welt1.zip</code> before and extract the main content
+to the folder listed above.
+
+Next up, the players can edit the world in the Tiled Editor installed on the computer. At the end you have to export
+the edited map as JSON via <code>Datei > Exportieren als</code> and then select <code>welt1.json</code>.
+
+That's it.
+
+### Custom Tilemap
+
+You can create custom tilemaps with this branch, just open up the tiled editor and do the following.
+**Bold** marked sentences or quotes are important things about the current step you're processing.
+
+#### 1. Settings
+
+Create a new tilemap project with the following settings:
+
+| Key          | Value          |
+|--------------|----------------|
+| Orientation  | Orthogonal     |
+| Tile-Layer-Format | CSV         |
+| Tile-Drawing-Order | Right Down |
+| Tile-Size    | 32px x 32px    |
+
+#### 2. Layers
+
+Create a layer with the name "world" (the name must be world). Layers can be
+renamed by double-clicking the layer, default layer name is "Kachelebene 1".
+
+**The layer must fit the name <code>world</code>**
+
+#### 3. Import tile
+
+Import a new tileset by pressing the left button in the right-bottom panel
+of your tiled editor. It will ask you for a tile-name and a location. Drag the created
+tile which has a size of 32x32px into the right bottom panel and it will auto-fill
+the alert-box for you. Press "Ok" to continue then.
+
+**The importet tile must fit the name <code>tile-{{name}}</code>**
+
+#### 4. Draw
+
+Select the importet tile and draw with it in the tiled editor.
+
+#### 5. Export
+
+Export the map by the menu "Datei > Exportieren als ..." and then select JSON.
+
+#### 6. Background
+
+Use an existing background or create one in photoshop together with a designer.
+
+**The background name must fit the name <code>background-{{name}}</code>**
+
+#### 7. Final steps
+
+After this process, place all the files (project file is optional) in a folder called
+<code>{{name}}</code>. The name-placeholder will be used to load your custom map. For example;
+if you create a folder called "myworld" you have to call the files the following:
+
+* <code>tilemap-myworld.json</code>
+* <code>tile-myworld.png</code>
+* <code>background-myworld.png</code>
+* <code>project.tmx</code> *(optional!)*
+
+Place your world folder in <code>/pixel-run/worlds/{{name}}</code> and start the game!
+
+**The exported filename must fit the convention <code>tilemap-{{name}}</code>**
