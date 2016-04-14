@@ -1,5 +1,6 @@
 {
   "name": "pixel-run-namics",
+  "version": "1.0.0",
   "authors": [
     "Jan Biasi <jan.biasi@namics.com>",
     "Fabio Russo <fabio.russo@namics.com>"
@@ -14,6 +15,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "vendor",
     "test",
     "tests",
     "release"
