@@ -22,7 +22,7 @@
         "dist": "./dist/**/*.*"
     },
     "copy": {
-        "./assets/**/*": "./www/dist/assets/"
+        "./src/**/*": "./www/dist/assets/"
     },
     "bundle": {
         "name": "app",
@@ -62,10 +62,10 @@
         "target": "./www/dist",
         "name": "application",
         "files": [
-            "./assets/css/reset.{scss,css}",
-            "./assets/css/grid.{scss,css}",
-            "./assets/css/typo.{scss,css}",
-            "./assets/css/*.{scss,css}"
+            "./src/css/reset.{scss,css}",
+            "./src/css/grid.{scss,css}",
+            "./src/css/typo.{scss,css}",
+            "./src/css/*.{scss,css}"
         ]
     }
 }
