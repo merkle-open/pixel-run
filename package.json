@@ -1,10 +1,12 @@
 {
   "name": "pixel-run-namics",
   "header": "Pixel. Run. Namics.",
-  "version": "0.0.0",
-  "description": "",
-  "main": "",
+  "license": "MIT",
+  "version": "1.0.0",
+  "description": "A simple jump & run game made by Namics people",
+  "main": "./www/dist/application.js",
   "scripts": {
+    "test": "./node_modules/.bin/mocha ./tests/*.js",
     "start": "node ./app/server",
     "debug": "set DEBUG=express:* && npm start",
     "preinstall": "rm -rf ./www/dist && rm -rf ./node_modules && rm -rf ./vendor",
@@ -15,15 +17,14 @@
     "type": "git",
     "url": "https://git.namics.com/jan.biasi/pixel-run.git"
   },
-  "developer": "Jan Biasi <jan.biasi@namics.com>",
-  "authors": [
+  "author": "Namics AG",
+  "contributors": [
     "Jan Biasi <jan.biasi@namics.com>",
     "Fabio Russo <fabio.russo@namics.com>"
   ],
-  "homepage": "http://namics.com/",
-  "company": "Namics AG",
-  "license": "MIT",
   "devDependencies": {
+    "bower-json": "^0.8.1",
+    "chai": "^3.5.0",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
@@ -36,6 +37,7 @@
     "gulp-uglify": "^1.5.1",
     "gulp-zip": "^3.1.0",
     "jshint": "^2.9.1",
+    "mocha": "^2.4.5",
     "morgan": "^1.6.1"
   },
   "dependencies": {
@@ -51,5 +53,12 @@
     "hpp": "^0.2.1",
     "serve-favicon": "^2.3.0",
     "shortid": "^2.2.4"
-  }
+  },
+  "bugs": {
+    "url" : "https://git.namics.com/jan.biasi/pixel-run/issues",
+    "email": "jan.biasi@namics.com"
+  },
+  "homepage": "http://namics.com/",
+  "company": "Namics AG",
+  "keywords": ["Pixel. Run", "OFFA", "tunOstschweiz", "Namics AG", "Game"]
 }
