@@ -1,14 +1,16 @@
-var hbs = require('hbs');
-var path = require('path');
-var pollution = require('hpp');
-var logger = require('morgan');
-var helmet = require('helmet');
-var express = require('express');
-var favicon = require('serve-favicon');
-var bodyParser = require('body-parser');
-var hbutils = require('hbs-utils')(hbs);
-var cookieParser = require('cookie-parser');
-var base = path.join(__dirname, '..', '..', 'www');
+'use strict';
+
+const hbs = require('hbs');
+const path = require('path');
+const pollution = require('hpp');
+const logger = require('morgan');
+const helmet = require('helmet');
+const express = require('express');
+const favicon = require('serve-favicon');
+const bodyParser = require('body-parser');
+const hbutils = require('hbs-utils')(hbs);
+const cookieParser = require('cookie-parser');
+const base = path.join(__dirname, '..', '..', 'www');
 
 exports = module.exports = function(app) {
     // Registering partials

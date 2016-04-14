@@ -9,7 +9,7 @@ exports = module.exports = function(handlebars) {
         return ret;
     });
 
-    handlebars.registerHelper('debug', (optionalValue) => {
+    handlebars.registerHelper('debug', optionalValue => {
         console.log('Current Context');
         console.log('====================');
         console.log(this);
@@ -21,7 +21,7 @@ exports = module.exports = function(handlebars) {
         }
     });
 
-    handlebars.registerHelper('json', (context) => {
+    handlebars.registerHelper('json', context => {
         return JSON.stringify(context);
     });
 }
