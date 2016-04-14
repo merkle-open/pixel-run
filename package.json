@@ -13,6 +13,9 @@
     "install": "bower install",
     "postinstall": "gulp build:default"
   },
+  "engines" : {
+    "node" : ">=4.1.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://git.namics.com/jan.biasi/pixel-run.git"
@@ -38,7 +41,8 @@
     "gulp-zip": "^3.1.0",
     "jshint": "^2.9.1",
     "mocha": "^2.4.5",
-    "morgan": "^1.6.1"
+    "morgan": "^1.6.1",
+    "package-json-validator": "^0.6.1"
   },
   "dependencies": {
     "async": "^1.5.2",
@@ -55,10 +59,16 @@
     "shortid": "^2.2.4"
   },
   "bugs": {
-    "url" : "https://git.namics.com/jan.biasi/pixel-run/issues",
+    "url": "https://git.namics.com/jan.biasi/pixel-run/issues",
     "email": "jan.biasi@namics.com"
   },
   "homepage": "http://namics.com/",
   "company": "Namics AG",
-  "keywords": ["Pixel. Run", "OFFA", "tunOstschweiz", "Namics AG", "Game"]
+  "keywords": [
+    "Pixel. Run",
+    "OFFA",
+    "tunOstschweiz",
+    "Namics AG",
+    "Game"
+  ]
 }
