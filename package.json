@@ -10,11 +10,11 @@
     "start": "node ./app/server",
     "debug": "set DEBUG=express:* && npm start",
     "preinstall": "rm -rf ./www/dist && rm -rf ./node_modules && rm -rf ./vendor",
-    "install": "bower install",
+    "install": "./node_modules/bower/bin/bower install",
     "postinstall": "gulp build:default"
   },
-  "engines" : {
-    "node" : ">=4.1.0"
+  "engines": {
+    "node": ">=4.1.0"
   },
   "repository": {
     "type": "git",
@@ -47,6 +47,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "body-parser": "^1.14.2",
+    "bower": "^1.7.9",
     "chalk": "^1.1.1",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
