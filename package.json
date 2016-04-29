@@ -9,9 +9,8 @@
     "test": "./node_modules/.bin/mocha ./tests/*.js",
     "start": "node ./app/server",
     "debug": "set DEBUG=express:* && npm start",
-    "preinstall": "rm -rf ./www/dist && rm -rf ./node_modules && rm -rf ./vendor",
-    "install": "./node_modules/bower/bin/bower install",
-    "postinstall": "gulp build:default"
+    "preinstall": "rm -rf ./vendor/ && rm -rf ./www/dist/",
+    "postinstall": "./node_modules/bower/bin/bower install && gulp build:default"
   },
   "engines": {
     "node": ">=4.1.0"
