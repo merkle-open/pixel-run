@@ -10,6 +10,7 @@
     "start": "node ./app/server",
     "debug": "set DEBUG=express:* && npm start",
     "preinstall": "rm -rf ./vendor/ && rm -rf ./www/dist/",
+    "install": "npm i -g gulp",
     "postinstall": "./node_modules/bower/bin/bower install && gulp build:default"
   },
   "engines": {
