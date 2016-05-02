@@ -13,7 +13,8 @@ module.exports = function (shipit) {
             repositoryUrl: config.repository,
             ignores: config.ignore,
             keepReleases: 3,
-            shallowClone: true
+            shallowClone: true,
+            key: config.ssh
         },
         production: {
             servers: `${config.username}@${config.hostname}`
