@@ -1,4 +1,4 @@
-## TOC
+## Table of Contents
 
 * [About](#about)
     * [Launch](#launch)
