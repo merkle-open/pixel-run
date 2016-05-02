@@ -1,11 +1,11 @@
 {
-    "branch": "master",
+    "branch": "online",
     "workspace": "deploy",
     "username": "namics",
     "hostname": "lsharedli01.sg.ch.namics.com",
     "destination": "/var/www/pixelrun.namics.com/shipit/",
     "repository": "https://github.com/janbiasi/pixel-run.git",
-    "ssh": "./path/to/key.ssh",
+    "ssh": "/path/to/key.ssh",
     "ignore": [
         ".git",
         "node_modules",
