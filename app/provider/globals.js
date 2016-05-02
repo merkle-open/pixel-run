@@ -15,6 +15,7 @@
             },
             Audio: {}
         },
+        Controls: {},
         Factory: {},
         Session: {},
         Emergency: {},

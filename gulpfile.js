@@ -57,6 +57,19 @@ gulp.task('copy', function() {
     }
 });
 
+gulp.task('build:resolution', function() {
+    let res = config.resolution;
+    let source = `./src/resolutions/${res}/`;
+
+    // TODO: test implementation
+    return true;
+
+    return gulp.src([
+        `${source}/**/*`,
+        './src/base/**/*'
+    ]).pipe(gulp.dest('./src/img/'));
+});
+
 gulp.task('archive', ['build:start', 'build:default'], function() {
     return gulp.src(config.release)
         .pipe(archive(currentBuildID + '-' + config.version + '.zip'))

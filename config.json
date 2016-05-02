@@ -1,4 +1,5 @@
 {
+    "resolution": "1920x1080",
     "hostname": "pixel-run.namics.dev",
     "port": "3000",
     "version": "2.0.0",
@@ -47,6 +48,7 @@
         "files": [
             "./app/lib/intro.js",
             "./app/provider/util.js",
+            "./app/provider/controls.js",
             "./app/provider/store.js",
             "./app/provider/fetch.js",
             "./app/classes/player.js",

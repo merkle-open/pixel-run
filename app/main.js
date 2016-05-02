@@ -10,12 +10,16 @@
     var config = settings.render;
 
     console.log('Welcome to the Pixel. Run. game by Namics AG!\n');
+    Controls.Arrows.disable();
 
     stepper.start(function($lastStep) {
         // Get the current selected world and players
         settings.worldType = HUD.$store.world;
         settings.currentPlayers = Util.getValues(HUD.$store.players);
         settings.game.players.amount = settings.currentPlayers.length;
+
+        // Enable the arrow keys
+        Controls.Arrows.enable();
 
         // Create a new phaser game
         var game = new Phaser.Game(config.width, config.height, Phaser.CANVAS, config.node);
