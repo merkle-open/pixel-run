@@ -26,7 +26,7 @@
         },
         game: {
             deadline: 1000,
-            jumpOn: 'release', // release
+            jumpOn: 'push', // push or release
             players: {
                 height: 160,
                 width: 153,

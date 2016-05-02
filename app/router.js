@@ -67,6 +67,14 @@ router.get('/', (req, res, next) => {
     });
 });
 
+/* GET about page. */
+router.get('/about', (req, res, next) => {
+    res.render('about', {
+        title: 'About Pixel. Run.',
+        uuid: uuid.generate()
+    });
+});
+
 /* GET highscores page. */
 router.get('/scores', (req, res, next) => {
     fs.readFile(SCOREFILE, ENCODING, (err, data) => {
