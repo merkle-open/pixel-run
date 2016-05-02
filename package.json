@@ -7,10 +7,10 @@
   "main": "./www/dist/application.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./tests/*.js",
-    "start": "node ./app/server",
-    "debug": "set DEBUG=express:* && npm start",
-    "preinstall": "npm install -g gulp",
-    "postinstall": "./node_modules/bower/bin/bower install && gulp build:default"
+    "start": "set DEBUG=none && node ./app/server",
+    "debug": "set DEBUG=express:* && node ./app/server",
+    "deploy": "shipit production deploy",
+    "postinstall": "./node_modules/bower/bin/bower install && ./node_modules/.bin/gulp build:default"
   },
   "engines": {
     "node": ">=4.1.0"
