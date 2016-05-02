@@ -16,3 +16,6 @@ app/data/scores.json
 # dependencies
 node_modules
 vendor
+
+# deploy stuff
+deploy
