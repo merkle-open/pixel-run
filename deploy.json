@@ -1,0 +1,17 @@
+{
+    "branch": "master",
+    "workspace": "deploy",
+    "username": "namics",
+    "hostname": "lsharedli01.sg.ch.namics.com",
+    "destination": "/var/www/pixelrun.namics.com/shipit/",
+    "repository": "https://github.com/janbiasi/pixel-run.git",
+    "ignore": [
+        ".git",
+        "node_modules",
+        "vendor",
+        "tests",
+        "*.MD",
+        ".build",
+        ".jshintrc"
+    ]
+}
