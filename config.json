@@ -1,7 +1,7 @@
 {
     "resolution": "1920x1080",
     "hostname": "pixel-run.namics.dev",
-    "port": "3000",
+    "port": "9071",
     "version": "2.0.0",
     "buildFile": ".build",
     "release": [
