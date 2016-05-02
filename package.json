@@ -9,11 +9,12 @@
     "test": "./node_modules/.bin/mocha ./tests/*.js",
     "start": "set DEBUG=none && node ./app/server",
     "debug": "set DEBUG=express:* && node ./app/server",
-    "deploy": "shipit production deploy",
-    "postinstall": "./node_modules/bower/bin/bower install && ./node_modules/.bin/gulp build:default"
+    "deploy": "shipit production deploy && shipit production build",
+    "init": "./node_modules/.bin/bower install && ./node_modules/.bin/gulp build:default",
+    "preinstall": "rm -rf ./vendor ./node_modules"
   },
   "engines": {
-    "node": ">=4.1.0"
+    "node": ">=4.2.0"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,6 @@
     "Fabio Russo <fabio.russo@namics.com>"
   ],
   "devDependencies": {
-    "bower": "^1.7.9",
     "bower-json": "^0.8.1",
     "chai": "^3.5.0",
     "del": "^2.2.0",

@@ -20,4 +20,8 @@ module.exports = function (shipit) {
             servers: `${config.username}@${config.hostname}`
         }
     });
+
+    shipit.blTask('build', () => {
+        return shipit.remote('npm run init');
+    });
 };
