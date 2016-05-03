@@ -56,11 +56,12 @@ run the task <code>lint</code> to validate all the files and generating an outpu
 
 > If there's a warning/info *"ES5 option is now set per default"* you can ignore this message
 and just keep on reading. This message will be removed in a newer version of JSHint and is generated
-due the <code>esversion</code> in the [.jshintrc](https://github.com/janbiasi/pixelrun/blob/master/.jshintrc#L7) is set
-to 5 (using ECMAScript 5).
+due the <code>esversion</code> in the [.jshintrc](https://github.com/janbiasi/pixel-run/blob/master/.jshintrc) is set to 5 (using ECMAScript 5).
 
 #### Dependencies
 * Gulp *(NPM)*
+* Express *(NPM)*
+* Shipit *(NPM)*
 * Phaser *(Bower)*
 * jQuery *(Bower)*
 * ~~BrowserStorage *(NPM)*~~
@@ -175,16 +176,15 @@ state. Read more about the states in the chapters below.
 
 ##### Boot
 The boot state loads all image, sprites and audio assets in the preload function and
-sets the basic [game settings](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/settings.js)
-in the create method. Define new media elements to get loaded within the [world settings](https://github.com/janbiasi/pixelrun/blob/master/app/provider/settings.js#L51).
+sets the basic [game settings](https://github.com/janbiasi/pixel-run/blob/master/app/provider/settings.js)
+in the create method. Define new media elements to get loaded within the [world settings](https://github.com/janbiasi/pixel-run/blob/master/app/provider/settings.js#L55).
 
 ##### Preload
-Used for pregame settings such as the game mode of phaser (Arcade in this case) and background settings ect. Visit
-the default settings [here](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/states/preload.js).
+Used for pregame settings such as the game mode of phaser (Arcade in this case) and background settings ect. Visit the default settings [here](https://github.com/janbiasi/pixel-run/blob/master/app/states/preload.js).
 
 ##### Game
-Main game process, uses the [game settings](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/settings.js) and
-the utility stuff. If you want to change something in the Jump N Run game itself, you'll have to change it [here](https://github.com/janbiasi/tun-ostschweiz/blob/master/app/states/game.js).
+Main game process, uses the [game settings](https://github.com/janbiasi/pixel-run/blob/master/app/provider/settings.js) and
+the utility stuff. If you want to change something in the Jump N Run game itself, you'll have to change it [here](https://github.com/janbiasi/pixel-run/blob/master/app/states/game.js).
 
 ##### Over
 This state will show the resume screen with the highscores. Afterwards it will run the **Sync** state.
