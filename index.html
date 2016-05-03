@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Pixel. Run. by Namics AG by janbiasi</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="stylesheets/normalize.css" media="screen" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href="stylesheets/stylesheet.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="stylesheets/github-light.css" media="screen" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <section class="page-header">
+        <h1 class="project-name">Pixel. Run. by Namics AG</h1>
+
+        <h2 class="project-tagline">
+            Mirror from the Namics AG internal repository of the Pixel.
+            Run. game.
+        </h2>
+        <a class="btn" href="https://github.com/janbiasi/pixel-run">Source Code</a> <a class="btn" href=
+        "https://github.com/janbiasi/pixel-run/zipball/master">Download
+        .zip</a> <a class="btn" href=
+        "https://github.com/janbiasi/pixel-run/tarball/master">Download
+        .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+        <h2>
+            <a aria-hidden="true" class="anchor" href="#about" id=
+            "about"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>About
+        </h2>
+
+        <h4>
+            <a aria-hidden="true" class="anchor" href=
+            "#master-version-offa" id=
+            "master-version-offa"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Master Version (OFFA)
+        </h4>
+
+        <p>
+            The latest release for demonstration or showcases is located in
+            the branch <code><a href=
+            "https://git.namics.com/jan.biasi/pixel-run/tree/master">master</a></code>
+        </p>
+
+        <h4>
+            <a aria-hidden="true" class="anchor" href=
+            "#standalone-version-tilemap-editing" id=
+            "standalone-version-tilemap-editing"><span aria-hidden="true"
+            class="octicon octicon-link"></span></a>Standalone Version
+            (Tilemap Editing)
+        </h4>
+
+        <p>
+            The standalone version is located in the branch <code><a href=
+            "https://git.namics.com/jan.biasi/pixel-run/tree/creator">creator</a></code>
+        </p>
+
+        <h4>
+            <a aria-hidden="true" class="anchor" href=
+            "#online-version-pixelrunnamicscom" id=
+            "online-version-pixelrunnamicscom"><span aria-hidden="true"
+            class="octicon octicon-link"></span></a>Online Version
+            (pixelrun.namics.com)
+        </h4>
+
+        <p>
+            The online version with more content and deployment
+            environement is located in the branch <code><a href=
+            "https://git.namics.com/jan.biasi/pixel-run/tree/online">online</a></code>
+        </p>
+
+        <h4>
+            <a aria-hidden="true" class="anchor" href="#documentations" id=
+            "documentations"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Documentations
+        </h4>
+
+        <p>
+            All documents related to this program/game are located in the
+            branch <code><a href=
+            "https://git.namics.com/jan.biasi/pixel-run/tree/docs">docs</a></code>
+        </p>
+
+        <h2>
+            <a aria-hidden="true" class="anchor" href="#build-process" id=
+            "build-process"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Build Process
+        </h2>
+
+        <h4>
+            <a aria-hidden="true" class="anchor" href="#gulp" id=
+            "gulp"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Gulp
+        </h4>
+
+        <p>
+            A build can be triggered over your systems CLI like the launch
+            command above. There are several tasks avaible (listed below),
+            but if you want to re-build the whole application, simpy run
+            the <code>gulp</code> command, and everything is done.
+        </p>
+
+        <blockquote>
+            <p>
+                To apply settings changed, you have to <strong>rebuild the
+                application</strong>, simply rund the default
+                <code>gulp</code> command to do this.
+            </p>
+        </blockquote>
+
+        <pre><code>gulp # run whole build
+
+# remove builded files, additionally use :app or
+# :dependencies to just remove the related files
+gulp clean:dist
+
+# builds the app or dependencies only
+gulp build:app
+gulp build:dependencies
+
+# watches the app or dependencies and auto-trigger
+# the right builds on file changes
+gulp watch:app
+gulp watch:dependencies
+</code></pre>
+        <h6>
+            <a aria-hidden="true" class="anchor" href="#plugins" id=
+            "plugins"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Plugins
+        </h6>
+
+        <ul>
+            <li>gulp@^3.9.0
+            </li>
+
+            <li>gulp-concat@^2.6.0
+            </li>
+
+            <li>gulp-cssmin@^0.1.7
+            </li>
+
+            <li>gulp-gzip@^1.2.0
+            </li>
+
+            <li>gulp-header@^1.7.1
+            </li>
+
+            <li>gulp-if@^2.0.0
+            </li>
+
+            <li>gulp-jshint@^2.0.0
+            </li>
+
+            <li>gulp-rename@^1.2.2
+            </li>
+
+            <li>gulp-uglify@^1.5.1
+            </li>
+
+            <li>gulp-zip@^3.1.0
+            </li>
+
+            <li>jshint@^2.9.1
+            </li>
+
+            <li>mocha@^2.4.5
+            </li>
+
+            <li>morgan@^1.6.1
+            </li>
+        </ul>
+
+        <h4>
+            <a aria-hidden="true" class="anchor" href="#jshint" id=
+            "jshint"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>JSHint
+        </h4>
+
+        <p>
+            There's a gulp task integrated which helps you to lint the
+            application files under <code>/app</code>. Simply run the task
+            <code>lint</code> to validate all the files and generating an
+            output.
+        </p>
+
+        <blockquote>
+            <p>
+                If there's a warning/info <em>"ES5 option is now set per
+                default"</em> you can ignore this message and just keep on
+                reading. This message will be removed in a newer version of
+                JSHint and is generated due the <code>esversion</code> in
+                the <a href=
+                "https://github.com/janbiasi/pixel-run/blob/master/.jshintrc">
+                .jshintrc</a> is set to 5 (using ECMAScript 5).
+            </p>
+        </blockquote>
+
+        <h2>
+            <a aria-hidden="true" class="anchor" href="#start" id=
+            "start"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Start
+        </h2>
+
+        <p>
+            The game can be started over your systems CLI, the only
+            requirement is, that Node.js 4.+ is installed on your machine.
+            Run the command below and see the magic.
+        </p>
+
+        <pre><code>npm start
+</code></pre>
+        <h2>
+            <a aria-hidden="true" class="anchor" href="#main-dependencies"
+            id="main-dependencies"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Main Dependencies
+        </h2>
+
+        <ul>
+            <li>Gulp <em>(NPM)</em>
+            </li>
+
+            <li>Express <em>(NPM)</em>
+            </li>
+
+            <li>Shipit <em>(NPM)</em>
+            </li>
+
+            <li>Phaser <em>(Bower)</em>
+            </li>
+
+            <li>jQuery <em>(Bower)</em>
+            </li>
+        </ul>
+
+        <h2>
+            <a aria-hidden="true" class="anchor" href="#phaser-states" id=
+            "phaser-states"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Phaser States
+        </h2>
+
+        <h4>
+            <a aria-hidden="true" class="anchor" href="#states" id=
+            "states"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>States
+        </h4>
+
+        <p>
+            There are four general states avaible which are used for the
+            game process. The Preload, Boot, Game and Update state. Read
+            more about the states in the chapters below.
+        </p>
+
+        <h5>
+            <a aria-hidden="true" class="anchor" href="#boot" id=
+            "boot"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Boot
+        </h5>
+
+        <p>
+            The boot state loads all image, sprites and audio assets in the
+            preload function and sets the basic <a href=
+            "https://github.com/janbiasi/pixel-run/blob/master/app/provider/settings.js">
+            game settings</a> in the create method. Define new media
+            elements to get loaded within the <a href=
+            "https://github.com/janbiasi/pixel-run/blob/master/app/provider/settings.js#L55">
+            world settings</a>.
+        </p>
+
+        <h5>
+            <a aria-hidden="true" class="anchor" href="#preload" id=
+            "preload"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Preload
+        </h5>
+
+        <p>
+            Used for pregame settings such as the game mode of phaser
+            (Arcade in this case) and background settings ect. Visit the
+            default settings <a href=
+            "https://github.com/janbiasi/pixel-run/blob/master/app/states/preload.js">
+            here</a>.
+        </p>
+
+        <h5>
+            <a aria-hidden="true" class="anchor" href="#game" id=
+            "game"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Game
+        </h5>
+
+        <p>
+            Main game process, uses the <a href=
+            "https://github.com/janbiasi/pixel-run/blob/master/app/provider/settings.js">
+            game settings</a> and the utility stuff. If you want to change
+            something in the Jump N Run game itself, you'll have to change
+            it <a href=
+            "https://github.com/janbiasi/pixel-run/blob/master/app/states/game.js">
+            here</a>.
+        </p>
+
+        <h5>
+            <a aria-hidden="true" class="anchor" href="#over" id=
+            "over"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Over
+        </h5>
+
+        <p>
+            This state will show the resume screen with the highscores.
+            Afterwards it will run the <strong>Sync</strong> state.
+        </p>
+
+        <h5>
+            <a aria-hidden="true" class="anchor" href="#sync" id=
+            "sync"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Sync
+        </h5>
+
+        <p>
+            At least the sync state will synchronize all the player scores
+            to the file <code>/app/data/scores.json</code> via an AJAX
+            request to <code>HTTP POST /api/save/score</code>.
+        </p>
+
+        <h3>
+            <a aria-hidden="true" class="anchor" href="#emergency" id=
+            "emergency"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>Emergency
+        </h3>
+
+        <p>
+            Sometimes you want to kill all players in the world or even
+            quit the game itself due some unexpected bugs or lags. But you
+            will loose the player scores if you just reload the browser
+            window (press F5), so it is <strong>not recommended to reload
+            the page to exit</strong>! There are two methods provided as
+            soon as the game starts, they are located under the global
+            <code>Emergency</code> object. Each method has to be confirmed
+            with the yes button before it will affect your current game.
+        </p>
+
+        <h4>
+            <a aria-hidden="true" class="anchor" href="#killall" id=
+            "killall"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>$killAll
+        </h4>
+
+        <p>
+            This method will kill all alive players in your game, e.g. if
+            one player lasts in the game and he hang up in an obstacle on
+            the map and can't move further, this method will be great to
+            kill him (or just use the one below).
+        </p>
+
+        <div class="highlight highlight-source-js">
+            <pre><span class="pl-smi">Emergency</span>.<span class=
+            "pl-en">$killAll</span>()</pre>
+        </div>
+        <h4>
+            <a aria-hidden="true" class="anchor" href="#quit" id=
+            "quit"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>$quit
+        </h4>
+        <p>
+            This method will use the <code>$killAll</code> method and
+            additionally exits the game, saves the scores and display the
+            overview like every player would die.
+        </p>
+        <blockquote>
+            <p>
+                You can also use the shortcut keycombination <code>Ctrl +
+                Y</code> to quit the game!
+            </p>
+        </blockquote>
+
+        <div class="highlight highlight-source-js">
+            <pre>
+                <span class="pl-smi">Emergency</span>.<span class="pl-en">$quit</span>()</pre>
+        </div>
+        <h2>
+            <a aria-hidden="true" class="anchor" href="#license" id=
+            "license"><span aria-hidden="true" class=
+            "octicon octicon-link"></span></a>License
+        </h2>
+        <p>
+            <a href="LICENSE">MIT Licensed</a> by <a href=
+            "http://namics.com/">Namics AG</a>.
+        </p>
+        <footer class="site-footer">
+            <span class="site-footer-owner">
+                <a href="https://github.com/janbiasi/pixel-run">Pixel. Run. by NamicsAG</a> is maintained by
+                <a href="https://github.com/janbiasi">janbiasi</a>.
+            </span>
+        </footer>
+    </section>
+</body>
+</html>
