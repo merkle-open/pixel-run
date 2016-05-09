@@ -23,18 +23,18 @@
 
 #### Master Version (OFFA)
 The latest release for demonstration or showcases is located
-in the branch <code>[master](https://git.namics.com/jan.biasi/pixel-run/tree/master)</code>
+in the branch <code>[master](https://git.namics.com/namics/pixel-run/tree/master)</code>
 
 #### Standalone Version (Tilemap Editing)
-The standalone version is located in the branch <code>[creator](https://git.namics.com/jan.biasi/pixel-run/tree/creator)</code>
+The standalone version is located in the branch <code>[creator](https://git.namics.com/namics/pixel-run/tree/creator)</code>
 
 #### Online Version (pixelrun.namics.com)
 The online version with more content and deployment environement is located
-in the branch <code>[online](https://git.namics.com/jan.biasi/pixel-run/tree/online)</code>
+in the branch <code>[online](https://git.namics.com/namics/pixel-run/tree/online)</code>
 
 #### Documentations
 All documents related to this program/game are located in the branch
-<code>[docs](https://git.namics.com/jan.biasi/pixel-run/tree/docs)</code>
+<code>[docs](https://git.namics.com/namics/pixel-run/tree/docs)</code>
 
 ## Start
 
