@@ -53,6 +53,7 @@
     "chalk": "^1.1.1",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
+    "gulp": "^3.9.1",
     "gulp-sass": "^2.2.0",
     "hbs": "^4.0.0",
     "hbs-utils": "0.0.3",
