@@ -35,12 +35,11 @@ cd ./pixel-run
 
 # install dependencies
 echo -e "\nInstalling dependencies ...\n"
-npm install .
-bower install .
+npm install && bower install
 
 # run the build process
 echo -e "\nStarting build-process ...\n"
-gulp build:bundle
+gulp build:postinstall
 
 # done
 echo -e "\nInstallation done!\n"
