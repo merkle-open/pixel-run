@@ -1,11 +1,12 @@
 'use strict';
 
+const fs = require('fs');
 const hbs = require('hbs');
 const path = require('path');
 const http = require('http');
+const chalk = require('chalk');
 const cluster = require('cluster');
 const express = require('express');
-const chalk = require('chalk');
 const config = require(path.join(__dirname, '..', 'config.json'));
 
 if(cluster.isMaster) {
