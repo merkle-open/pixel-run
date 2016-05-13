@@ -8,12 +8,11 @@ var sass = require('gulp-sass');
 var gulpif = require('gulp-if');
 var archive = require('gulp-zip');
 var jshint = require('gulp-jshint');
-var header = require('gulp-header');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var cssmin = require('gulp-cssmin');
-var commentify = require('gulp-header');
+var makeHeader = require('gulp-header');
 var config = require('./config.json');
 var pkg = require('./package.json');
 
@@ -97,7 +96,7 @@ gulp.task('build:app', ['clean:dist:bundle'], function() {
     return gulp.src(config.app.files)
         .pipe(gulpif(config.app.minify === true, uglify()))
         .pipe(concat(config.app.name + '.js'))
-        .pipe(commentify(banner, {
+        .pipe(makeHeader(banner, {
             cfg: config,
             pkg: pkg,
             uuid: currentBuildID
@@ -112,7 +111,7 @@ gulp.task('build:bundle', ['clean:dist:bundle', 'build:app', 'build:dependencies
         ])
         .pipe(uglify())
         .pipe(concat(config.bundle.name + '.min.js'))
-        .pipe(commentify(banner, {
+        .pipe(makeHeader(banner, {
             cfg: config,
             pkg: pkg,
             uuid: currentBuildID
@@ -131,7 +130,7 @@ gulp.task('build:styles', ['clean:dist:styles'], function() {
         }).on('error', sass.logError))
         .pipe(gulpif(shouldMinify === true, cssmin()))
         .pipe(concat(config.styles.name + '.css'))
-        .pipe(commentify(banner, {
+        .pipe(makeHeader(banner, {
             cfg: config,
             pkg: pkg,
             uuid: currentBuildID
@@ -182,6 +181,11 @@ gulp.task('build:init', [
     'build:start',
     'build:default',
     'watch:default'
+]);
+
+gulp.task('build:postinstall', [
+    'build:start',
+    'build:default'
 ]);
 
 gulp.task('bundle', ['build:bundle']);
