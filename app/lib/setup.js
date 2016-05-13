@@ -13,7 +13,8 @@ const cookieParser = require('cookie-parser');
 const base = path.join(__dirname, '..', '..', 'www');
 
 exports = module.exports = function(app) {
-    // Registering partials
+    // Registering partials and locals in handlebars
+    hbs.localsAsTemplateData(app);
     hbutils.registerWatchedPartials(path.join(base, 'components'));
 
     // Defining views and templates
