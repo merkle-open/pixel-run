@@ -1,0 +1,10 @@
+<article class="{{#if type}}{{type}}{{else}}post{{/if}}">
+    {{#if isTeaser}}
+        <h1 class="teaser-title">{{title}}</h1>
+    {{else}}
+        <h2 class="post-title">{{title}}</h2>
+    {{/if}}
+    <div class="post-content">
+        {{{@partial-block}}}
+    </div>
+</article>
