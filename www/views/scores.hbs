@@ -10,6 +10,7 @@
                             <td>Score</td>
                             <td>Name</td>
                             <td>Welt</td>
+                            <td>Zeitpunkt</td>
                         </tr>
                     </thead>
                     <tbody id="js-insert">
@@ -21,6 +22,7 @@
                                 <td>{{this.score}}</td>
                                 <td>{{this.name}}</td>
                                 <td>{{this.world}}</td>
+                                <td class="timestamp">{{moment this.$stamp}}</td>
                             </tr>
                         {{/each}}
                     </tbody>
