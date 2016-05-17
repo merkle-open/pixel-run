@@ -277,7 +277,9 @@
                 generated.push(score.name);
                 generated.push('</td><td>');
                 generated.push(Util.firstToUpper(score.world));
-                generated.push('</td><tr>');
+                generated.push('</td><td class="timestamp">');
+                generated.push(score.$stamp);
+                generated.push('</td></tr>');
             });
 
             handler(generated.join('\n'));

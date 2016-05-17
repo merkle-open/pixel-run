@@ -1,3 +1,7 @@
+'use strict';
+
+const moment = require('moment');
+
 exports = module.exports = function(handlebars) {
     handlebars.registerHelper('each', (context, options) => {
         var ret = '';
@@ -24,4 +28,11 @@ exports = module.exports = function(handlebars) {
     handlebars.registerHelper('json', context => {
         return JSON.stringify(context);
     });
-}
+
+    handlebars.registerHelper('moment', input => {
+        if(!input) {
+            return '-';
+        }
+        return moment(input).format('DD.MM.YYYY [um] HH:mm');
+    });
+};

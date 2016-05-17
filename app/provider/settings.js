@@ -49,8 +49,8 @@
             }
         },
         scores: {
-            limit: 10, // How many entries (-1 equals unlimited)
-            refetch: 10 * 1000 // How often the scores should be reloaded
+            limit: -1, // How many entries (-1 equals unlimited)
+            refetch: 15 * 1000 // How often the scores should be reloaded
         },
         worlds: { // You must insert all worlds here!
             space: {

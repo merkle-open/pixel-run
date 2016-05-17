@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const async = require('async');
 const uuid = require('shortid');
+const moment = require('moment');
 const express = require('express');
 const settings = require('./provider/settings');
 const router = express.Router();
@@ -11,6 +12,7 @@ const router = express.Router();
 const BASE = path.join(__dirname, 'data');
 const ENCODING = 'utf8';
 const SCOREFILE = path.join(BASE, 'scores.json');
+const SAVE_AMOUNT = 50;
 
 var sortScore = (a, b) => {
     if(a.score > b.score) {
@@ -22,9 +24,27 @@ var sortScore = (a, b) => {
     }
 };
 
-var capitalize = function(value) {
+var capitalize = value => {
     return typeof value === 'string' ?
         value.charAt(0).toUpperCase() + value.slice(1) : '';
+};
+
+var cleaning = finished => {
+    fs.readFile(SCOREFILE, ENCODING, (err, data) => {
+        if(err) {
+            next(err);
+        }
+
+        data = processScores(data);
+        console.log(data);
+
+        if(data.length > SAVE_AMOUNT) {
+            console.log(`More than ${SAVE_AMOUNT} datasets detected, cutting off the first ${SAVE_AMOUNT} ...`);
+            data = data.slice(0, (SAVE_AMOUNT - 1));
+        }
+
+        (finished || () => {})(data);
+    });
 };
 
 var processScores = data => {
@@ -62,16 +82,15 @@ var processScores = data => {
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.render('index', {
-        title: 'Play Now',
-        uuid: uuid.generate()
+        title: 'Play Now'
     });
 });
 
 /* GET about page. */
 router.get('/about', (req, res, next) => {
     res.render('about', {
-        title: 'About Pixel. Run.',
-        uuid: uuid.generate()
+        title: 'Über Pixel. Run.',
+        isContentPage: true
     });
 });
 
@@ -100,6 +119,9 @@ router.get('/api/get/scores', (req, res, next) => {
         }
 
         data = processScores(data);
+        data.forEach(dataset => {
+            dataset.$stamp = moment(dataset.$stamp).format('DD.MM.YYYY [um] HH:mm');
+        })
         res.json(data);
     });
 });
@@ -122,13 +144,16 @@ router.post('/api/save/score', (req, res, next) => {
                 resolve(null, data);
             });
         },
+        // Push new score to the array
         (data, resolve) => {
             var insert = req.body;
             insert.$id = uuid.generate();
+            insert.$stamp = new Date().toISOString();
             data.push(req.body);
 
             resolve(null, data, JSON.stringify(data, null, 2));
         },
+        // Write the content to the file
         (data, inject, resolve) => {
             fs.writeFile(SCOREFILE, inject, ENCODING, err => {
                 if(err) {
@@ -139,8 +164,10 @@ router.post('/api/save/score', (req, res, next) => {
             });
         }
     ], err => {
-        res.send(err ? false : true);
+        cleaning(afterCleanData => {
+            res.send(err ? false : true);
+        });
     });
 });
 
-module.exports = router;
+exports = module.exports = router;
