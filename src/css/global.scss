@@ -1,12 +1,14 @@
-body, html, main, .autosize {
+body, main, .autosize {
     height: 100%;
 }
 
 body {
     overflow: hidden;
     font-family: Arial, sans-serif;
-    color: #000;
+    color: #fff;
     background-color: #000;
+    min-width: 1300px;
+    min-height: 1000px;
 }
 
 img {
@@ -102,6 +104,13 @@ button {
     width: 100%;
     display: block;
     margin-top: 10px;
+}
+
+@media all and (max-width: 500px) {
+    body, html {
+        max-width: 100%;
+        min-width: 0px;
+    }
 }
 
 @media print {

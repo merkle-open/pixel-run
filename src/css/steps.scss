@@ -52,6 +52,15 @@
         font-size: 12px;
     }
 
+    .question-link {
+        color: #fff;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
     img {
         display: block;
         margin: 0 auto 30px auto;

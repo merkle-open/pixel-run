@@ -9,8 +9,8 @@
 
     h1 {
         text-align: center;
-        font-size: 85px;
-        margin: 0 0 50px 0;
+        font-size: 50px;
+        margin: 0 0 40px 0;
         font-weight: bold;
     }
 
@@ -18,13 +18,17 @@
         thead {
             td {
                 border-bottom: 0px solid transparent;
-                font-size: 30px;
+                font-size: 20px;
             }
         }
 
         tbody {
             td {
-                font-size: 45px;
+                font-size: 25px;
+
+                &.timestamp {
+                    font-size: 22px;
+                }
             }
         }
     }

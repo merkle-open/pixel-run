@@ -1,0 +1,51 @@
+.application {
+    &.application-game {
+        &.application-game--smartphone {
+            display: none;
+            padding: 20px 10px 0 10px;
+
+            h2 {
+                font-size: 25px;
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+
+            p {
+                font-size: 16px;
+                line-height: 20px;
+            }
+
+            a {
+                color: #fff;
+
+                &.button {
+                    text-align: center;
+                    padding: 10px 25px;
+                    background-color: #fff;
+                    display: block;
+                    color: #000;
+                    text-decoration: none;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    border-radius: 4px;
+                    -moz-border-radius: 4px;
+                    -webkit-border-radius: 4px;
+                    margin-top: 15px;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}
+
+@media all and (max-width: 500px) {
+    .application {
+        &.application-game {
+            display: none;
+
+            &.application-game--smartphone {
+                display: block;
+            }
+        }
+    }
+}
