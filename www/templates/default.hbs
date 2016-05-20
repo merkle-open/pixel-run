@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/public/application.css{{#if $debug}}?build={{$build}}{{/if}}">
     <link rel="icon" href="/public/assets/img/favicon.png" type="image/png">
 </head>
-<body{{#if isContentPage}} class="content-page"{{/if}}{{#if $debug}} data-build="{{$build}}"{{/if}}>
+<body class="application {{#if isContentPage}}content-page{{/if}}" {{#if $debug}}data-build="{{$build}}"{{/if}}>
     <main>
         {{{body}}}
     </main>

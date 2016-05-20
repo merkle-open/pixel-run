@@ -106,7 +106,8 @@ router.get('/scores', (req, res, next) => {
         res.render('scores', {
             scores: data,
             title: 'Highscores',
-            uuid: uuid.generate()
+            uuid: uuid.generate(),
+            isContentPage: true
         });
     });
 });
