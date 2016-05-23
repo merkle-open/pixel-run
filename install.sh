@@ -8,7 +8,7 @@ if [[ -z "$branch" ]]; then
     let branch="master"
 fi
 
-download_url="https://github.com/janbiasi/pixel-run/archive/$branch.zip"
+download_url="https://github.com/namics/pixel-run/archive/$branch.zip"
 
 # change to basic working directory
 cd ~/Desktop
