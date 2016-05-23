@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.namics.com/jan.biasi/pixel-run.git"
+    "url": "https://github.com/namics/pixel-run.git"
   },
   "author": "Namics AG",
   "contributors": [
@@ -54,7 +54,7 @@
     "shortid": "^2.2.4"
   },
   "bugs": {
-    "url": "https://git.namics.com/jan.biasi/pixel-run/issues",
+    "url": "https://github.com/namics/pixel-run/issues",
     "email": "jan.biasi@namics.com"
   },
   "homepage": "http://namics.com/",
