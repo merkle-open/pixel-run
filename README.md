@@ -5,6 +5,7 @@
     * [Build](https://github.com/janbiasi/pixel-run/tree/docs/Build.md)
     * [Validation](https://github.com/janbiasi/pixel-run/tree/docs/Build.md#jshint)
     * [Dependencies](#main-dependencies)
+    * [Mirror](#mirror-this-repository)
 * [License](#license)
 * [API](https://github.com/janbiasi/pixel-run/tree/docs/API.md)
     * [Classes](https://github.com/janbiasi/pixel-run/tree/docs/API.md#classes)
@@ -49,6 +50,24 @@ The game can be started over your systems CLI, the only requirement is, that Nod
 * Phaser *(Bower)*
 * jQuery *(Bower)*
 * ~~BrowserStorage *(NPM)*~~
+
+## Mirror this Repository
+
+If you would like to push all the content from our [internal GitLab repository](https://git.namics.com/namics/pixel-run/) to this public GitHub Repository, you have to add a new remot to your git project configuration. Append these lines below to your file under <code>/pixel-run/.git/index</code> and follow the commands.
+
+```config
+[remote "github"]
+	url = https://github.com/namics/pixel-run.git
+	fetch = +refs/heads/*:refs/remotes/mirror/*
+   fetch = +refs/tags/*:refs/tags/*
+```
+
+And do this afterwards
+
+```bash
+# execute this command after adjusting your configuration
+git push --mirror github
+```
 
 ## License
 [MIT Licensed](LICENSE) by [Namics AG](http://namics.com/).
