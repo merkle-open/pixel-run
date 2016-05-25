@@ -1,1 +1,5 @@
-Please referr to [docs/README.md](http://github.com/janbiasi/pixel-run/blob/docs/README.md)
+* For questions and information referr to the [docs](http://github.com/janbiasi/pixel-run/blob/docs/README.md) branch or contact the organization.
+
+* View the public mirror on [Namics GitHub](http://gitub.com/namics/pixel-run) for contribution or other stuff.
+
+* For installing or updating use the [install.sh](https://github.com/namics/pixel-run/blob/utility/install.sh) or [update.sh](https://github.com/namics/pixel-run/blob/utility/update.sh) script and follow the steps listed in the Readme of the utility branch.
