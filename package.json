@@ -7,7 +7,7 @@
   "main": "./www/dist/application.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha ./tests/*.js",
-    "start": "set DEBUG=none && node ./app/server",
+    "start": "set DEBUG=none && node ./app/server --harmony",
     "debug": "set DEBUG=express:* && node ./app/server",
     "deploy": "shipit production deploy && shipit production build",
     "init": "./node_modules/.bin/bower install && ./node_modules/.bin/gulp build:default",
