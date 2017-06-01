@@ -6,6 +6,7 @@
   "description": "A simple jump & run game made by Namics people",
   "main": "./www/dist/application.js",
   "scripts": {
+    "install": "bower install",
     "test": "./node_modules/.bin/mocha ./tests/*.js",
     "start": "set DEBUG=none && node ./app/server --harmony",
     "debug": "set DEBUG=express:* && node ./app/server",
