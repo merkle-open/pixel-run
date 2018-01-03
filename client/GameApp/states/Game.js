@@ -1,5 +1,6 @@
 import $ from "jquery";
 import store from "../redux/store";
+import settings from "../settings";
 import {
   addCursors,
   addSound,
@@ -149,7 +150,7 @@ class Game {
    * Creates all audio FX nodes and inject it to the Audio Container
    */
   $createAudioFX() {
-    const fxSounds = store.getState().settings.audio.fx;
+    const fxSounds = settings.audio.fx;
 
     fxSounds.forEach(fxSound => {
       store.dispatch(
@@ -176,7 +177,7 @@ class Game {
    * @return {Object}             Session Player
    */
   $createPlayerSession(username, realname, pid) {
-    const worlds = store.getState().settings.worlds;
+    const worlds = settings.worlds;
     const wtype = store.getState().world;
 
     const newPlayerSession = {
@@ -213,16 +214,12 @@ class Game {
       this.$createPlayerSession(username, name, pid);
 
       const text = new ScoreText(this, username.toUpperCase(), 0);
-      text.option("fontSize", `${store.getState().settings.render.fontSize}px`);
+      text.option("fontSize", `${settings.render.fontSize}px`);
       text.option(
         "fill",
         store.getState().currentPlayers.find(p => p.name === username).color
       );
-      text.add(
-        20,
-        (store.getState().settings.render.fontSize + 5) * (pid + 1),
-        true
-      );
+      text.add(20, (settings.render.fontSize + 5) * (pid + 1), true);
 
       store.dispatch(updateTextOfACurrentPlayer(pid, text));
 
@@ -266,8 +263,8 @@ class Game {
    * @return {*}                      Callback return value
    */
   $createPlayers() {
-    const pheight = store.getState().settings.game.players.height;
-    const pwidth = store.getState().settings.game.players.width;
+    const pheight = settings.game.players.height;
+    const pwidth = settings.game.players.width;
 
     // Create players for the amount defined in settings.players
     // TODO beautify filter method

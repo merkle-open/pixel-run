@@ -4,6 +4,7 @@ import {
   updateTextOfACurrentPlayer,
   updateScoreOfACurrentPlayer
 } from "../redux/actions";
+import settings from "../settings";
 
 const KILL_BOUNDS = 20;
 
@@ -20,22 +21,22 @@ const debug = new Util.Debugger("Player.class");
  */
 class Player extends Phaser.Sprite {
   constructor(game, index, posX, posY, variation) {
-    let baseSprite = store.getState().settings.game.players.baseName;
+    let baseSprite = settings.game.players.baseName;
     let type =
       variation === undefined
-        ? `-${store.getState().settings.game.players.variations[index]}`
+        ? `-${settings.game.players.variations[index]}`
         : "";
     let sprite = baseSprite + store.getState().world + type;
 
     super(game, posX, posY, sprite);
 
-    this.$basePath = `${store.getState().settings.game.players.basePath +
+    this.$basePath = `${settings.game.players.basePath +
       store.getState().world}/`;
-    this.$mimeType = store.getState().settings.game.players.mimeType;
-    this.jumpOn = store.getState().settings.game.jumpOn;
+    this.$mimeType = settings.game.players.mimeType;
+    this.jumpOn = settings.game.jumpOn;
     this.id = index;
     this.type = variation;
-    this.jumpKey = store.getState().settings.game.players.keymap[index];
+    this.jumpKey = settings.game.players.keymap[index];
     this.injector = game;
     this.doubleJump = false;
     this.score = null;
@@ -53,8 +54,8 @@ class Player extends Phaser.Sprite {
    */
   init() {
     this.injector.physics.arcade.enable(this);
-    this.body.bounce.y = store.getState().settings.game.players.bounce.y;
-    this.body.gravity.y = store.getState().settings.game.players.gravity.y;
+    this.body.bounce.y = settings.game.players.bounce.y;
+    this.body.gravity.y = settings.game.players.gravity.y;
     this.body.collideWorldBounds = true;
     this.body.linearDamping = 1;
   }
@@ -72,7 +73,7 @@ class Player extends Phaser.Sprite {
    * Constantly run with the velocity set in the game settings of the players
    */
   run() {
-    this.body.velocity.x = store.getState().settings.game.players.velocity.x;
+    this.body.velocity.x = settings.game.players.velocity.x;
   }
 
   /**
@@ -84,7 +85,7 @@ class Player extends Phaser.Sprite {
         .getState()
         .audio.find(a => a.name == "jump")
         .play();
-      this.body.velocity.y = store.getState().settings.game.players.velocity.y;
+      this.body.velocity.y = settings.game.players.velocity.y;
     }
   }
 
@@ -140,8 +141,8 @@ class Player extends Phaser.Sprite {
     this.score = Util.calculate.score(this.x);
     if (
       this.y >=
-      store.getState().settings.game.deadline -
-        store.getState().settings.game.players.height -
+      settings.game.deadline -
+        settings.game.players.height -
         KILL_BOUNDS
     ) {
       this.die();

@@ -5,6 +5,7 @@ import StepHeader from "../../components/StepHeader";
 import StepFooter from "../../components/StepFooter";
 import WorldSelect from "../../components/WorldSelect";
 import { addWorld } from "../../redux/actions";
+import settings from "../../settings";
 
 class WorldSelection extends React.Component {
   render() {
@@ -16,7 +17,7 @@ class WorldSelection extends React.Component {
         />
         <div className="body space-xl">
           <WorldSelect
-            worlds={this.props.worlds}
+            worlds={settings.worlds}
             activeWorld={this.props.activeWorld}
             onSelection={this.props.addWorld}
           />
@@ -27,7 +28,6 @@ class WorldSelection extends React.Component {
   }
 }
 const mapStateToProps = (state, ownProps) => ({
-  worlds: state.settings.worlds,
   activeWorld: state.world
 });
 

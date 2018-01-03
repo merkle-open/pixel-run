@@ -1,5 +1,4 @@
-import store from "../redux/store";
-
+import settings from "../settings";
 /**
  * Custom error type for all avaible game failures,
  * can be thrown with the debugger or called manually.
@@ -134,7 +133,7 @@ Util.Replacer = Replacer;
  */
 class Debugger {
   constructor(namespace) {
-    this.enabled = store.getState().settings.debug === true;
+    this.enabled = settings.debug === true;
     this.namespace = namespace || "undefined";
   }
 

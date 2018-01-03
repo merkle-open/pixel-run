@@ -1,4 +1,4 @@
-import store from "../redux/store";
+import settings from "../settings";
 
 class Preload {
   constructor() {
@@ -8,8 +8,7 @@ class Preload {
   }
 
   preload() {
-    this.physics.arcade.gravity.y =
-      store.getState().settings.physics.arcadeGravity || 200;
+    this.physics.arcade.gravity.y = settings.physics.arcadeGravity || 200;
     this.ready = true;
 
     try {

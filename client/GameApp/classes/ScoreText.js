@@ -1,5 +1,6 @@
 import Util from "../provider/Util";
 import store from "../redux/store";
+import settings from "../settings";
 
 const debug = new Util.Debugger("ScoreText.class");
 
@@ -22,7 +23,7 @@ class ScoreText {
       extension: "",
       fontSize: "20px",
       fontFamily: "Arial",
-      fill: store.getState().settings.worlds.find(w => w.name === wtype).contrast || "#ffffff"
+      fill: settings.worlds.find(w => w.name === wtype).contrast || "#ffffff"
     };
 
     return this;

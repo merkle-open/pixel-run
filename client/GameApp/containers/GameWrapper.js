@@ -9,6 +9,7 @@ import Over from "../states/Over";
 import Preload from "../states/Preload";
 import Sync from "../states/Sync";
 import { setGame } from "../redux/actions";
+import settings from "../settings";
 
 class GameWrapper extends React.Component {
   componentDidMount() {
@@ -16,10 +17,10 @@ class GameWrapper extends React.Component {
 
     // Create a new phaser game
     const game = new Phaser.Game(
-      this.props.settings.render.width,
-      this.props.settings.render.height,
+      settings.render.width,
+      settings.render.height,
       Phaser.CANVAS,
-      this.props.settings.render.node
+      settings.render.node
     );
 
     // Adding all required phaser-game-states
@@ -44,7 +45,6 @@ class GameWrapper extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  settings: state.settings,
   gameIsRunning: state.gameIsRunning
 });
 const mapDispatchToProps = (dispatch, ownProps) => ({
