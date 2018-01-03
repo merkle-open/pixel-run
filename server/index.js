@@ -22,9 +22,6 @@ console.log(
 // Create a new express instance
 const app = express();
 
-// Apply different helper methods
-require("./lib/helpers")(hbs);
-
 // Adding general setup stuff for views, router etc.
 require("./lib/setup")(app);
 

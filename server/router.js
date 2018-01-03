@@ -7,6 +7,10 @@ const uuid = require("shortid");
 const express = require("express");
 const router = express.Router();
 
+const sortScore = require("./lib/helper").sortScore;
+const capitalize = require("./lib/helper").capitalize;
+const processScores = require("./lib/helper").processScores;
+
 const BASE = path.join(__dirname, "..", "data");
 const ENCODING = "utf8";
 const SCOREFILE = path.join(BASE, "scores.json");
@@ -38,54 +42,6 @@ const flushArrayToScoreFile = (scores = null) => {
   results.length = 0;
   return writeFile(SCOREFILE, JSON.stringify(data, null, 2), ENCODING);
 };
-
-const sortScore = (a, b) => {
-  if (a.score > b.score) {
-    return -1;
-  } else if (a.score < b.score) {
-    return 1;
-  }
-  return 0;
-};
-
-const capitalize = function(value) {
-  return typeof value === "string"
-    ? value.charAt(0).toUpperCase() + value.slice(1)
-    : "";
-};
-
-const processScores = data => {
-  let previous = 0;
-  let i = 0;
-  data = JSON.parse(data);
-
-  // Parsing values
-  data.forEach(dataset => {
-    dataset.world = capitalize(dataset.world);
-    dataset.score = Number.parseInt(dataset.score);
-  });
-
-  // Order the score
-  data.sort(sortScore);
-
-  // Apply the users rank
-  data.forEach(dataset => {
-    if (previous !== dataset.score) {
-      i++;
-    }
-
-    dataset.index = i;
-    previous = dataset.score;
-  });
-
-  // Cut off the array
-  // default => show only 10 entries
-  data = data.slice(0, 10);
-
-  return data;
-};
-
-const saveToJson = () => {};
 
 /* GET home page. */
 router.get("/", (req, res, next) => {

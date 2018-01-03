@@ -84,9 +84,5 @@
   },
   "homepage": "http://namics.com/",
   "company": "Namics AG",
-  "keywords": [
-    "Pixel. Run",
-    "Namics AG",
-    "Game"
-  ]
+  "keywords": ["Pixel. Run", "Namics AG", "Game"]
 }
