@@ -2,21 +2,19 @@
 .build
 release
 
-# build-compressed assets
-www/dist/assets
+www/dist/
 
-# main css and js exports
-www/dist/application.css
-www/dist/application.js
-www/dist/dependencies.js
+*.swp
+
+# env files
+.env
+
+# npm lock file because yarn
+package-lock.json
 
 # scores
-app/data/scores.json
+data/scores.json
 
 # dependencies
 node_modules
-vendor
-
-# deploy stuff
-deploy
-deploy.json
+npm-debug.log

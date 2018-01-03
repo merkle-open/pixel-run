@@ -1,0 +1,55 @@
+.resume {
+  color: #fff;
+
+  h1 {
+    text-align: center;
+    font-size: 86px;
+    margin: 0 0 30px 0;
+    padding-top: 30px;
+  }
+
+  > table {
+    max-width: 50%;
+    margin: 0 auto;
+    margin-top: 120px;
+    font-size: 32px;
+  }
+
+  table thead td {
+    border: 0px transparent;
+  }
+
+  .grid {
+    button {
+      background-color: transparent;
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 60px;
+      border: 0px solid transparent;
+    }
+  }
+
+  .actions {
+    margin-top: 150px;
+  }
+
+  button {
+    a {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+    }
+  }
+
+  a {
+    color: #bbb;
+    transition: color 0.2s linear;
+    -moz-transition: color 0.2s linear;
+    -webkit-transition: color 0.2s linear;
+
+    &:focus {
+      color: #fff;
+    }
+  }
+}

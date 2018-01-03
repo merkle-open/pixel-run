@@ -3,14 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>Pixel. Run. Namics. - {{title}}</title>
-    <link rel="stylesheet" href="/public/application.css{{#if $debug}}?v={{uuid}}{{/if}}">
-    <link rel="icon" href="/public/assets/img/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/public/application.css">
+    <link rel="icon" href="/public/favicon.png" type="image/png">
 </head>
 <body>
-    <main>
-        {{{body}}}
+    <main id="root">
     </main>
-    <script src="/public/dependencies.js{{#if $debug}}?v={{uuid}}{{/if}}"></script>
-    <script src="/public/application.js{{#if $debug}}?v={{uuid}}{{/if}}"></script>
+    <script src="/public/{{script}}.js"></script>
 </body>
 </html>

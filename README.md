@@ -1,13 +1,67 @@
-* For questions and information referr to the [docs](http://github.com/namics/pixel-run/tree/docs/) branch or contact the organization.
+# Pixel-Run
 
-* View the public mirror on [Namics GitHub](http://gitub.com/namics/pixel-run) for contribution or other stuff.
+Pixel-Run is a jump and run game developed and maintained by Namics' trainees.
 
-* For installing or updating use the [install.sh](https://github.com/namics/pixel-run/tree/utility/install.sh) or [update.sh](https://github.com/namics/pixel-run/tree/utility/update.sh) script and follow the steps listed in the Readme of the utility branch.
+## Run
 
+To run the pixel run server you first have to build the client application. There is a server running Express which serves the game app and handles the scores sent by the game in the browser.
 
-#### to-do's
+### Install
 
-- [ ] Save the session and scores to a random generated guid in the window instead of the window.Session object to prevent hacking scores
-- [ ] Improve tilemap collision to react quicker
-- [ ] Cleaning up the code
-- [ ] Adding an automatic deployment process for the online branch
+To install and run the game on your by your own clone this repository and install all dependencies.
+
+```bash
+yarn install
+```
+
+## Env variables to set
+
+Some environmental variables are needed in order to build the game.
+
+| Key                | Value                                                         |
+| ------------------ | ------------------------------------------------------------- |
+| HOST (required)    | the local hostname                                            |
+| JUMP_ON (required) | **push** to jump on keypress and **release** to jump on keyup |
+| PORT               | Port default is **3000**                                      |
+
+### Build
+
+To build for production use the `build` task.
+
+```bash
+yarn build
+```
+
+### Start Server
+
+To start the server run the command
+
+```bash
+yarn start
+```
+
+> Before starting the live server you have the build the React app otherwise nothing is displayed.
+
+## Contributing
+
+### Development Server
+
+For development there is a `dev` task which runs webpack with a watcher side by side with the express server.
+
+```bash
+yarn dev
+```
+
+For development build only use the `build:dev` task
+
+```bash
+yarn build:dev
+```
+
+### Run tests
+
+To run the Jest tests run
+
+```bash
+ yarn test
+```
