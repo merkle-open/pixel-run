@@ -1,6 +1,6 @@
-import Util from "../provider/Util";
+import Phaser from "phaser-ce";
+import { Debugger } from "../provider/Util";
 
-const debug = new Util.Debugger("Tilemap.class");
 
 /**
  * Constructor of the Tilemap Class
@@ -25,7 +25,7 @@ class Tilemap extends Phaser.Tilemap {
    * @param  {String} asset           Asset of the tileset
    */
   addImage(tileset, asset) {
-    debug.log("Tilemap image added with asset ->", tileset, asset);
+    Debugger.log("Tilemap image added with asset ->", tileset, asset);
     return this.map.addTilesetImage(tileset, asset);
   }
 
@@ -37,8 +37,8 @@ class Tilemap extends Phaser.Tilemap {
    * @return {Tilemap}            The tilemap itself
    */
   addToGame(game) {
-    game = game || this.game || null;
-    this.map = game.add.tilemap(this.name);
+    const saveGame = game || this.game;
+    this.map = saveGame.add.tilemap(this.name);
     return this.map;
   }
 
@@ -48,7 +48,7 @@ class Tilemap extends Phaser.Tilemap {
    * @return {TilemapLayer}       Phaser tilemap layer
    */
   createLayer(name) {
-    debug.log("Layer created ->", name);
+    Debugger.log("Layer created ->", name);
     const layer = this.map.createLayer(name);
     this.layers[name] = layer;
     return this.layers[name];
@@ -63,7 +63,7 @@ class Tilemap extends Phaser.Tilemap {
    * @param  {Number} end         Endpoint of collision
    */
   setCollision(layer, start, end) {
-    debug.log("Collision set on layer with start/end ->", layer, start, end);
+    Debugger.log("Collision set on layer with start/end ->", layer, start, end);
     try {
       const collide = this.map.setCollisionBetween(start, end, true, layer);
       return collide;
@@ -79,9 +79,9 @@ class Tilemap extends Phaser.Tilemap {
   resize(targetLayer) {
     try {
       this.layers[targetLayer].resizeWorld();
-      debug.log("World resized to the layer ->", targetLayer);
+      Debugger.log("World resized to the layer ->", targetLayer);
     } catch (resizeErr) {
-      debug.throw(`Tilemap.resize failed: ${resizeErr.message}`, 0);
+      Debugger.throw(`Tilemap.resize failed: ${resizeErr.message}`, 0);
     }
   }
 }

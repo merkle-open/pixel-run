@@ -16,27 +16,6 @@ function Util() {
   // class wrapper
 }
 
-Util.noop = () => {
-  // Basic no-operation method
-};
-
-/**
- * Private helper to order the score descending
- * @param  {Array} score        Highscore array
- * @return {Array}              Ordered array
- */
-Util.orderScore = score => {
-  function compare(a, b) {
-    if (a.score > b.score) {
-      return -1;
-    } else if (a.score < b.score) {
-      return 1;
-    }
-    return 0;
-  }
-  return score.sort(compare);
-};
-
 /**
  * Set the defaults for a variable. Custom handler can
  * also be used to check the value (to prevent long conditions)
@@ -55,24 +34,6 @@ Util.default = (input, defaultValue, custom) => {
     return defaultValue;
   }
   return input;
-};
-
-/**
- * Generates a clone of an object (without proto values)
- * @param  {Object} obj         Object to clone
- * @return {Object}             Cloned object
- */
-Util.clone = obj => {
-  if (!obj || typeof obj !== "object") {
-    return obj;
-  }
-  const copy = obj.constructor();
-  for (const attr in obj) {
-    if (obj.hasOwnProperty(attr) && attr !== "_saveState") {
-      copy[attr] = obj[attr];
-    }
-  }
-  return copy;
 };
 
 /**
@@ -104,12 +65,10 @@ class Replacer {
    */
   replace(data) {
     let result = this.input;
-    if (data === undefined) {
-      data = this.data;
-    }
-    const keys = Object.keys(data);
+    const saveData = data || this.data;
+    const keys = Object.keys(saveData);
     keys.forEach(key => {
-      result = Util.replaceAll(result, `{${key}}`, data[key]);
+      result = Util.replaceAll(result, `{${key}}`, saveData[key]);
     });
     return result;
   }
@@ -140,45 +99,29 @@ class Debugger {
   /**
    * Apply arguments to the warn function if enabled
    */
-  warn(...args) {
-    if (console && console.warn) {
-      this.$out(args, args => {
-        console.warn(...args);
-      });
-    }
+  static warn(...args) {
+    console.warn(...args);
   }
 
   /**
    * Apply arguments to the info function if enabled
    */
-  info(...args) {
-    if (console && console.info) {
-      this.$out(args, args => {
-        console.info(...args);
-      });
-    }
+  static info(...args) {
+    console.info(...args);
   }
 
   /**
    * Apply arguments to the error function if enabled
    */
-  error(...args) {
-    if (console && console.error) {
-      this.$out(args, args => {
-        console.error(...args);
-      });
-    }
+  static error(...args) {
+    console.error(...args);
   }
 
   /**
    * Apply arguments to the log function if enabled
    */
-  log(...args) {
-    if (console) {
-      this.$out(args, args => {
-        console.log(...args);
-      });
-    }
+  static log(...args) {
+    console.log(...args);
   }
 
   /**
@@ -186,7 +129,7 @@ class Debugger {
    * @param  {String} reason      Error reason
    * @param  {String} status      Error status
    */
-  throw(reason, status) {
+  static throw(reason, status) {
     throw new GameError(`${reason}(${status})`);
   }
 
@@ -202,42 +145,6 @@ class Debugger {
   }
 }
 
-Util.Debugger = Debugger;
-
-/**
- * Like Object.keys but get the values and not keys
- * @param  {Object} dataObject      Object target
- * @return {Array}                  Object values
- */
-Util.getValues = dataObject => {
-  const dataArray = [];
-  for (const o in dataObject) {
-    dataArray.push(dataObject[o]);
-  }
-  return dataArray;
-};
-
-/**
- * Get playerscores in compressed object form
- * @return {Obejct}                 Compressed score info
- */
-Util.getPlayerScoreData = () => {
-  const res = Util.orderScore(store.getState().currentPlayers);
-
-  return {
-    p1: res[0] ? res[0].name : "-",
-    p2: res[1] ? res[1].name : "-",
-    p3: res[2] ? res[2].name : "-",
-    p1s: res[0] ? res[0].score : "-",
-    p2s: res[1] ? res[1].score : "-",
-    p3s: res[2] ? res[2].score : "-",
-    p1img: res[0] ? res[0].image() : "",
-    p2img: res[1] ? res[1].image() : "",
-    p3img: res[2] ? res[2].image() : "",
-    wtype: store.getState().world
-  };
-};
-
 /**
  * Replace all orccurencies in a string with a replacement
  * @param  {String} target         Input ressource
@@ -247,33 +154,6 @@ Util.getPlayerScoreData = () => {
  */
 Util.replaceAll = (target, search, replacement) =>
   target.replace(new RegExp(search, "g"), replacement);
-
-/**
- * Gets the score in a HTML string (tr>td) for inserting
- * it into a table body
- * @return {String}                 HTML markup
- */
-Util.getScoreTable = (opts, handler) => {
-  const generated = [];
-  $.get("/api/get/scores", scores => {
-    scores.forEach(score => {
-      generated.push("<tr><td>");
-      if (opts.index) {
-        generated.push("<strong>");
-        generated.push(`# ${score.index}`);
-        generated.push("</strong></td><td>");
-      }
-      generated.push(score.score);
-      generated.push("</td><td>");
-      generated.push(score.name);
-      generated.push("</td><td>");
-      generated.push(Util.firstToUpper(score.world));
-      generated.push("</td><tr>");
-    });
-
-    handler(generated.join("\n"));
-  });
-};
 
 Util.calculate = {
   /**

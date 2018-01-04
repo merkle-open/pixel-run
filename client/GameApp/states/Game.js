@@ -11,7 +11,7 @@ import {
   updateTextOfACurrentPlayer,
   toggleGameState
 } from "../redux/actions";
-import Util from "../provider/Util";
+import Util, { Debugger } from "../provider/Util";
 import Sprite from "../classes/Sprite";
 import ScoreText from "../classes/ScoreText";
 import Tilemap from "../classes/Tilemap";
@@ -20,7 +20,6 @@ import Player from "../classes/Player";
 const PLAYER_OFFSET_X = 500;
 const PLAYER_OFFSET_Y = 300;
 
-const debug = new Util.Debugger("States.Game");
 
 class Game {
   create() {
@@ -43,7 +42,7 @@ class Game {
     this.$createPlayers();
 
     // Follow the first player with the camera
-    this.camera.follow(this.$furthestPlayer().player);
+    this.camera.follow(Game.$furthestPlayer().player);
 
     // Add emergency handlers in window
     this.$applyEmergency();
@@ -51,24 +50,25 @@ class Game {
 
   update() {
     if (this.skipUpdateLoop) {
-      return false;
+      return;
     }
 
-    const currentPlayers = store.getState().currentPlayers;
+    const { currentPlayers } = store.getState();
     const aliveCurrentPlayers = currentPlayers.filter(
       p => p.player().dead === false
     );
     const players = currentPlayers.map(p => p.player());
 
     // Follow the first player if the first player dies etc.
-    this.camera.follow(this.$furthestPlayer(players).player);
+    this.camera.follow(Game.$furthestPlayer(players).player);
 
-    const alivePlayers = this.$getAlivePlayers(players);
+    const alivePlayers = Game.$getAlivePlayers(players);
 
     if (alivePlayers.length === 0 && !this.finished) {
       // Quit the game if no players are alive
       store.dispatch(toggleGameState());
-      return this.exit();
+      this.exit();
+      return;
     } else if (alivePlayers.length === 1) {
       // TODO: If just one player is alive and he/she is blocked
       // by an obstacle by more than 5 seconds, the game should end!
@@ -114,7 +114,7 @@ class Game {
    * Gets all players which are still alive
    * @return {Array}          Alive players
    */
-  $getAlivePlayers(players = store.getState().players) {
+  static $getAlivePlayers(players = store.getState().players) {
     const alive = [];
     players.forEach(player => {
       if (player.alive === true) {
@@ -129,7 +129,7 @@ class Game {
    * following procedure.
    * @return {Object}         Player and position
    */
-  $furthestPlayer(players = store.getState().players) {
+  static $furthestPlayer(players = store.getState().players) {
     let firstPlayer = players[0];
     let posFirst = players[0].x;
 
@@ -176,8 +176,8 @@ class Game {
    * @param  {Number} pid         Player ID
    * @return {Object}             Session Player
    */
-  $createPlayerSession(username, realname, pid) {
-    const worlds = settings.worlds;
+  static $createPlayerSession(username, realname, pid) {
+    const { worlds } = settings;
     const wtype = store.getState().world;
 
     const newPlayerSession = {
@@ -209,9 +209,9 @@ class Game {
     const players = store.getState().playerNames.filter(p => p !== "");
 
     players.forEach(name => {
-      name = name.trim();
-      const username = name.replace(" ", "");
-      this.$createPlayerSession(username, name, pid);
+      const trimmedName = name.trim();
+      const username = trimmedName.replace(" ", "");
+      Game.$createPlayerSession(username, trimmedName, pid);
 
       const text = new ScoreText(this, username.toUpperCase(), 0);
       text.option("fontSize", `${settings.render.fontSize}px`);
@@ -223,7 +223,7 @@ class Game {
 
       store.dispatch(updateTextOfACurrentPlayer(pid, text));
 
-      pid++;
+      pid += 1;
     });
   }
 
@@ -271,7 +271,7 @@ class Game {
     for (
       let i = 0;
       i < store.getState().playerNames.filter(p => p !== "").length;
-      i++
+      i += 1
     ) {
       const instance = new Player(
         this,
@@ -300,7 +300,7 @@ class Game {
         this.exit();
         return;
       }
-      debug.log("User canceled emergency action");
+      Debugger.log("User canceled emergency action");
     };
 
     class Emergency {

@@ -41,9 +41,9 @@ class ScoreScreen extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.scores.map(score => {
-                    return <ScoreEntry key={score.$id} {...score} />;
-                  })}
+                  {this.state.scores.map(score => (
+                    <ScoreEntry key={score.$id} {...score} />
+                  ))}
                 </tbody>
               </table>
             </div>

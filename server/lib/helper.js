@@ -7,42 +7,44 @@ const sortScore = (a, b) => {
   return 0;
 };
 
-const capitalize = value => {
-  return typeof value === "string"
+const capitalize = value => (
+   typeof value === "string"
     ? value.charAt(0).toUpperCase() + value.slice(1)
-    : "";
-};
+    : ""
+);
 
 module.exports.sortScore = sortScore;
 module.exports.capitalize = capitalize;
 
-module.exports.processScores = data => {
+module.exports.processScores = rawData => {
   let previous = 0;
   let i = 0;
-  data = JSON.parse(data);
+  const data = JSON.parse(rawData);
 
   // Parsing values
-  data.forEach(dataset => {
-    dataset.world = capitalize(dataset.world);
-    dataset.score = Number.parseInt(dataset.score);
+  const parsedData = data.map(dataset => {
+    const newData = dataset;
+    newData.world = capitalize(dataset.world);
+    newData.score = Number.parseInt(dataset.score, 10);
+    return newData;
   });
 
   // Order the score
-  data.sort(sortScore);
+  const sortedData = parsedData.sort(sortScore);
 
   // Apply the users rank
-  data.forEach(dataset => {
-    if (previous !== dataset.score) {
-      i++;
+  const rankedData = sortedData.map(dataset => {
+    const newDataset = dataset;
+    if (previous !== newDataset.score) {
+      i += 1;
     }
 
-    dataset.index = i;
+    newDataset.index = i;
     previous = dataset.score;
+    return newDataset;
   });
 
   // Cut off the array
   // default => show only 10 entries
-  data = data.slice(0, 10);
-
-  return data;
+  return rankedData.slice(0, 10);
 };

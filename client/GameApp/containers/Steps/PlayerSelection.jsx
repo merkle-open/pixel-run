@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { addPlayerName } from "../../redux/actions";
@@ -8,9 +9,11 @@ import StepInput from "../../components/StepInput";
 import techieNude from "../../assets/img/avatars/nude/techie.png";
 import designerNude from "../../assets/img/avatars/nude/designer.png";
 import consultantNude from "../../assets/img/avatars/nude/consultant.png";
+
 const images = [techieNude, designerNude, consultantNude];
 
 class PlayerSelection extends React.Component {
+  componentDidUpdate() {}
   render() {
     return (
       <div className="step">
@@ -21,17 +24,25 @@ class PlayerSelection extends React.Component {
         <div className="body space-xl">
           <StepInput images={images} onInput={this.props.addPlayerName} />
         </div>
-        <StepFooter link="/world" active={this.props.playerNames.some(p => p.length > 0)}/>
+        <StepFooter
+          link="/world"
+          active={this.props.playerNames.some(p => p.length > 0)}
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+PlayerSelection.propTypes = {
+  playerNames: PropTypes.arrayOf(PropTypes.string).isRequired,
+  addPlayerName: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
   playerNames: state.playerNames
 });
 
-const mapDisptachToProps = (dispatch) => ({
+const mapDisptachToProps = dispatch => ({
   addPlayerName: e => {
     dispatch(addPlayerName(e.target.value, e.target.dataset.index));
   }

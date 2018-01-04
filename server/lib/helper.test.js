@@ -1,6 +1,5 @@
-const sortScore = require("./helper").sortScore;
-const capitalize = require("./helper").capitalize;
-const processScores = require("./helper").processScores;
+const { sortScore, capitalize, processScores } = require("./helper");
+
 const rawFakes = `
   [
   {
@@ -107,7 +106,7 @@ test("Capitalizes only first letter", () => {
   expect(capitalize(name)).toBe("Space");
 });
 
-let processedScores = processScores(rawFakes);
+const processedScores = processScores(rawFakes);
 
 test("Only 10 scores retruned", () => {
   expect(processedScores.length).toBeLessThanOrEqual(10);

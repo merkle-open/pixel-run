@@ -1,15 +1,17 @@
 // Global import of pixi and p2 needed because phaser needs it
 // and phaser is not quite there with the whole npm packaging
 // for pixi and p2 an alias was defined in webpack.config.js
+// eslint-disable-next-line
 import "pixi";
+// eslint-disable-next-line
 import "p2";
 
+// eslint-disable-next-line
 import Phaser from "phaser";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { MemoryRouter, Route } from "react-router-dom";
-import { CSSTransitionGroup } from "react-transition-group";
 
 import store from "./redux/store";
 import StartScreen from "./containers/Steps/StartScreen";

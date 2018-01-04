@@ -1,6 +1,5 @@
-import Util from "../provider/Util";
+import { Debugger } from "../provider/Util";
 
-const debug = new Util.Debugger("Sprite.class");
 let id = 0;
 
 /**
@@ -14,7 +13,8 @@ let id = 0;
 class Sprite extends Phaser.Sprite {
   constructor(game, image, path) {
     super();
-    this.$id = id++;
+    this.$id = id;
+    id += 1;
     this.injector = game;
     this.image = image;
     this.path = path;
@@ -30,8 +30,9 @@ class Sprite extends Phaser.Sprite {
    * @return {Sprite} this        Return the object itself for chaning
    */
   load(path) {
-    path = Util.default(path, this.path);
-    this.injector.load.image(this.image, path);
+    // TODO: validate legimitaion of Util.default
+    const savePath = path || this.path;
+    this.injector.load.image(this.image, savePath);
     return this;
   }
 
@@ -42,10 +43,10 @@ class Sprite extends Phaser.Sprite {
    * @return {Spritesheet} $internal
    */
   add(x, y) {
-    debug.log("Sprite mounted ->", this.image, x, y);
-    x = Util.default(x, 0);
-    y = Util.default(y, 0);
-    this.$internal = this.injector.add.sprite(x, y, this.image);
+    Debugger.log("Sprite mounted ->", this.image, x, y);
+    const saveX = x || 0;
+    const saveY = y || 0;
+    this.$internal = this.injector.add.sprite(saveX, saveY, this.image);
     return this.$internal;
   }
 }

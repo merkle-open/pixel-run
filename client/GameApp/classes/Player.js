@@ -1,4 +1,4 @@
-import Util from "../provider/Util";
+import Util, { Debugger } from "../provider/Util";
 import store from "../redux/store";
 import {
   updateTextOfACurrentPlayer,
@@ -7,8 +7,6 @@ import {
 import settings from "../settings";
 
 const KILL_BOUNDS = 20;
-
-const debug = new Util.Debugger("Player.class");
 
 /**
  * Creates a new player instance
@@ -21,12 +19,12 @@ const debug = new Util.Debugger("Player.class");
  */
 class Player extends Phaser.Sprite {
   constructor(game, index, posX, posY, variation) {
-    let baseSprite = settings.game.players.baseName;
-    let type =
+    const baseSprite = settings.game.players.baseName;
+    const type =
       variation === undefined
         ? `-${settings.game.players.variations[index]}`
         : "";
-    let sprite = baseSprite + store.getState().world + type;
+    const sprite = baseSprite + store.getState().world + type;
 
     super(game, posX, posY, sprite);
 
@@ -44,7 +42,7 @@ class Player extends Phaser.Sprite {
 
     this.$addActionKey();
     game.add.existing(this);
-    debug.log("New player initiaded on x/y ->", posX, posY);
+    Debugger.log("New player initiaded on x/y ->", posX, posY);
 
     return this;
   }
@@ -83,7 +81,7 @@ class Player extends Phaser.Sprite {
     if (this.body.onFloor()) {
       store
         .getState()
-        .audio.find(a => a.name == "jump")
+        .audio.find(a => a.name === "jump")
         .play();
       this.body.velocity.y = settings.game.players.velocity.y;
     }
@@ -93,12 +91,12 @@ class Player extends Phaser.Sprite {
    * Let a player die
    */
   die() {
-    debug.log("Player died with id ->", this.id);
-    debug.log("Updating player session ->", this.id);
+    Debugger.log("Player died with id ->", this.id);
+    Debugger.log("Updating player session ->", this.id);
 
     store
       .getState()
-      .audio.find(a => a.name == "die")
+      .audio.find(a => a.name === "die")
       .play();
     this.$updateText("dead");
     store.dispatch(updateScoreOfACurrentPlayer(this.id, this.score));
@@ -112,10 +110,10 @@ class Player extends Phaser.Sprite {
    */
   $updateText(val) {
     if (val !== undefined) {
-      debug.log("Updating player text ->", this.id);
+      Debugger.log("Updating player text ->", this.id);
       const currentPlayer = store
         .getState()
-        .currentPlayers.find(p => p.id == this.id);
+        .currentPlayers.find(p => p.id === this.id);
       currentPlayer.text.option("extension", `(${val})`);
       store.dispatch(updateTextOfACurrentPlayer(this.id, currentPlayer.text));
       currentPlayer.text.$update();
@@ -128,7 +126,7 @@ class Player extends Phaser.Sprite {
    * @return {Key}            Phaser key stack
    */
   $addActionKey() {
-    debug.log("Player created actionKey ->", this.jumpKey);
+    Debugger.log("Player created actionKey ->", this.jumpKey);
     this.$actionKey = store.getState().cursors[this.jumpKey];
     return this.$actionKey;
   }

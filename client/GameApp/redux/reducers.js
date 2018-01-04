@@ -1,7 +1,4 @@
 import {
-  ADD_TODO,
-  TOGGLE_TODO,
-  SET_VISIBILITY_FILTER,
   ADD_PLAYERS,
   ADD_PLAYER,
   ADD_PLAYER_NAME,
@@ -18,7 +15,6 @@ import {
   UPDATE_TEXT_OF_A_CURRENT_PLAYER,
   UPDATE_SCORE_OF_A_CURRENT_PLAYER,
   INCREMENT_CURRENT_STEP,
-  INCREMENT_TAB_COUNT,
   TOGGLE_GAME_STATE
 } from "./actions";
 
@@ -38,6 +34,24 @@ const initialState = {
   gameIsRunning: false
 };
 
+const updateScoreOfPlayer = (players, action) =>
+  players.map(player => {
+    const newPlayer = player;
+    if (newPlayer.id === action.currentUserId) {
+      newPlayer.score = action.score;
+    }
+    return newPlayer;
+  });
+
+const updateTextOfPlayer = (players, action) =>
+  players.map(player => {
+    const newPlayer = player;
+    if (newPlayer.id === action.currentUserId) {
+      newPlayer.text = action.text;
+    }
+    return newPlayer;
+  });
+
 function rootReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_PLAYERS:
@@ -48,7 +62,8 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         playerNames: state.playerNames.map(
-          (p, i) => (i == action.index ? action.playerName : p)
+          (p, i) =>
+            i === Number.parseInt(action.index, 10) ? action.playerName : p
         )
       };
     case ADD_WORLD:
@@ -81,21 +96,15 @@ function rootReducer(state = initialState, action) {
         currentPlayers: [...state.currentPlayers, action.player]
       };
     case UPDATE_TEXT_OF_A_CURRENT_PLAYER:
-      let newCurrentPlayersText = state.currentPlayers.map(p => {
-        if (p.id == action.currentUserId) {
-          p.text = action.text;
-        }
-        return p;
-      });
-      return { ...state, currentPlayers: newCurrentPlayersText };
+      return {
+        ...state,
+        currentPlayers: updateTextOfPlayer(state.currentPlayers, action)
+      };
     case UPDATE_SCORE_OF_A_CURRENT_PLAYER:
-      let newCurrentPlayersScore = state.currentPlayers.map(p => {
-        if (p.id == action.currentUserId) {
-          p.score = action.score;
-        }
-        return p;
-      });
-      return { ...state, currentPlayers: newCurrentPlayersScore };
+      return {
+        ...state,
+        currentPlayers: updateScoreOfPlayer(state.currentPlayers, action)
+      };
     default:
       return state;
     case INCREMENT_CURRENT_STEP:

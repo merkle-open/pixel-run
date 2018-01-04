@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
@@ -44,10 +45,15 @@ class GameWrapper extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+GameWrapper.propTypes = {
+  gameIsRunning: PropTypes.bool.isRequired,
+  setGame: PropTypes.func.isRequired
+}
+
+const mapStateToProps = (state) => ({
   gameIsRunning: state.gameIsRunning
 });
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = (dispatch) => ({
   setGame: game => {
     dispatch(setGame(game));
   }

@@ -1,15 +1,12 @@
-"use strict";
-
 const fs = require("fs");
 const path = require("path");
 const util = require("util");
 const uuid = require("shortid");
 const express = require("express");
+
 const router = express.Router();
 
-const sortScore = require("./lib/helper").sortScore;
-const capitalize = require("./lib/helper").capitalize;
-const processScores = require("./lib/helper").processScores;
+const { processScores} = require("./lib/helper");
 
 const BASE = path.join(__dirname, "..", "data");
 const ENCODING = "utf8";
@@ -19,32 +16,29 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
 const results = [];
-setInterval(() => {
-  if (results.length === 0) return;
-
-  readFile(SCOREFILE, ENCODING)
-    .then(data => {
-      return JSON.parse(data);
-    })
-    .then(jsonData => {
-      return flushArrayToScoreFile(jsonData);
-    })
-    .catch(error => {
-      if (error.code === "ENOENT") {
-        return flushArrayToScoreFile();
-      }
-      console.log(error);
-    });
-}, 1000);
-
 const flushArrayToScoreFile = (scores = null) => {
-  let data = scores === null ? results.slice() : scores.concat(results);
+  const data = scores === null ? results.slice() : scores.concat(results);
   results.length = 0;
   return writeFile(SCOREFILE, JSON.stringify(data, null, 2), ENCODING);
 };
 
+setInterval(() => {
+  if (results.length === 0) return;
+
+  readFile(SCOREFILE, ENCODING)
+    .then(data => JSON.parse(data))
+    .then(jsonData => flushArrayToScoreFile(jsonData))
+    .catch(error => {
+      if (error.code === "ENOENT") {
+        return flushArrayToScoreFile();
+      }
+      throw error;
+    });
+}, 1000);
+
+
 /* GET home page. */
-router.get("/", (req, res, next) => {
+router.get("/", (req, res) => {
   res.render("default", {
     script: "gameApp",
     title: "Play Now"
@@ -52,7 +46,7 @@ router.get("/", (req, res, next) => {
 });
 
 /* GET highscores page. */
-router.get("/scores", (req, res, next) => {
+router.get("/scores", (req, res) => {
   res.render("default", {
     script: "scoresApp",
     title: "Highscores"
@@ -68,7 +62,7 @@ router.get("/api/get/scores", (req, res, next) => {
 });
 
 /* POST save new score. */
-router.post("/api/save/score", (req, res, next) => {
+router.post("/api/save/score", (req, res) => {
   req.body.$id = uuid.generate();
   results.push(req.body);
   res.sendStatus(200);

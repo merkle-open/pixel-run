@@ -29,6 +29,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.1.2",
     "babel-jest": "^22.0.4",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -51,18 +52,14 @@
     "flow-bin": "^0.61.0",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "jest": "^22.0.4",
-    "morgan": "^1.9.0",
     "node-sass": "^4.7.2",
-    "babel-eslint": "^8.1.2",
     "prettier": "^1.9.2",
     "prettier-webpack-plugin": "^0.2.2",
     "react-test-renderer": "^16.2.0",
     "redux-devtools": "^3.4.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
-    "webpack": "^3.10.0",
-    "webpack-config-utils": "^2.3.0",
-    "webpack-dev-middleware": "^2.0.1"
+    "webpack-config-utils": "^2.3.0"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -75,15 +72,18 @@
     "helmet": "^3.9.0",
     "hpp": "^0.2.1",
     "jquery": "^3.2.1",
+    "morgan": "^1.9.0",
     "phaser-ce": "^2.7.9",
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
-    "react-transition-group": "2.2.1",
     "redux": "^3.7.2",
     "serve-favicon": "^2.4.5",
-    "shortid": "^2.2.4"
+    "shortid": "^2.2.4",
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^2.0.1"
   },
   "bugs": {
     "url": "https://git.namics.com/jan.biasi/pixel-run/issues",

@@ -1,23 +1,21 @@
-"use strict";
-
 const hbs = require("hbs");
 const path = require("path");
 const pollution = require("hpp");
 const logger = require("morgan");
 const helmet = require("helmet");
 const express = require("express");
-const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 const hbutils = require("hbs-utils")(hbs);
 const cookieParser = require("cookie-parser");
 const webpack = require("webpack");
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackConfig = require("../../webpack.config.js");
+
 const isDev = process.env.NODE_ENV !== "production";
 const base = path.join(__dirname, "..", "..", "www");
 
-exports = module.exports = function(app) {
-  //Webpack for development
+module.exports = function setupApp(app) {
+  // Webpack for development
   if (isDev) {
     const compiler = webpack(webpackConfig);
     app.use(

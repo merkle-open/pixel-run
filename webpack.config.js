@@ -4,6 +4,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const PrettierPlugin = require("prettier-webpack-plugin");
 const { getIfUtils, removeEmpty } = require("webpack-config-utils");
+
 const { ifDev, ifProduction } = getIfUtils(process.env.NODE_ENV);
 
 // Phaser webpack config
@@ -16,8 +17,8 @@ module.exports = {
   context: path.resolve(__dirname, "./client"),
   devtool: "source-map",
   entry: {
-    gameApp: "./GameApp/index.js",
-    scoresApp: "./ScoreApp/index.js"
+    gameApp: "./GameApp/index.jsx",
+    scoresApp: "./ScoreApp/index.jsx"
   },
   output: {
     filename: "[name].js",
@@ -27,7 +28,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: [/node_modules/],
         use: [
           {
@@ -71,9 +72,10 @@ module.exports = {
   ]),
   resolve: {
     alias: {
-      phaser: phaser,
-      pixi: pixi,
-      p2: p2
-    }
+      phaser,
+      pixi,
+      p2
+    },
+    extensions: [".js", ".jsx"]
   }
 };

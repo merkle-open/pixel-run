@@ -1,8 +1,6 @@
-import Util from "../provider/Util";
+import Util, { Debugger } from "../provider/Util";
 import store from "../redux/store";
 import settings from "../settings";
-
-const debug = new Util.Debugger("ScoreText.class");
 
 /**
  * Score text base class which generates the
@@ -78,11 +76,11 @@ class ScoreText {
    * @return {Text}
    */
   add(x, y, fixedToCamera) {
-    x = x || 0;
-    y = y || 0;
+    const saveX = x || 0;
+    const saveY = y || 0;
 
     // Create basic text node and inject it to the game
-    this.$text = this.injector.add.text(x, y, this.get(), {
+    this.$text = this.injector.add.text(saveX, saveY, this.get(), {
       font: `${this.opts.fontSize} ${this.opts.fontFamily}`,
       fill: this.opts.fill
     });
@@ -93,7 +91,12 @@ class ScoreText {
       this.$text.cameraOffset.setTo(x, y);
     }
 
-    debug.log("Text added with props x, y, fixed ->", x, y, fixedToCamera);
+    Debugger.log(
+      "Text added with props x, y, fixed ->",
+      saveX,
+      saveY,
+      fixedToCamera
+    );
 
     return this;
   }

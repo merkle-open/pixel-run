@@ -1,28 +1,26 @@
-import Util from "../provider/Util";
+import { Debugger } from "../provider/Util";
 import store from "../redux/store";
-
-var debug = new Util.Debugger("States.Sync");
 
 class Sync {
   create() {
     this.postProgress = [];
-    const currentPlayers = store.getState().currentPlayers;
+    const { currentPlayers } = store.getState();
     const amount = currentPlayers.length;
-    debug.log(`Syncing scores over AJAX for ${amount} players ...`);
+    Debugger.log(`Syncing scores over AJAX for ${amount} players ...`);
 
     currentPlayers.forEach(currentPlayer =>
       this.sendScores(currentPlayer)
         .then(res => {
           this.postProgress.push(res);
-          this.logPostProgress(amount, this.postProgress);
+          Sync.logPostProgress(amount, this.postProgress);
         })
         .catch(error => console.log(error))
     );
   }
 
-  logPostProgress(amount, postProgress) {
+  static logPostProgress(amount, postProgress) {
     const percentage = 100 / amount * postProgress.length;
-    debug.log(
+    Debugger.log(
       [
         "Scores saved for",
         postProgress.length,

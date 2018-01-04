@@ -1,9 +1,4 @@
-"use strict";
-
-const hbs = require("hbs");
-const path = require("path");
 const http = require("http");
-const cluster = require("cluster");
 const express = require("express");
 const chalk = require("chalk");
 require("dotenv").config();
