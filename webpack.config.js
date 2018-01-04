@@ -39,7 +39,8 @@ module.exports = {
                 "babel-plugin-transform-class-properties"
               ]
             }
-          }
+          },
+          "eslint-loader"
         ]
       },
       {
