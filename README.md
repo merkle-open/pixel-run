@@ -1,5 +1,7 @@
 # Pixel-Run
 
+[![Build Status](https://travis-ci.org/namics/pixel-run.svg?branch=master)](https://travis-ci.org/namics/pixel-run)
+
 Pixel-Run is a jump and run game developed and maintained by Namics' trainees.
 
 ## Run
