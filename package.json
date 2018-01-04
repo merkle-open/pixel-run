@@ -1,5 +1,5 @@
 {
-  "name": "pixel-run-namics",
+  "name": "pixel-run",
   "header": "Pixel. Run. Namics.",
   "license": "MIT",
   "version": "1.0.0",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.namics.com/namics/pixel-run.git"
+    "url": "https://github.com/namics/pixel-run.git"
   },
   "author": "Namics AG",
   "contributors": [
@@ -86,8 +86,7 @@
     "webpack-dev-middleware": "^2.0.1"
   },
   "bugs": {
-    "url": "https://git.namics.com/jan.biasi/pixel-run/issues",
-    "email": "jan.biasi@namics.com"
+    "url": "https://github.com/namics/pixel-run/issues"
   },
   "homepage": "http://namics.com/",
   "company": "Namics AG",
