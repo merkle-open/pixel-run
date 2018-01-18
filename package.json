@@ -11,7 +11,9 @@
     "test": "jest",
     "start": "cross-env NODE_ENV=production node ./server/",
     "dev": "cross-env NODE_ENV=development node ./server/",
-    "format": "prettier --write \"{client,server}/**/*.js\""
+    "lint": "node_modules/.bin/eslint --ext .js --ext .jsx client/*",
+    "precommit": "yarn lint",
+    "prepush": "yarn test"
   },
   "engines": {
     "node": ">=8.9.1"
@@ -51,6 +53,7 @@
     "file-loader": "^1.1.5",
     "flow-bin": "^0.61.0",
     "friendly-errors-webpack-plugin": "^1.6.1",
+    "husky": "^0.14.3",
     "jest": "^22.0.4",
     "node-sass": "^4.7.2",
     "prettier": "^1.9.2",
