@@ -2,7 +2,7 @@
 .build
 release
 
-www/dist/
+dist/
 
 *.swp
 

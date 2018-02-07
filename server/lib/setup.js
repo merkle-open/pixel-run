@@ -5,14 +5,12 @@ const logger = require("morgan");
 const helmet = require("helmet");
 const express = require("express");
 const bodyParser = require("body-parser");
-const hbutils = require("hbs-utils")(hbs);
 const cookieParser = require("cookie-parser");
 const webpack = require("webpack");
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackConfig = require("../../webpack.config.js");
 
 const isDev = process.env.NODE_ENV !== "production";
-const base = path.join(__dirname, "..", "..", "www");
 
 module.exports = function setupApp(app) {
   // Webpack for development
@@ -27,11 +25,8 @@ module.exports = function setupApp(app) {
     );
   }
 
-  // Registering partials
-  hbutils.registerWatchedPartials(path.join(base, "components"));
-
   // Defining views and templates
-  app.set("views", [path.join(base, "views"), path.join(base, "templates")]);
+  app.set("views", path.join(__dirname, "..", "views"));
 
   // View-engine setup
   app.set("view engine", "hbs");
@@ -50,5 +45,5 @@ module.exports = function setupApp(app) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use("/public", express.static(path.join(base, "dist")));
+  app.use("/public", express.static(path.join(__dirname, "..", "..", "dist")));
 };
