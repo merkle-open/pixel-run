@@ -1,7 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const PrettierPlugin = require("prettier-webpack-plugin");
 const { getIfUtils, removeEmpty } = require("webpack-config-utils");
 
@@ -13,9 +12,12 @@ const phaser = path.join(phaserModule, "build/custom/phaser-split.js");
 const pixi = path.join(phaserModule, "build/custom/pixi.js");
 const p2 = path.join(phaserModule, "build/custom/p2.js");
 
+const clientScripts = path.resolve(__dirname, "client");
+
 module.exports = {
   context: path.resolve(__dirname, "./client"),
   devtool: "source-map",
+  stats: "minimal",
   entry: {
     gameApp: "./GameApp/index.jsx",
     scoresApp: "./ScoreApp/index.jsx"
@@ -29,6 +31,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
+        include: clientScripts,
         exclude: [/node_modules/],
         use: [
           {
@@ -46,6 +49,8 @@ module.exports = {
       },
       {
         test: /\.(css|scss)$/,
+        include: clientScripts,
+        exclude: [/node_modules/],
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: ["css-loader", "sass-loader"]
@@ -53,6 +58,8 @@ module.exports = {
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|mp3|json)$/,
+        include: clientScripts,
+        exclude: [/node_modules/],
         loader: "file-loader?name=[name].[ext]"
       },
       { test: /pixi\.js/, use: ["expose-loader?PIXI"] },
@@ -66,7 +73,6 @@ module.exports = {
       "process.env.NODE_ENV": ifProduction('"production"', '"development"'),
       "process.env.JUMP_ON": JSON.stringify(process.env.JUMP_ON)
     }),
-    new FriendlyErrorsWebpackPlugin(),
     ifDev(new PrettierPlugin()),
     ifProduction(new webpack.optimize.UglifyJsPlugin())
   ]),

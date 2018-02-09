@@ -19,8 +19,8 @@ module.exports = function setupApp(app) {
     app.use(
       webpackDevMiddleware(compiler, {
         publicPath: webpackConfig.output.publicPath,
-        // use friendly-errors-webpack-plugin for logging
-        quiet: true
+        logLevel: "warn",
+        stats: "minimal"
       })
     );
   }
